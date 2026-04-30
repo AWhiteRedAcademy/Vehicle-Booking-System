@@ -7,7 +7,7 @@
             public required string Make { get; set; }
             public required string Model { get; set; }
             public required string Category { get; set; }
-            public float DailyRate { get; set; }
+            public decimal DailyRate { get; set; }
             public bool IsAvailable { get; set; }
            
            /*

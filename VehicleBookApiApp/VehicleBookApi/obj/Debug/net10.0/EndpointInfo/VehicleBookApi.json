@@ -77,9 +77,14 @@
   "components": {
     "schemas": {
       "VehicleModel": {
+        "required": [
+          "make",
+          "model",
+          "category"
+        ],
         "type": "object",
         "properties": {
-          "productID": {
+          "vehicleID": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "integer",
@@ -87,13 +92,24 @@
             ],
             "format": "int32"
           },
-          "name": {
+          "ownerID": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "make": {
             "type": "string"
           },
-          "description": {
+          "model": {
             "type": "string"
           },
-          "price": {
+          "category": {
+            "type": "string"
+          },
+          "dailyRate": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
             "type": [
               "number",
@@ -101,13 +117,8 @@
             ],
             "format": "double"
           },
-          "stock": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "format": "int32"
+          "isAvailable": {
+            "type": "boolean"
           }
         }
       }
