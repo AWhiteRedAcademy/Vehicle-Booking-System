@@ -1,0 +1,56 @@
+[
+  {
+    "ContainingType": "VehicleBook.EndPoints.RootEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CAddRootEndpoints\u003Eb__0_0",
+    "RelativePath": "",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "VehicleBook.EndPoints.RootEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CAddRootEndpoints\u003Eb__0_1",
+    "RelativePath": "health",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "VehicleBook.EndPoints.VehicleEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CAddVehicleEndpoints\u003Eb__0_0",
+    "RelativePath": "vehicles",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[VehicleBook.Models.VehicleModel, VehicleBookApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

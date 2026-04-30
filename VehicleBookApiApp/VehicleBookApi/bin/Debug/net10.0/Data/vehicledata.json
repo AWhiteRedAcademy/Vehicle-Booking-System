@@ -1,0 +1,11 @@
+[
+  {
+    "vehicleID": 1,
+    "ownerID": 3,
+    "make": "Toyota",
+    "model": "Corolla",
+    "category": "Sedan",
+    "dailyRate": 250.00,
+    "isAvailable": true
+  }
+]
