@@ -8,7 +8,7 @@
             public required string Model { get; set; }
             public required string Category { get; set; }
             public decimal DailyRate { get; set; }
-            public bool IsAvailable { get; set; }
+            public int IsAvailable { get; set; }
            
            /*
             public int ProductID { get; set; }

@@ -6,7 +6,7 @@
     "Model": "Subaru",
     "Category": "Sedan",
     "DailyRate":  250,
-    "IsAvailable": true
+    "IsAvailable": 0
   }
 
 ]
