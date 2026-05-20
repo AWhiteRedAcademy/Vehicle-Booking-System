@@ -1,0 +1,60 @@
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\bin\Debug\net10.0\VehicleBook.Application.deps.json
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\bin\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\bin\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\bin\Debug\net10.0\VehicleBook.Domain.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\bin\Debug\net10.0\VehicleBook.Domain.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.AssemblyReference.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfoInputs.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfo.cs
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.CoreCompileInputs.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleB.83AD0DEB.Up2Date
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\refint\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_JWT_Reference_Applied\Application\obj\Debug\net10.0\ref\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Application.deps.json
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Domain.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Domain.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.AssemblyReference.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfoInputs.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfo.cs
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.CoreCompileInputs.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleB.83AD0DEB.Up2Date
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\refint\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\Vehicle_Booking_System_JWT_Reference_Applied\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\ref\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Application.deps.json
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Domain.dll
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\bin\Debug\net10.0\VehicleBook.Domain.pdb
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.AssemblyReference.cache
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfoInputs.cache
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfo.cs
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.CoreCompileInputs.cache
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleB.83AD0DEB.Up2Date
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\refint\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\Downloads\Vehicle_Booking_System_AuthToken_Implemented 3\Vehicle_Booking_System_AuthToken_Implemented\Application\obj\Debug\net10.0\ref\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\bin\Debug\net10.0\VehicleBook.Application.deps.json
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\bin\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\bin\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\bin\Debug\net10.0\VehicleBook.Domain.dll
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\bin\Debug\net10.0\VehicleBook.Domain.pdb
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.AssemblyReference.cache
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfoInputs.cache
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.AssemblyInfo.cs
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.csproj.CoreCompileInputs.cache
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleB.83AD0DEB.Up2Date
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\refint\VehicleBook.Application.dll
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\Desktop\Vehicle Booking System\Vehicle_Booking_System_CA\Application\obj\Debug\net10.0\ref\VehicleBook.Application.dll

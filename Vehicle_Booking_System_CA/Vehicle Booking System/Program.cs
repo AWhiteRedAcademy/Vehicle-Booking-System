@@ -1,0 +1,104 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using System.Text;
+using VehicleBook.Application.Authentication;
+using VehicleBook.Application.Interfaces;
+using VehicleBook.Application.Services;
+using VehicleBook.Infrastructure.Authentication;
+using VehicleBook.Infrastructure.Data;
+using VehicleBook.Infrastructure.Repositories;
+
+namespace Vehicle_Booking_System
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Enter only the JWT access token. Swagger will add Bearer automatically.",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT"
+                });
+
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("bearer", document)] = []
+                });
+            });
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            var jwtSettings = new JwtSettings
+            {
+                Token = builder.Configuration["AppSettings:Token"] ?? string.Empty,
+                Issuer = builder.Configuration["AppSettings:Issuer"] ?? string.Empty,
+                Audience = builder.Configuration["AppSettings:Audience"] ?? string.Empty,
+                AccessTokenExpiryHours = int.TryParse(builder.Configuration["AppSettings:AccessTokenExpiryDays"], out var accessHours) ? accessHours : 1,
+                RefreshTokenExpiryHours = int.TryParse(builder.Configuration["AppSettings:RefreshTokenExpiryDays"], out var refreshHours) ? refreshHours : 2
+            };
+
+            if (string.IsNullOrWhiteSpace(jwtSettings.Token))
+            {
+                throw new InvalidOperationException("JWT token signing key is missing from AppSettings:Token.");
+            }
+
+            builder.Services.AddSingleton(jwtSettings);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = jwtSettings.Audience,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Token)),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IVehicleService, VehicleService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.MapControllers();
+            app.Run();
+        }
+    }
+}
