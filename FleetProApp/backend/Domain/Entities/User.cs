@@ -18,7 +18,7 @@ namespace VehicleBook.Domain.Entities
         [Required]
         [MaxLength(50)]
         [Column("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
 
         [Required(ErrorMessage = "Email is required.")]

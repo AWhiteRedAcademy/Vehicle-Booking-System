@@ -2,6 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VehicleBook.Application.DTOs
 {
+
+    public enum UserRole
+    {
+        Admin,
+        Company,
+        Owner,
+        Guest
+    }
     public class UserDto
     {
         public int UserId { get; set; }
@@ -10,6 +18,27 @@ namespace VehicleBook.Application.DTOs
         public string PhoneNumber { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
     }
+    // Added Register Dto
+    public class RegisterUserDto
+    {
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        [StringLength(50)]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(255)]
+        public string Password { get; set; } = string.Empty;
+    }
+
 
     public class CreateUserDto
     {
@@ -24,7 +53,7 @@ namespace VehicleBook.Application.DTOs
 
         [Required]
         [Phone]
-        [StringLength(20)]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
         public string PhoneNumber { get; set; } = string.Empty;
 
         [Required]
@@ -48,9 +77,10 @@ namespace VehicleBook.Application.DTOs
         [StringLength(50)]
         public string Email { get; set; } = string.Empty;
 
+
         [Required]
         [Phone]
-        [StringLength(20)]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
         public string PhoneNumber { get; set; } = string.Empty;
 
         [Required]

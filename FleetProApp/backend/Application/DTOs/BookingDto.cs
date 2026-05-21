@@ -2,6 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VehicleBook.Application.DTOs
 {
+    public enum BookingRole
+    {
+        Admin,
+        Company,
+        Owner,
+        Guest
+    }
     public class BookingDto
     {
         public int BookingId { get; set; }
