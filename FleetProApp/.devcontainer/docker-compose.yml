@@ -11,9 +11,9 @@ services:
     volumes:
       - ..:/workspace:cached
     ports:
-      - "3000:3000" # React Dev Server
-      - "5000:5000" # C# API HTTP
-      - "5001:5001" # C# API HTTPS
+      - "3001:3000" # React Dev Server
+      - "5002:5000" # C# API HTTP
+      - "5003:5001" # C# API HTTPS
     environment:
       - WATCHPACK_POLLING=true # 💡 Fixes React hot-reload failing inside Docker
     command: /bin/sh -c "while sleep 1000; do :; done"
