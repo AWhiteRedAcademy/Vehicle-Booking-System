@@ -1,0 +1,16 @@
+{
+  "name": "C# and React Dev Environment",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "backend", 
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "postCreateCommand": "dotnet restore backend/ && cd frontend && npm install"
+}

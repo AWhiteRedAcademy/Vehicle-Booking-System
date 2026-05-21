@@ -1,0 +1,19 @@
+services:
+  backend:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    volumes:
+      - ..:/workspace:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    network_mode: service:frontend
+
+  frontend:
+    image: node:20-alpine
+    volumes:
+      - ..:/workspace:cached
+    ports:
+      - "3000:3000" # React Dev Server
+      - "5000:5000" # C# API HTTP
+      - "5001:5001" # C# API HTTPS
+    environment:
+      - WATCHPACK_POLLING=true # 💡 Fixes React hot-reload failing inside Docker
+    command: /bin/sh -c "while sleep 1000; do :; done"
