@@ -1,3 +1,4 @@
+using Application.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleBook.Application.DTOs;
@@ -19,11 +20,13 @@ namespace Vehicle_Booking_System.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] UserQueryObject query)
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _userService.GetAllUsersAsync(query);
             return Ok(users);
         }
+
+
 
         [HttpGet("{id:int}")]
         [Authorize(Roles = "Admin")]
@@ -135,6 +138,8 @@ namespace Vehicle_Booking_System.Controllers
 
             return NoContent();
         }
+
+
 
         // [HttpDelete("{id:int}")]
         // public async Task<IActionResult> DeleteUser(int id)

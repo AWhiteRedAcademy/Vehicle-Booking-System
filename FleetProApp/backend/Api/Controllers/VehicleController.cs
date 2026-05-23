@@ -1,7 +1,9 @@
+using Application.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleBook.Application.DTOs;
 using VehicleBook.Application.Services;
+using System.Security.Claims;
 
 namespace Vehicle_Booking_System.Controllers
 {
@@ -20,11 +22,34 @@ namespace Vehicle_Booking_System.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Company")]
-        public async Task<IActionResult> GetAllVehicles()//implement filter by is Available in query params
+        public async Task<IActionResult> GetAllVehicles([FromQuery] VehicleQueryObject query)
         {
-            var vehicles = await _vehicleService.GetAllVehiclesAsync();
+            var vehicles = await _vehicleService.GetAllVehiclesAsync(query);
             return Ok(vehicles);
         }
+
+        // [HttpGet("my-vehicles")]
+        // [Authorize(Roles = "Owner")]
+        // public async Task<IActionResult> GetMyVehicles([FromQuery] VehicleQueryObject query)
+        // {
+        //     var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //     if (string.IsNullOrWhiteSpace(userIdClaim))
+        //     {
+        //         return Unauthorized("User ID was not found in the token.");
+        //     }
+
+        //     if (!int.TryParse(userIdClaim, out int ownerId))
+        //     {
+        //         return Unauthorized("Invalid User ID in token.");
+        //     }
+
+        //     query.OwnerId = ownerId;
+
+        //     var vehicles = await _vehicleService.GetAllVehiclesAsync(query);
+
+        //     return Ok(vehicles);
+        // }
 
         [HttpGet("{id:int}")]
         [Authorize(Roles = "Owner")]

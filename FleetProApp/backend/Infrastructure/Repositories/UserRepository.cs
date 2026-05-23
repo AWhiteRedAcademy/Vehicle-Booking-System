@@ -1,3 +1,4 @@
+using Application.Helpers;
 using Microsoft.EntityFrameworkCore;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Domain.Entities;
@@ -16,9 +17,23 @@ namespace VehicleBook.Infrastructure.Repositories
             _dbSet = _context.Set<User>();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync(UserQueryObject query)
         {
-            return await _dbSet.ToListAsync();
+            var users = _dbSet.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                users = users.Where(u =>
+                    u.Name.Contains(query.SearchTerm) ||
+                    u.Email.Contains(query.SearchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Role))
+            {
+                users = users.Where(u => u.Role == query.Role);
+            }
+
+            return await users.ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(int id)

@@ -1,3 +1,4 @@
+using Application.Helpers;
 using Microsoft.AspNetCore.Identity;
 using VehicleBook.Application.DTOs;
 using VehicleBook.Application.Interfaces;
@@ -15,9 +16,9 @@ namespace VehicleBook.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync(UserQueryObject query)
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            var users = await _userRepository.GetAllUsersAsync(query);
             return users.Select(MapToDto);
         }
 

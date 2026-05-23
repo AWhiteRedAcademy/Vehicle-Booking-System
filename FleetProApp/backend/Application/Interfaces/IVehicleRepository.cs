@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Application.Helpers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace VehicleBook.Application.Interfaces
     public interface IVehicleRepository
     {
         Task<IEnumerable<Vehicle>> GetVehiclesForUserAsync(int userId, string role);
-        Task<IEnumerable<Vehicle>> GetAllVehiclesAsync();
+        Task<IEnumerable<Vehicle>> GetAllVehiclesAsync(VehicleQueryObject query);
         Task<Vehicle?> GetByIdAsync(int id);
         Task AddAsync(Vehicle vehicle);
         void Update(Vehicle vehicle);

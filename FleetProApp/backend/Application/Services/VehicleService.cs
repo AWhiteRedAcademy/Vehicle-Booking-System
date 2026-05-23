@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Helpers;
 using VehicleBook.Application.DTOs;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Domain.Entities;
@@ -16,9 +17,9 @@ namespace VehicleBook.Application.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync()
+        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync(VehicleQueryObject query)
         {
-            var vehicles = await _vehicleRepository.GetAllVehiclesAsync();
+            var vehicles = await _vehicleRepository.GetAllVehiclesAsync(query);
             return vehicles.Select(MapToDto);
         }
 

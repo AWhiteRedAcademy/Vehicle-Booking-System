@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Application.Helpers;
+using Microsoft.EntityFrameworkCore;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Domain.Entities;
 using VehicleBook.Infrastructure.Data;
@@ -24,7 +25,8 @@ namespace VehicleBook.Infrastructure.Repositories
             if (role.Equals("Owner", StringComparison.OrdinalIgnoreCase))
             {
                 query = query.Where(v => v.OwnerId == userId);
-            }  else if (role.Equals("Company", StringComparison.OrdinalIgnoreCase))
+            }
+            else if (role.Equals("Company", StringComparison.OrdinalIgnoreCase))
             {
                 query = query.Where(v => v.IsAvailable == true);
             }
@@ -37,9 +39,45 @@ namespace VehicleBook.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
+        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync(VehicleQueryObject query)
         {
-            return await _dbSet.ToListAsync();
+            IQueryable<Vehicle> dbQuery = _dbSet;
+
+            if (!string.IsNullOrEmpty(query.Make))
+            {
+                dbQuery = dbQuery.Where(v => v.Make.Contains(query.Make));
+            }
+
+            if (!string.IsNullOrEmpty(query.Model))
+            {
+                dbQuery = dbQuery.Where(v => v.Model.Contains(query.Model));
+            }
+
+            if (!string.IsNullOrEmpty(query.Category))
+            {
+                dbQuery = dbQuery.Where(v => v.Category.Contains(query.Category));
+            }
+            if (query.IsAvailable.HasValue)
+            {
+                dbQuery = dbQuery.Where(v => v.IsAvailable == query.IsAvailable.Value);
+            }
+
+            if (query.OwnerId.HasValue)
+            {
+                dbQuery = dbQuery.Where(v => v.OwnerId == query.OwnerId.Value);
+            }
+
+            if (query.MinDailyRate.HasValue)
+            {
+                dbQuery = dbQuery.Where(v => v.DailyRate >= query.MinDailyRate.Value);
+            }
+
+            if (query.MaxDailyRate.HasValue)
+            {
+                dbQuery = dbQuery.Where(v => v.DailyRate <= query.MaxDailyRate.Value);
+            }
+
+            return await dbQuery.ToListAsync();
         }
 
         public async Task<Vehicle?> GetByIdAsync(int id)
