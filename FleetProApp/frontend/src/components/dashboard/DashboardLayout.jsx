@@ -6,10 +6,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import LogoutIcon from "@mui/icons-material/Logout";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 import {
   Shell,
   Sidebar,
+  SidebarToggleButton,
   Brand,
   LogoBox,
   BrandText,
@@ -49,12 +52,15 @@ function DashboardLayout({
   const location = useLocation();
   const navigate = useNavigate();
   const menuRef = useRef(null);
+
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("role");
+
     setIsUserMenuOpen(false);
     navigate("/login");
   }
@@ -75,15 +81,16 @@ function DashboardLayout({
 
   return (
     <Shell>
-      <Sidebar>
+      <Sidebar $isSidebarOpen={isSidebarOpen}>
         <Brand>
           <LogoBox>
             <DirectionsCarIcon fontSize="small" />
           </LogoBox>
-          <BrandText>FleetPro</BrandText>
+
+          {isSidebarOpen && <BrandText>FleetPro</BrandText>}
         </Brand>
 
-        <RoleBadge>{roleLabel}</RoleBadge>
+        {isSidebarOpen && <RoleBadge>{roleLabel}</RoleBadge>}
 
         <Nav>
           {navItems.map((item) => {
@@ -92,7 +99,7 @@ function DashboardLayout({
             return (
               <NavLinkItem key={item.label} to={item.to} $active={isActive}>
                 <NavIcon>{item.icon}</NavIcon>
-                <NavText>{item.label}</NavText>
+                {isSidebarOpen && <NavText>{item.label}</NavText>}
               </NavLinkItem>
             );
           })}
@@ -103,20 +110,34 @@ function DashboardLayout({
             <NavIcon>
               <SupportAgentIcon fontSize="small" />
             </NavIcon>
-            <NavText>Support</NavText>
+
+            {isSidebarOpen && <NavText>Support</NavText>}
           </NavLinkItem>
 
           <LogoutNavButton type="button" onClick={handleLogout}>
             <NavIcon>
               <LogoutIcon fontSize="small" />
             </NavIcon>
-            <NavText>Sign Out</NavText>
+
+            {isSidebarOpen && <NavText>Sign Out</NavText>}
           </LogoutNavButton>
         </SidebarFooter>
       </Sidebar>
 
       <Main>
         <Topbar>
+          <SidebarToggleButton
+            type="button"
+            onClick={() => setIsSidebarOpen((currentValue) => !currentValue)}
+            aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            {isSidebarOpen ? (
+              <MenuOpenIcon fontSize="small" />
+            ) : (
+              <MenuIcon fontSize="small" />
+            )}
+          </SidebarToggleButton>
+
           <PageHeading>
             <PageTitle>{title}</PageTitle>
             {subtitle && <PageSubtitle>{subtitle}</PageSubtitle>}
@@ -130,7 +151,9 @@ function DashboardLayout({
             <UserMenuWrapper ref={menuRef}>
               <UserMenuButton
                 type="button"
-                onClick={() => setIsUserMenuOpen((currentValue) => !currentValue)}
+                onClick={() =>
+                  setIsUserMenuOpen((currentValue) => !currentValue)
+                }
                 aria-haspopup="menu"
                 aria-expanded={isUserMenuOpen}
               >
@@ -148,7 +171,11 @@ function DashboardLayout({
 
                   <UserDropdownDivider />
 
-                  <UserDropdownItem type="button" onClick={handleLogout} role="menuitem">
+                  <UserDropdownItem
+                    type="button"
+                    onClick={handleLogout}
+                    role="menuitem"
+                  >
                     <LogoutIcon fontSize="small" />
                     Logout
                   </UserDropdownItem>

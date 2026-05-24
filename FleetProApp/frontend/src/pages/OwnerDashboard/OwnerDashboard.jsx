@@ -1,17 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import GridViewIcon from "@mui/icons-material/GridView";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import AddIcon from "@mui/icons-material/Add";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import BuildIcon from "@mui/icons-material/Build";
-import PaidIcon from "@mui/icons-material/Paid";
-
-import DashboardLayout from "../../components/layout/DashboardLayout";
-import StatCard from "../../components/dashboard/StatCard";
-import VehicleCard from "../../components/vehicles/VehicleCard";
-
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import StatCard from "../../components/cards/StatCard";
+import VehicleCard from "../../components/cards/VehicleCard";
 import {
   HeaderRow,
   SectionEyebrow,
@@ -25,6 +14,9 @@ import {
   VehicleGrid,
   EmptyCard,
   ErrorCard,
+} from "../../components/dashboard/DashboardPage.styles";
+
+import {
   AddVehicleCard,
   PlusCircle,
 } from "./OwnerDashboard.style";
@@ -161,6 +153,7 @@ function OwnerDashboard() {
       title="Vehicle Management"
       subtitle="Manage and monitor your vehicle assets in real time."
       roleLabel="Owner Console"
+      userLabel="Owner"
       navItems={ownerNavItems}
     >
       <HeaderRow>

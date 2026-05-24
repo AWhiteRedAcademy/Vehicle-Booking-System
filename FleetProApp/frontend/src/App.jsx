@@ -1,5 +1,5 @@
-import LoginPage from "./pages/LoginPage/LoginPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage/LoginPage";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
 
