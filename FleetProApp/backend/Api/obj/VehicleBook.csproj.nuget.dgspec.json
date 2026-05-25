@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\api\\VehicleBook.csproj": {}
+    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\api\\VehicleBook.csproj": {
+    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\api\\VehicleBook.csproj",
+        "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
         "projectName": "VehicleBook",
-        "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\api\\VehicleBook.csproj",
+        "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
         "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\api\\obj\\",
+        "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
