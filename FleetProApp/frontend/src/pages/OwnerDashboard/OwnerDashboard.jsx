@@ -14,6 +14,7 @@ import StatCard from "../../components/cards/StatCard";
 import VehicleCard from "../../components/cards/VehicleCard";
 import OwnerVehicleList from "./OwnerVehicleList"; 
 import { authFetch } from "../../HTTPS Services/Auth.js";
+import { useNavigate } from "react-router-dom";
 
 
 import {
@@ -38,9 +39,6 @@ import {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5188";
 
-// Keep this true while you are building the frontend UI.
-// Change to false when your login stores a real JWT token in localStorage.
-
 const ownerNavItems = [
   {
     label: "Dashboard",
@@ -49,7 +47,7 @@ const ownerNavItems = [
   },
   {
     label: "Vehicles",
-    to: "/owner/vehicles",
+    to: "/owner/vehicles/add",
     icon: <DirectionsCarIcon fontSize="small" />,
   },
   {
@@ -65,6 +63,8 @@ const ownerNavItems = [
 ];
 
 function OwnerDashboard() {
+  const navigate = useNavigate();
+  
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -118,7 +118,7 @@ function OwnerDashboard() {
           </SectionText>
         </div>
 
-        <AddButton type="button">
+        <AddButton type="button" onClick={() => navigate("/owner/vehicles/add")}>
           <AddIcon fontSize="small" />
           Add New Vehicle
         </AddButton>

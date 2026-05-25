@@ -1,27 +1,21 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-import { userIdParam } from '../../../constants/userHelper';
-import { jwtDecode } from 'jwt-decode';
-
-import GridViewIcon from "@mui/icons-material/GridView";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import PaymentsIcon from '@mui/icons-material/Payments';
+// Icons & UI Imports
 import SaveIcon from "@mui/icons-material/Save";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import PaymentsIcon from "@mui/icons-material/Payments";
 
-import DashboardLayout from "../../../components/dashboard/DashboardLayout";
-import { addVehicle } from "../../../HTTPS Services/VehicleServices";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import { userIdParam } from "../../../constants/userHelper";
+import { getVehicleById, updateVehicle } from "../../../HTTPS Services/PostServices";
 
 import {
   HeaderRow,
   SectionEyebrow,
   SectionTitle,
   SectionText,
-} from "../../../components/dashboard/DashboardPage.styles";
-
-import {
   FormGrid,
   MainColumn,
   SideColumn,
@@ -34,49 +28,33 @@ import {
   Select,
   StatusOptions,
   StatusOption,
+  ErrorMessage,
   FooterBar,
   FooterText,
   FooterActions,
   DiscardButton,
   SaveButton,
-  ErrorMessage,
-} from "./  OwnerAddVehicle.style";
+} from "./OwnerDashboard.style";
 
-
-const ownerNavItems = [
-  {
-    label: "Dashboard",
-    to: "/owner/dashboard",
-    icon: <GridViewIcon fontSize="small" />,
-  },
-  {
-    label: "Vehicles",
-    to: "/owner/vehicles",
-    icon: <DirectionsCarIcon fontSize="small" />,
-  },
-  {
-    label: "Reports",
-    to: "/owner/reports",
-    icon: <BarChartIcon fontSize="small" />,
-  },
-];
-
-function OwnerAddVehicle() {
+function OwnerEditVehicle() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Extracts the vehicle ID string straight from the route parameter URL
 
+  // Safe user token lookup fallback setup
   const token = localStorage.getItem("accessToken");
-  let userId = "";
+  let currentUserId = "";
   if (token) {
     try {
       const decoded = jwtDecode(token);
-      userId = decoded[userIdParam] || "";
+      currentUserId = decoded[userIdParam] || "";
     } catch (e) {
-      console.error("Failed to decode token on initialization:", e);
+      console.error("Failed to decode token inside vehicle editor:", e);
     }
   }
 
   const [formData, setFormData] = useState({
-    ownerId: userId,
+    id: id,
+    ownerId: currentUserId,
     make: "",
     model: "",
     category: "Executive Sedan",
@@ -84,12 +62,38 @@ function OwnerAddVehicle() {
     isAvailable: true,
   });
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
+
+  useEffect(() => {
+    if (!id) return;
+
+    setIsLoading(true);
+    getVehicleById(id)
+      .then((data) => {
+
+        setFormData({
+          id: data.id || id,
+          ownerId: data.ownerId || currentUserId,
+          make: data.make || "",
+          model: data.model || "",
+          category: data.category || "Executive Sedan",
+          dailyRate: data.dailyRate || "",
+          isAvailable: data.isAvailable !== undefined ? data.isAvailable : true,
+        });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to populate asset record data:", err);
+        setError(err.message || "Failed to load vehicle profile information.");
+        setIsLoading(false);
+      });
+  }, [id, currentUserId]);
+
   function handleChange(event) {
     const { name, value } = event.target;
-
     setFormData((currentData) => ({
       ...currentData,
       [name]: value,
@@ -103,21 +107,17 @@ function OwnerAddVehicle() {
     }));
   }
 
+  // 2. (PUT)
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!formData.ownerId) {
-      setError("Owner ID is required for now because your backend expects it.");
-      return;
-    }
-
     if (!formData.make.trim() || !formData.model.trim()) {
-      setError("Vehicle make and model are required.");
+      setError("Vehicle make and model details cannot be left blank.");
       return;
     }
 
     if (!formData.dailyRate || Number(formData.dailyRate) <= 0) {
-      setError("Daily rate must be greater than 0.");
+      setError("Rental evaluation rate pricing tier must exceed 0.");
       return;
     }
 
@@ -126,38 +126,50 @@ function OwnerAddVehicle() {
       setError("");
 
       const requestBody = {
+        id: Number(formData.id),
         ownerId: Number(formData.ownerId),
-        make: formData.make,
-        model: formData.model,
+        make: formData.make.trim(),
+        model: formData.model.trim(),
         category: formData.category,
         dailyRate: Number(formData.dailyRate),
         isAvailable: formData.isAvailable,
       };
 
-      await addVehicle(requestBody);
-
+      // Dispatches clean PUT request via fixed interceptor
+      await updateVehicle(id, requestBody);
+      
+      // Navigate safely back to main console space
       navigate("/owner/dashboard");
     } catch (error) {
-        setError(error.message || "Could not save vehicle.");
+      setError(error.message || "Unable to modify database record asset profiles.");
     } finally {
-        setIsSaving(false);
+      setIsSaving(false);
     }
+  }
+
+  if (isLoading) {
+    return (
+      <DashboardLayout title="Edit Vehicle" subtitle="Loading record statistics...">
+        <div style={{ padding: "2rem", textAlign: "center", fontWeight: "600", color: "#666" }}>
+          Reading vehicle specifications data from server...
+        </div>
+      </DashboardLayout>
+    );
   }
 
   return (
     <DashboardLayout
-      title="Add New Vehicle"
-      subtitle="Register a new vehicle to your fleet."
+      title="Edit Vehicle Profile"
+      subtitle="Modify registration traits, categories, and marketplace tier values."
       roleLabel="Owner Console"
       userLabel="Owner"
-      navItems={ownerNavItems}
     >
       <HeaderRow>
         <div>
-          <SectionEyebrow>Vehicles &gt; Add New Vehicle</SectionEyebrow>
-          <SectionTitle>Add New Vehicle</SectionTitle>
+          <SectionEyebrow>Vehicles &gt; Edit Vehicle</SectionEyebrow>
+          <SectionTitle>Update Fleet Asset</SectionTitle>
           <SectionText>
-            Register a new asset to your vehicle booking system.
+            Refine existing characteristics configuration layouts for asset tracking indices.
           </SectionText>
         </div>
       </HeaderRow>
@@ -173,14 +185,8 @@ function OwnerAddVehicle() {
 
               <FormRow>
                 <FieldGroup>
-                  <Label>Owner ID</Label>
-                  <Input
-                    type="number"
-                    name="ownerId"
-                    value={userId}
-                    readOnly
-                    placeholder="Auto-filled from your account"
-                  />
+                  <Label>Vehicle Identification ID</Label>
+                  <Input type="text" name="id" value={formData.id} disabled />
                 </FieldGroup>
 
                 <FieldGroup>
@@ -190,7 +196,7 @@ function OwnerAddVehicle() {
                     name="make"
                     value={formData.make}
                     onChange={handleChange}
-                    placeholder="e.g. BMW"
+                    placeholder="e.g. Audi"
                   />
                 </FieldGroup>
               </FormRow>
@@ -203,17 +209,13 @@ function OwnerAddVehicle() {
                     name="model"
                     value={formData.model}
                     onChange={handleChange}
-                    placeholder="e.g. M2"
+                    placeholder="e.g. RS6"
                   />
                 </FieldGroup>
 
                 <FieldGroup>
                   <Label>Category</Label>
-                  <Select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                  >
+                  <Select name="category" value={formData.category} onChange={handleChange}>
                     <option value="Executive Sedan">Executive Sedan</option>
                     <option value="SUV">SUV</option>
                     <option value="Luxury">Luxury</option>
@@ -234,19 +236,18 @@ function OwnerAddVehicle() {
               </CardTitle>
 
               <FieldGroup>
-                <Label>Daily Rental Rate</Label>
+                <Label>Daily Rental Rate (R)</Label>
                 <Input
                   type="number"
                   name="dailyRate"
                   value={formData.dailyRate}
                   onChange={handleChange}
-                  placeholder="e.g. 1200"
+                  placeholder="e.g. 1800"
                 />
               </FieldGroup>
 
               <FieldGroup>
                 <Label>Vehicle Status</Label>
-
                 <StatusOptions>
                   <StatusOption
                     type="button"
@@ -269,24 +270,21 @@ function OwnerAddVehicle() {
           </SideColumn>
         </FormGrid>
 
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {error && <ErrorMessage>⚠️ {error}</ErrorMessage>}
 
         <FooterBar>
           <FooterText>
-            All changes will be reflected in your fleet dashboard.
+            Asset modification tracking matches local persistence state rules immediately.
           </FooterText>
 
           <FooterActions>
-            <DiscardButton
-              type="button"
-              onClick={() => navigate("/owner/dashboard")}
-            >
-              Discard
+            <DiscardButton type="button" onClick={() => navigate("/owner/dashboard")}>
+              Cancel Changes
             </DiscardButton>
 
             <SaveButton type="submit" disabled={isSaving}>
               <SaveIcon fontSize="small" />
-              {isSaving ? "Saving..." : "Save Vehicle"}
+              {isSaving ? "Updating Fleet..." : "Update Specifications"}
             </SaveButton>
           </FooterActions>
         </FooterBar>
@@ -295,4 +293,4 @@ function OwnerAddVehicle() {
   );
 }
 
-export default OwnerAddVehicle;
+export default OwnerEditVehicle;
