@@ -3,8 +3,8 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
-import OwnerAddVehicle from "./pages/OwnerDashboard/OwnerAddVehiclePage/  OwnerAddVehicle";
-
+import OwnerAddVehicle from "./pages/OwnerDashboard/OwnerAddVehiclePage/OwnerAddVehicle";
+import OwnerEditVehicle from "./pages/OwnerDashboard/OwnerEditVehiclePage/OwnerEditVehicle";
 
 function RegisterPage() {
   return <h1>Register Page</h1>;
@@ -23,7 +23,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={["Owner"]} />}>
           <Route path="/owner/dashboard" element={<OwnerDashboard />} />
           <Route path="/owner/vehicles/add" element={<OwnerAddVehicle />} />
-          {/* Add future owner-specific paths here, e.g., /owner/vehicles */}
+          <Route path="/owner/vehicles/edit/:id" element={<OwnerEditVehicle />} />
         </Route>
 
         {/* COMPANY ONLY ROUTES */}

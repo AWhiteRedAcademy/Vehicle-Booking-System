@@ -45,7 +45,10 @@ function VehicleCard({ vehicle }) {
           <Rate>R{Number(vehicle.dailyRate).toLocaleString()} / day</Rate>
 
           <ActionButtons>
-            <EditButton type="button">
+            <EditButton
+              type="button"
+              onClick={() => navigate(`/owner/vehicles/edit/${vehicle.id}`)}
+            >
               <EditIcon fontSize="inherit" />
               Edit
             </EditButton>

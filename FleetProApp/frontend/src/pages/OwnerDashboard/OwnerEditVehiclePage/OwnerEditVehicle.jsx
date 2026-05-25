@@ -7,34 +7,10 @@ import SaveIcon from "@mui/icons-material/Save";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PaymentsIcon from "@mui/icons-material/Payments";
 
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import DashboardLayout from "../../../components/dashboard/DashboardLayout";
 import { userIdParam } from "../../../constants/userHelper";
-import { getVehicleById, updateVehicle } from "../../../HTTPS Services/PostServices";
+import { getVehicleById, updateVehicle } from "../../../HTTPS Services/VehicleServices";
 
-import {
-  HeaderRow,
-  SectionEyebrow,
-  SectionTitle,
-  SectionText,
-  FormGrid,
-  MainColumn,
-  SideColumn,
-  FormCard,
-  CardTitle,
-  FormRow,
-  FieldGroup,
-  Label,
-  Input,
-  Select,
-  StatusOptions,
-  StatusOption,
-  ErrorMessage,
-  FooterBar,
-  FooterText,
-  FooterActions,
-  DiscardButton,
-  SaveButton,
-} from "./OwnerDashboard.style";
 
 function OwnerEditVehicle() {
   const navigate = useNavigate();
@@ -157,139 +133,7 @@ function OwnerEditVehicle() {
     );
   }
 
-  return (
-    <DashboardLayout
-      title="Edit Vehicle Profile"
-      subtitle="Modify registration traits, categories, and marketplace tier values."
-      roleLabel="Owner Console"
-      userLabel="Owner"
-    >
-      <HeaderRow>
-        <div>
-          <SectionEyebrow>Vehicles &gt; Edit Vehicle</SectionEyebrow>
-          <SectionTitle>Update Fleet Asset</SectionTitle>
-          <SectionText>
-            Refine existing characteristics configuration layouts for asset tracking indices.
-          </SectionText>
-        </div>
-      </HeaderRow>
-
-      <form onSubmit={handleSubmit}>
-        <FormGrid>
-          <MainColumn>
-            <FormCard>
-              <CardTitle>
-                <InfoOutlinedIcon fontSize="small" />
-                General Information
-              </CardTitle>
-
-              <FormRow>
-                <FieldGroup>
-                  <Label>Vehicle Identification ID</Label>
-                  <Input type="text" name="id" value={formData.id} disabled />
-                </FieldGroup>
-
-                <FieldGroup>
-                  <Label>Vehicle Make</Label>
-                  <Input
-                    type="text"
-                    name="make"
-                    value={formData.make}
-                    onChange={handleChange}
-                    placeholder="e.g. Audi"
-                  />
-                </FieldGroup>
-              </FormRow>
-
-              <FormRow>
-                <FieldGroup>
-                  <Label>Model</Label>
-                  <Input
-                    type="text"
-                    name="model"
-                    value={formData.model}
-                    onChange={handleChange}
-                    placeholder="e.g. RS6"
-                  />
-                </FieldGroup>
-
-                <FieldGroup>
-                  <Label>Category</Label>
-                  <Select name="category" value={formData.category} onChange={handleChange}>
-                    <option value="Executive Sedan">Executive Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="Luxury">Luxury</option>
-                    <option value="Cargo">Cargo</option>
-                    <option value="Hatchback">Hatchback</option>
-                    <option value="Coupe">Coupe</option>
-                  </Select>
-                </FieldGroup>
-              </FormRow>
-            </FormCard>
-          </MainColumn>
-
-          <SideColumn>
-            <FormCard>
-              <CardTitle>
-                <PaymentsIcon fontSize="small" />
-                Pricing & Status
-              </CardTitle>
-
-              <FieldGroup>
-                <Label>Daily Rental Rate (R)</Label>
-                <Input
-                  type="number"
-                  name="dailyRate"
-                  value={formData.dailyRate}
-                  onChange={handleChange}
-                  placeholder="e.g. 1800"
-                />
-              </FieldGroup>
-
-              <FieldGroup>
-                <Label>Vehicle Status</Label>
-                <StatusOptions>
-                  <StatusOption
-                    type="button"
-                    $active={formData.isAvailable === true}
-                    onClick={() => handleStatusChange(true)}
-                  >
-                    Available
-                  </StatusOption>
-
-                  <StatusOption
-                    type="button"
-                    $active={formData.isAvailable === false}
-                    onClick={() => handleStatusChange(false)}
-                  >
-                    Unavailable
-                  </StatusOption>
-                </StatusOptions>
-              </FieldGroup>
-            </FormCard>
-          </SideColumn>
-        </FormGrid>
-
-        {error && <ErrorMessage>⚠️ {error}</ErrorMessage>}
-
-        <FooterBar>
-          <FooterText>
-            Asset modification tracking matches local persistence state rules immediately.
-          </FooterText>
-
-          <FooterActions>
-            <DiscardButton type="button" onClick={() => navigate("/owner/dashboard")}>
-              Cancel Changes
-            </DiscardButton>
-
-            <SaveButton type="submit" disabled={isSaving}>
-              <SaveIcon fontSize="small" />
-              {isSaving ? "Updating Fleet..." : "Update Specifications"}
-            </SaveButton>
-          </FooterActions>
-        </FooterBar>
-      </form>
-    </DashboardLayout>
+  return ( {}
   );
 }
 
