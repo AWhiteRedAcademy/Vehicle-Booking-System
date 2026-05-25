@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -28,12 +29,10 @@ import {
   ErrorCard,
 } from "../../components/dashboard/DashboardPage.styles";
 
-import {
-  AddVehicleCard,
-  PlusCircle,
-} from "./OwnerDashboard.style";
+import { AddVehicleCard, PlusCircle } from "./OwnerDashboard.style";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5188";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5188";
 
 // Keep this true while you are building the frontend UI.
 // Change to false when your login stores a real JWT token in localStorage.
@@ -98,6 +97,7 @@ function OwnerDashboard() {
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadVehicles() {
@@ -112,11 +112,14 @@ function OwnerDashboard() {
 
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${API_BASE_URL}/api/Vehicle/my-vehicles`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `${API_BASE_URL}/api/Vehicle/my-vehicles`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to load owner vehicles.");
@@ -125,7 +128,9 @@ function OwnerDashboard() {
         const data = await response.json();
         setVehicles(data);
       } catch (error) {
-        setError("Could not load your vehicles. Check your API URL, JWT token, or CORS setup.");
+        setError(
+          "Could not load your vehicles. Check your API URL, JWT token, or CORS setup.",
+        );
       } finally {
         setIsLoading(false);
       }
@@ -153,11 +158,15 @@ function OwnerDashboard() {
   }, [vehicles, searchTerm, availabilityFilter]);
 
   const totalVehicles = vehicles.length;
-  const availableVehicles = vehicles.filter((vehicle) => vehicle.isAvailable).length;
-  const unavailableVehicles = vehicles.filter((vehicle) => !vehicle.isAvailable).length;
+  const availableVehicles = vehicles.filter(
+    (vehicle) => vehicle.isAvailable,
+  ).length;
+  const unavailableVehicles = vehicles.filter(
+    (vehicle) => !vehicle.isAvailable,
+  ).length;
   const estimatedMonthlyRevenue = vehicles.reduce(
     (total, vehicle) => total + Number(vehicle.dailyRate) * 10,
-    0
+    0,
   );
 
   return (
@@ -177,7 +186,10 @@ function OwnerDashboard() {
           </SectionText>
         </div>
 
-        <AddButton type="button">
+        <AddButton
+          type="button"
+          onClick={() => navigate("/owner/vehicles/add")}
+        >
           <AddIcon fontSize="small" />
           Add New Vehicle
         </AddButton>
@@ -248,7 +260,10 @@ function OwnerDashboard() {
             <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
           ))}
 
-          <AddVehicleCard type="button">
+          <AddVehicleCard
+            type="button"
+            onClick={() => navigate("/owner/vehicles/add")}
+          >
             <PlusCircle>+</PlusCircle>
             <h3>Add New Vehicle</h3>
             <p>Expand your fleet by adding another vehicle profile.</p>
