@@ -1,5 +1,6 @@
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import {
   Card,
@@ -12,7 +13,9 @@ import {
   DetailTag,
   Footer,
   Rate,
+  ActionButtons,
   EditButton,
+  DeleteButton,
 } from "./VehicleCard.style";
 
 function VehicleCard({ vehicle }) {
@@ -41,10 +44,17 @@ function VehicleCard({ vehicle }) {
         <Footer>
           <Rate>R{Number(vehicle.dailyRate).toLocaleString()} / day</Rate>
 
-          <EditButton type="button">
-            <EditIcon fontSize="inherit" />
-            Edit
-          </EditButton>
+          <ActionButtons>
+            <EditButton type="button">
+              <EditIcon fontSize="inherit" />
+              Edit
+            </EditButton>
+
+            <DeleteButton type="button">
+              <DeleteIcon fontSize="inherit" />
+              Delete
+            </DeleteButton>
+          </ActionButtons>
         </Footer>
       </Body>
     </Card>

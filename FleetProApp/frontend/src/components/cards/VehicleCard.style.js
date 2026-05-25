@@ -76,7 +76,6 @@ export const DetailTag = styled.span`
   font-size: 12px;
   font-weight: 800;
 `;
-
 export const Footer = styled.div`
   margin-top: 18px;
   display: flex;
@@ -89,6 +88,13 @@ export const Rate = styled.strong`
   color: ${theme.colors.textDark};
   font-size: 15px;
   font-weight: 900;
+`;
+
+
+export const ActionButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 export const EditButton = styled.button`
@@ -109,3 +115,25 @@ export const EditButton = styled.button`
     background: #dceafe;
   }
 `;
+
+export const DeleteButton = styled.button`
+  border: none;
+  border-radius: ${theme.radius.medium};
+  padding: 9px 12px;
+  background: #edf4ff;
+  color: ${theme.colors.textRed};
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: #dceafe;
+  }
+`;
+
+
+

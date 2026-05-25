@@ -1,12 +1,17 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import SearchIcon from "@mui/icons-material/Search";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
-import VehicleCard from "../../components/cards/VehicleCard";
+import StatCard from "../../components/cards/StatCard";
 
 import {
   HeaderRow,
@@ -14,12 +19,31 @@ import {
   SectionTitle,
   SectionText,
   AddButton,
+  StatsGrid,
   Toolbar,
   SearchInput,
   FilterSelect,
-  VehicleGrid,
   EmptyCard,
 } from "../../components/dashboard/DashboardPage.styles";
+
+import {
+  DashboardPanel,
+  PanelHeader,
+  PanelTitle,
+  PanelActionButton,
+  VehicleTable,
+  VehicleImage,
+  VehicleInfo,
+  VehicleName,
+  VehicleMeta,
+  Badge,
+  StatusText,
+  ActionButton,
+  TableFooter,
+  FooterText,
+  PaginationButtons,
+  PaginationButton,
+} from "./CompanyDashboard.style";
 
 const companyNavItems = [
   {
@@ -44,51 +68,77 @@ const companyNavItems = [
   },
 ];
 
-const mockAvailableVehicles = [
+const mockVehicles = [
   {
     vehicleId: 1,
-    ownerId: 2,
-    make: "BMW",
-    model: "540i",
-    category: "Executive Sedan",
-    dailyRate: 1200,
+    make: "Mercedes-Benz",
+    model: "S-Class",
+    registration: "CAA 265",
+    category: "Sedan",
+    dailyRate: 1800,
     isAvailable: true,
+    currentBooking: "—",
+    nextService: "Oct 24, 2026",
   },
   {
     vehicleId: 2,
-    ownerId: 2,
-    make: "Toyota",
-    model: "Fortuner",
-    category: "SUV",
+    make: "Ford",
+    model: "Transit EV",
+    registration: "CA 522 3567",
+    category: "Bakkie",
     dailyRate: 950,
+    isAvailable: false,
+    currentBooking: "",
+    nextService: "Nov 12, 2026",
+  },
+  {
+    vehicleId: 3,
+    make: "BMW",
+    model: "M2",
+    registration: "CA 510 2765",
+    category: "Sedan",
+    dailyRate: 1600,
     isAvailable: true,
+    currentBooking: "Starts 16:00",
+    nextService: "Dec 05, 2026",
   },
 ];
 
 function CompanyDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [availabilityFilter, setAvailabilityFilter] = useState("all");
 
   const filteredVehicles = useMemo(() => {
-    return mockAvailableVehicles.filter((vehicle) => {
+    return mockVehicles.filter((vehicle) => {
       const searchValue = searchTerm.toLowerCase();
 
       const matchesSearch =
         vehicle.make.toLowerCase().includes(searchValue) ||
         vehicle.model.toLowerCase().includes(searchValue) ||
+        vehicle.registration.toLowerCase().includes(searchValue) ||
         vehicle.category.toLowerCase().includes(searchValue);
 
       const matchesCategory =
         categoryFilter === "all" || vehicle.category === categoryFilter;
 
-      return matchesSearch && matchesCategory;
+      const matchesAvailability =
+        availabilityFilter === "all" ||
+        (availabilityFilter === "available" && vehicle.isAvailable) ||
+        (availabilityFilter === "unavailable" && !vehicle.isAvailable);
+
+      return matchesSearch && matchesCategory && matchesAvailability;
     });
-  }, [searchTerm, categoryFilter]);
+  }, [searchTerm, categoryFilter, availabilityFilter]);
+
+  const availableVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable).length;
+  const inProgressVehicles = mockVehicles.filter((vehicle) => !vehicle.isAvailable).length;
+  const pendingBookings = 7;
 
   return (
     <DashboardLayout
-      title="Book a Vehicle"
-      subtitle="Search available vehicles and create bookings."
+      title="Company Dashboard"
+      subtitle="Search available vehicles and manage company bookings."
       roleLabel="Company Console"
       userLabel="Company"
       navItems={companyNavItems}
@@ -96,23 +146,57 @@ function CompanyDashboard() {
       <HeaderRow>
         <div>
           <SectionEyebrow>Booking Console</SectionEyebrow>
-          <SectionTitle>Available Vehicles</SectionTitle>
+          <SectionTitle>Fleet Management Overview</SectionTitle>
           <SectionText>
-            Browse vehicles that owners have made available for bookings.
+            Real-time vehicle availability and booking information for your company.
           </SectionText>
         </div>
 
         <AddButton type="button">
           <SearchIcon fontSize="small" />
-          Search Vehicles
+          Find Vehicle
         </AddButton>
       </HeaderRow>
+
+      <StatsGrid>
+        <StatCard
+          label="Available Vehicles"
+          value={availableVehicles}
+          helperText="Ready for booking"
+          tone="green"
+          icon={<CheckCircleIcon fontSize="small" />}
+        />
+
+        <StatCard
+          label="In Progress"
+          value={inProgressVehicles}
+          helperText="Currently booked"
+          tone="blue"
+          icon={<LocalShippingIcon fontSize="small" />}
+        />
+
+        <StatCard
+          label="Pending Bookings"
+          value={pendingBookings}
+          helperText="Awaiting approval"
+          tone="orange"
+          icon={<PendingActionsIcon fontSize="small" />}
+        />
+
+        <StatCard
+          label="Total Vehicles"
+          value={mockVehicles.length}
+          helperText="Visible fleet records"
+          tone="blue"
+          icon={<DirectionsCarIcon fontSize="small" />}
+        />
+      </StatsGrid>
 
       <Toolbar>
         <SearchInput
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search by make, model, or category..."
+          placeholder="Search vehicles by make, model, registration, or category..."
         />
 
         <FilterSelect
@@ -120,22 +204,104 @@ function CompanyDashboard() {
           onChange={(event) => setCategoryFilter(event.target.value)}
         >
           <option value="all">All categories</option>
-          <option value="Executive Sedan">Executive Sedan</option>
-          <option value="SUV">SUV</option>
           <option value="Sedan">Sedan</option>
-          <option value="Luxury">Luxury</option>
+          <option value="SUV">SUV</option>
+          <option value="Mini Van">Mini Van</option>
+        </FilterSelect>
+
+        <FilterSelect
+          value={availabilityFilter}
+          onChange={(event) => setAvailabilityFilter(event.target.value)}
+        >
+          <option value="all">All statuses</option>
+          <option value="available">Available</option>
+          <option value="unavailable">In Use</option>
         </FilterSelect>
       </Toolbar>
 
-      {filteredVehicles.length === 0 ? (
-        <EmptyCard>No available vehicles found.</EmptyCard>
-      ) : (
-        <VehicleGrid>
-          {filteredVehicles.map((vehicle) => (
-            <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
-          ))}
-        </VehicleGrid>
-      )}
+      <DashboardPanel>
+        <PanelHeader>
+          <PanelTitle>Fleet Status Overview</PanelTitle>
+
+          <PanelActionButton type="button">
+            Filter
+          </PanelActionButton>
+        </PanelHeader>
+
+        {filteredVehicles.length === 0 ? (
+          <EmptyCard>No vehicles found.</EmptyCard>
+        ) : (
+          <>
+            <VehicleTable>
+              <thead>
+                <tr>
+                  <th>Vehicle Details</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Current Booking</th>
+                  <th>Next Service</th>
+                  <th>Daily Rate</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredVehicles.map((vehicle) => (
+                  <tr key={vehicle.vehicleId}>
+                    <td>
+                      <VehicleInfo>
+                        <VehicleImage>
+                          <DirectionsCarIcon fontSize="small" />
+                        </VehicleImage>
+
+                        <div>
+                          <VehicleName>
+                            {vehicle.make} {vehicle.model}
+                          </VehicleName>
+                          <VehicleMeta>{vehicle.registration}</VehicleMeta>
+                        </div>
+                      </VehicleInfo>
+                    </td>
+
+                    <td>
+                      <Badge>{vehicle.category}</Badge>
+                    </td>
+
+                    <td>
+                      <StatusText $available={vehicle.isAvailable}>
+                        {vehicle.isAvailable ? "Available" : "In Use"}
+                      </StatusText>
+                    </td>
+
+                    <td>{vehicle.currentBooking}</td>
+
+                    <td>{vehicle.nextService}</td>
+
+                    <td>R{vehicle.dailyRate}</td>
+
+                    <td>
+                      <ActionButton type="button">
+                        <MoreVertIcon fontSize="small" />
+                      </ActionButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </VehicleTable>
+
+            <TableFooter>
+              <FooterText>
+                Showing {filteredVehicles.length} of {mockVehicles.length} vehicles
+              </FooterText>
+
+              <PaginationButtons>
+                <PaginationButton type="button">‹</PaginationButton>
+                <PaginationButton type="button">›</PaginationButton>
+              </PaginationButtons>
+            </TableFooter>
+          </>
+        )}
+      </DashboardPanel>
     </DashboardLayout>
   );
 }
