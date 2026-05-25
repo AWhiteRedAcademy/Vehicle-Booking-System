@@ -93,6 +93,13 @@ function OwnerDashboard() {
     0
   );
 
+  const [editingVehicle, setEditingVehicle] = useState(null);
+
+  const handleSaveVehicle = (updatedVehicle) => {
+    setVehicles(vehicles.map(v => v.id === updatedVehicle.id ? updatedVehicle : v));
+    setEditingVehicle(null); // Close the edit view / form
+  };
+
   return (
     <DashboardLayout
       title="Vehicle Management"
@@ -101,6 +108,7 @@ function OwnerDashboard() {
       userLabel="Owner"
       navItems={ownerNavItems}
     >
+      
       <HeaderRow>
         <div>
           <SectionEyebrow>Fleet Manager</SectionEyebrow>
