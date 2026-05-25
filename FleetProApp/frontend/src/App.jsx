@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
+import CompanyVehicles from "./pages/CompanyDashboard/CompanyVehiclesPage/CompanyVehicles";
 
 function RegisterPage() {
   return <h1>Register Page</h1>;
@@ -23,6 +24,7 @@ function App() {
           path="/dashboard"
           element={<Navigate to="/company/dashboard" />}
         />
+        <Route path="/company/vehicles" element={<CompanyVehicles />} />
       </Routes>
     </BrowserRouter>
   );
