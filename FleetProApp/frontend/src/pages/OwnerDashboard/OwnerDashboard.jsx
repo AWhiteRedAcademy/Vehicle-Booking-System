@@ -12,6 +12,9 @@ import PaidIcon from "@mui/icons-material/Paid";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
 import VehicleCard from "../../components/cards/VehicleCard";
+import OwnerVehicleList from "./OwnerVehicleList"; 
+import { authFetch } from "../../HTTPS Services/Auth.js";
+
 
 import {
   HeaderRow,
@@ -26,7 +29,7 @@ import {
   VehicleGrid,
   EmptyCard,
   ErrorCard,
-} from "../../components/dashboard/DashboardPage.styles";
+} from "../../components/dashboard/DashboardPage.styles.js";
 
 import {
   AddVehicleCard,
@@ -37,7 +40,6 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5188
 
 // Keep this true while you are building the frontend UI.
 // Change to false when your login stores a real JWT token in localStorage.
-const USE_MOCK_DATA = true;
 
 const ownerNavItems = [
   {
@@ -62,101 +64,32 @@ const ownerNavItems = [
   },
 ];
 
-const mockVehicles = [
-  {
-    vehicleId: 1,
-    ownerId: 2,
-    make: "BMW",
-    model: "540i",
-    category: "Executive Sedan",
-    dailyRate: 1200,
-    isAvailable: true,
-  },
-  {
-    vehicleId: 2,
-    ownerId: 2,
-    make: "Toyota",
-    model: "Fortuner",
-    category: "SUV",
-    dailyRate: 950,
-    isAvailable: true,
-  },
-  {
-    vehicleId: 3,
-    ownerId: 2,
-    make: "Mercedes-Benz",
-    model: "C-Class",
-    category: "Sedan",
-    dailyRate: 1100,
-    isAvailable: false,
-  },
-];
-
 function OwnerDashboard() {
   const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    async function loadVehicles() {
-      try {
-        setIsLoading(true);
-        setError("");
-
-        if (USE_MOCK_DATA) {
-          setVehicles(mockVehicles);
-          return;
-        }
-
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(`${API_BASE_URL}/api/Vehicle/my-vehicles`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to load owner vehicles.");
-        }
-
-        const data = await response.json();
-        setVehicles(data);
-      } catch (error) {
-        setError("Could not load your vehicles. Check your API URL, JWT token, or CORS setup.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadVehicles();
+    authFetch('api/Vehicle/user/context')
+      .then(data => {
+        setVehicles(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        setError(err.message || "Failed to load vehicle assets.");
+        setLoading(false);
+      });
   }, []);
 
-  const filteredVehicles = useMemo(() => {
-    return vehicles.filter((vehicle) => {
-      const searchValue = searchTerm.toLowerCase();
-
-      const matchesSearch =
-        vehicle.make.toLowerCase().includes(searchValue) ||
-        vehicle.model.toLowerCase().includes(searchValue) ||
-        vehicle.category.toLowerCase().includes(searchValue);
-
-      const matchesAvailability =
-        availabilityFilter === "all" ||
-        (availabilityFilter === "available" && vehicle.isAvailable) ||
-        (availabilityFilter === "unavailable" && !vehicle.isAvailable);
-
-      return matchesSearch && matchesAvailability;
-    });
-  }, [vehicles, searchTerm, availabilityFilter]);
-
+  // Calculates metrics from live array data
   const totalVehicles = vehicles.length;
-  const availableVehicles = vehicles.filter((vehicle) => vehicle.isAvailable).length;
-  const unavailableVehicles = vehicles.filter((vehicle) => !vehicle.isAvailable).length;
+  const availableVehicles = vehicles.filter(v => v.isAvailable === true).length;
+  const unavailableVehicles = vehicles.filter(v => v.isAvailable !== true).length;
   const estimatedMonthlyRevenue = vehicles.reduce(
-    (total, vehicle) => total + Number(vehicle.dailyRate) * 10,
+    (total, v) => total + Number(v.dailyRate || 0) * 10,
     0
   );
 
@@ -234,26 +167,12 @@ function OwnerDashboard() {
         </FilterSelect>
       </Toolbar>
 
-      {isLoading && <EmptyCard>Loading your vehicles...</EmptyCard>}
-
-      {!isLoading && error && <ErrorCard>{error}</ErrorCard>}
-
-      {!isLoading && !error && filteredVehicles.length === 0 && (
-        <EmptyCard>No vehicles found.</EmptyCard>
-      )}
-
-      {!isLoading && !error && filteredVehicles.length > 0 && (
-        <VehicleGrid>
-          {filteredVehicles.map((vehicle) => (
-            <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
-          ))}
-
-          <AddVehicleCard type="button">
-            <PlusCircle>+</PlusCircle>
-            <h3>Add New Vehicle</h3>
-            <p>Expand your fleet by adding another vehicle profile.</p>
-          </AddVehicleCard>
-        </VehicleGrid>
+      {!loading && !error && (
+        <OwnerVehicleList
+          vehicles={vehicles || []}
+          searchTerm={searchTerm}
+          availabilityFilter={availabilityFilter}
+        />
       )}
     </DashboardLayout>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -9,6 +9,8 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import RoleCard from "../../components/cards/RoleCard";
 import TextInput from "../../components/inputs/TextInput";
 import PrimaryButton from "../../components/buttons/PrimaryButton";
+
+import { handleSignInSubmit } from "../../HTTPS Services/SignIn";
 
 import {
   Page,
@@ -31,13 +33,17 @@ import {
 } from "./LoginPage.style";
 
 function LoginPage() {
-  const [selectedRole, setSelectedRole] = useState("Driver");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  function handleSubmit(event) {
-    event.preventDefault();
 
-    console.log("Selected role:", selectedRole);
-  }
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    setError(''); // Clear previous execution warnings
+    
+    handleSignInSubmit(email, password, setError);
+  };
 
   return (
     <Page>
@@ -61,42 +67,29 @@ function LoginPage() {
           </Subtitle>
         </Header>
 
-        <RoleGrid>
-          <RoleCard
-            title="Owner"
-            description="Manage fleet assets, financial reports, and overall organization growth."
-            icon={<GroupsIcon />}
-            selected={selectedRole === "Owner"}
-            onClick={() => setSelectedRole("Owner")}
-          />
-
-          <RoleCard
-            title="Company"
-            description="Access assigned vehicles, track routes, and report maintenance needs."
-            icon={<LocalShippingIcon />}
-            selected={selectedRole === "Driver"}
-            onClick={() => setSelectedRole("Driver")}
-          />
-
-          {/* <RoleCard
-            title="Administrator"
-            description="Oversee user permissions, system settings, and data integrity."
-            icon={<AdminPanelSettingsIcon />}
-            selected={selectedRole === "Administrator"}
-            onClick={() => setSelectedRole("Administrator")}
-          /> */}
-        </RoleGrid>
-
-        <LoginCard onSubmit={handleSubmit}>
+        <LoginCard onSubmit={onSubmitHandler}>
           <TextInput
             label="Email Address"
             type="email"
             placeholder="name@company.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
-          <TextInput label="Password" type="password" placeholder="••••••••" />
+          <TextInput
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          <PrimaryButton>Sign In</PrimaryButton>
+          {error && <p style={{ color: "#ef4444", fontSize: "14px", margin: "10px 0" }}>{error}</p>}
+
+          <PrimaryButton type="submit">
+          Sign In
+          </PrimaryButton>
+
 
           <ForgotPassword href="#">Forgot password?</ForgotPassword>
         </LoginCard>

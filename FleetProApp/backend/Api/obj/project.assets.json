@@ -3712,36 +3712,43 @@
     ]
   },
   "packageFolders": {
-    "/Users/thaqibubayd/.nuget/packages/": {}
+    "C:\\Users\\Backspace_SD\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/VehicleBook.csproj",
+      "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
       "projectName": "VehicleBook",
-      "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/VehicleBook.csproj",
-      "packagesPath": "/Users/thaqibubayd/.nuget/packages/",
-      "outputPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/obj/",
+      "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
+      "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/thaqibubayd/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Backspace_SD\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj": {
-              "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj"
+            "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj": {
+              "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj"
             },
-            "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {
-              "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj"
+            "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj"
             }
           }
         }
@@ -3756,7 +3763,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net10.0": {
@@ -3804,7 +3811,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

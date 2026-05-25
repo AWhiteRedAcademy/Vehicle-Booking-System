@@ -39,6 +39,14 @@ namespace Vehicle_Booking_System
                 });
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    policy => policy.WithOrigins("http://localhost:5174") // React URL
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
