@@ -1,4 +1,4 @@
-export const AddVehicle = async (VehicleData) => {
+export const addVehicle = async (VehicleData) => {
     try {
         const response = await authFetch(`/api/Vehicle`, {
             method: 'POST',
@@ -12,7 +12,7 @@ export const AddVehicle = async (VehicleData) => {
     }
 };
 
-export const AddBooking = async (BookingData) => {
+export const addBooking = async (BookingData) => {
     try {
         const response = await authFetch(`/api/Booking`, {
             method: 'POST',
@@ -24,9 +24,9 @@ export const AddBooking = async (BookingData) => {
         console.error("Error adding booking:", error);
         throw error;
     }
-};
+};     
 
-export const AddUserProfile = async (UserProfileData) => {
+export const addUserProfile = async (UserProfileData) => {
     try {
         const response = await authFetch(`/api/User`, {
             method: 'POST',
