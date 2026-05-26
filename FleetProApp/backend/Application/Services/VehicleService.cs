@@ -44,7 +44,10 @@ namespace VehicleBook.Application.Services
                 Model = vehicleDto.Model,
                 Category = vehicleDto.Category,
                 DailyRate = vehicleDto.DailyRate,
-                IsAvailable = vehicleDto.IsAvailable
+                IsAvailable = vehicleDto.IsAvailable,
+                LicenseNumber = vehicleDto.LicenseNumber,
+                VinNumber = vehicleDto.VinNumber,
+                ModelYear = vehicleDto.ModelYear,
             };
 
             await _vehicleRepository.AddAsync(vehicle);
@@ -68,6 +71,9 @@ namespace VehicleBook.Application.Services
             vehicle.Category = vehicleDto.Category;
             vehicle.DailyRate = vehicleDto.DailyRate;
             vehicle.IsAvailable = vehicleDto.IsAvailable;
+            vehicle.LicenseNumber = vehicleDto.LicenseNumber;
+            vehicle.VinNumber = vehicleDto.VinNumber;
+            vehicle.ModelYear = vehicleDto.ModelYear;
 
             _vehicleRepository.Update(vehicle);
             await _vehicleRepository.SaveChangesAsync();
@@ -100,7 +106,10 @@ namespace VehicleBook.Application.Services
                 Model = vehicle.Model,
                 Category = vehicle.Category,
                 DailyRate = vehicle.DailyRate,
-                IsAvailable = vehicle.IsAvailable
+                IsAvailable = vehicle.IsAvailable,
+                LicenseNumber = vehicle.LicenseNumber,
+                VinNumber = vehicle.VinNumber,
+                ModelYear = vehicle.ModelYear,
             };
         }
     }

@@ -46,8 +46,18 @@ export const StatusBadge = styled.span`
   font-size: 11px;
   font-weight: 900;
 
-  color: ${({ $available }) => ($available ? "#15803d" : "#c2410c")};
-  background: ${({ $available }) => ($available ? "#dcfce7" : "#fff7ed")};
+  color: ${({ $status }) => {
+    if ($status === "Available") return "#15803d";
+    if ($status === "In Use") return "#0b5ed7";
+    if ($status === "Maintenance") return "#92400e";
+    return "#334155";
+  }};
+  background: ${({ $status }) => {
+    if ($status === "Available") return "#dcfce7";
+    if ($status === "In Use") return "#dbeafe";
+    if ($status === "Maintenance") return "#fef3c7";
+    return "#e2e8f0";
+  }};
 `;
 
 export const Body = styled.div`

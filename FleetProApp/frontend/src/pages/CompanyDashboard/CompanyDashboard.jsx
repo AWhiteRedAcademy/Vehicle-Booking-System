@@ -50,10 +50,10 @@ const mockVehicles = [
     bookingId: 1, // Changed from vehicleId to match your child component's row keys
     make: "Mercedes-Benz",
     model: "S-Class",
-    registration: "CAA 265",
+    licenseNumber: "CAA 265",
     category: "Sedan",
     dailyRate: 1800,
-    isAvailable: true,
+    isAvailable: "Available",
     currentBooking: "—",
     nextService: "Oct 24, 2026",
   },
@@ -61,10 +61,10 @@ const mockVehicles = [
     bookingId: 2,
     make: "Ford",
     model: "Transit EV",
-    registration: "CA 522 3567",
-    category: "Bakkie",
+    licenseNumber: "CA 522 3567",
+    category: "Pickup Truck",
     dailyRate: 950,
-    isAvailable: false,
+    isAvailable: "In Use",
     currentBooking: "In Use",
     nextService: "Nov 12, 2026",
   },
@@ -72,10 +72,10 @@ const mockVehicles = [
     bookingId: 3,
     make: "BMW",
     model: "M2",
-    registration: "CA 510 2765",
+    licenseNumber: "CA 510 2765",
     category: "Sedan",
     dailyRate: 1600,
-    isAvailable: true,
+    isAvailable: "Available",
     currentBooking: "Starts 16:00",
     nextService: "Dec 05, 2026",
   },
@@ -86,9 +86,11 @@ function CompanyDashboard() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
 
-  const availableVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable).length;
-  const inProgressVehicles = mockVehicles.filter((vehicle) => !vehicle.isAvailable).length;
-  const pendingBookings = 7;
+  const availableVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable === "Available").length;
+  const inProgressVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable === "In Use").length;
+  const pendingBookings = mockVehicles.filter(
+    (booking) => booking.status === "Pending"
+  ).length;
 
   return (
     <DashboardLayout
@@ -148,7 +150,7 @@ function CompanyDashboard() {
         <SearchInput
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search vehicles by make, model, registration, or category..."
+          placeholder="Search vehicles by make, model, license, or category..."
         />
 
         <FilterSelect
@@ -157,9 +159,11 @@ function CompanyDashboard() {
         >
           <option value="all">All categories</option>
           <option value="Sedan">Sedan</option>
-          <option value="Bakkie">Bakkie</option>
+          <option value="Hatchback">Hatchback</option>
           <option value="SUV">SUV</option>
-          <option value="Mini Van">Mini Van</option>
+          <option value="Convertible">Convertible</option>
+          <option value="Pickup Truck">Pickup Truck</option>
+          <option value="Minivan/MPV">Minivan/MPV</option>
         </FilterSelect>
 
         <FilterSelect
@@ -167,8 +171,9 @@ function CompanyDashboard() {
           onChange={(event) => setAvailabilityFilter(event.target.value)}
         >
           <option value="all">All statuses</option>
-          <option value="available">Available</option>
-          <option value="unavailable">In Use</option>
+          <option value="Available">Available</option>
+          <option value="In Use">In Use</option>
+          <option value="Maintenance">Maintenance</option>
         </FilterSelect>
       </Toolbar>
 

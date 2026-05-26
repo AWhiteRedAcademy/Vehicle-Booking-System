@@ -77,9 +77,11 @@ const mockVehicles = [
     vehicleId: 1,
     make: "Mercedes-Benz",
     model: "S-Class",
-    plate: "C 235",
-    type: "Sedan",
-    status: "Available",
+    licenseNumber: "C 235",
+    vinNumber: "VIN001",
+    modelYear: 2024,
+    category: "Sedan",
+    isAvailable: "Available",
     dailyRate: 1800,
     lastService: "Oct 12, 2023",
     mileage: "12,450 km",
@@ -88,9 +90,11 @@ const mockVehicles = [
     vehicleId: 2,
     make: "Ford",
     model: "Wildtrack",
-    plate: "CA63565",
-    type: "Bakkie",
-    status: "In Use",
+    licenseNumber: "CA63565",
+    vinNumber: "VIN002",
+    modelYear: 2023,
+    category: "Pickup Truck",
+    isAvailable: "In Use",
     dailyRate: 950,
     driver: "John Miller",
     returnEstimate: "Today, 18:00",
@@ -99,9 +103,11 @@ const mockVehicles = [
     vehicleId: 3,
     make: "Range Rover",
     model: "Sport",
-    plate: "GP999",
-    type: "SUV",
-    status: "Maintenance",
+    licenseNumber: "GP999",
+    vinNumber: "VIN003",
+    modelYear: 2022,
+    category: "SUV",
+    isAvailable: "Maintenance",
     dailyRate: 2200,
     issue: "Brake Service",
     expected: "Oct 29, 2023",
@@ -110,23 +116,14 @@ const mockVehicles = [
     vehicleId: 4,
     make: "Audi",
     model: "A6 ",
-    plate: "GP0099",
-    type: "Hatchback",
-    status: "Available",
+    licenseNumber: "GP0099",
+    vinNumber: "VIN004",
+    modelYear: 2024,
+    category: "Hatchback",
+    isAvailable: "Available",
     dailyRate: 1500,
     lastService: "Sep 30, 2023",
     mileage: "8,920 km",
-  },
-  {
-    vehicleId: 5,
-    make: "Volvo",
-    model: "something",
-    plate: "KZN7456",
-    type: "Sedan",
-    status: "Pending",
-    dailyRate: 2600,
-    inspection: "Review Req.",
-    statusAge: "2 Days",
   },
 ];
 
@@ -142,13 +139,15 @@ function CompanyVehicles() {
       const matchesSearch =
         vehicle.make.toLowerCase().includes(searchValue) ||
         vehicle.model.toLowerCase().includes(searchValue) ||
-        vehicle.plate.toLowerCase().includes(searchValue) ||
-        vehicle.type.toLowerCase().includes(searchValue);
+        vehicle.licenseNumber.toLowerCase().includes(searchValue) ||
+        vehicle.vinNumber.toLowerCase().includes(searchValue) ||
+        vehicle.modelYear.toString().includes(searchValue) ||
+        vehicle.category.toLowerCase().includes(searchValue);
 
       const matchesStatus =
-        statusFilter === "all" || vehicle.status === statusFilter;
+        statusFilter === "all" || vehicle.isAvailable === statusFilter;
 
-      const matchesType = typeFilter === "all" || vehicle.type === typeFilter;
+      const matchesType = typeFilter === "all" || vehicle.category === typeFilter;
 
       return matchesSearch && matchesStatus && matchesType;
     });
@@ -178,7 +177,7 @@ function CompanyVehicles() {
         <SearchInput
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search vehicles or license plates..."
+          placeholder="Search vehicles by license, VIN, year, make, model, or category..."
         />
 
         <FilterSelect
@@ -189,7 +188,6 @@ function CompanyVehicles() {
           <option value="Available">Available</option>
           <option value="In Use">In Use</option>
           <option value="Maintenance">Maintenance</option>
-          <option value="Pending">Pending</option>
         </FilterSelect>
 
         <FilterSelect
@@ -198,8 +196,11 @@ function CompanyVehicles() {
         >
           <option value="all">All types</option>
           <option value="Sedan">Sedan</option>
+          <option value="Hatchback">Hatchback</option>
           <option value="SUV">SUV</option>
-          <option value="Mini Van">Mini Van</option>
+          <option value="Convertible">Convertible</option>
+          <option value="Pickup Truck">Pickup Truck</option>
+          <option value="Minivan/MPV">Minivan/MPV</option>
         </FilterSelect>
       </Toolbar>
 
@@ -226,7 +227,7 @@ function CompanyVehicles() {
 }
 
 function CompanyVehicleCard({ vehicle }) {
-  const isBookable = vehicle.status === "Available";
+  const isBookable = vehicle.isAvailable === "Available";
 
   return (
     <VehicleInventoryCard>
@@ -235,11 +236,11 @@ function CompanyVehicleCard({ vehicle }) {
           <DirectionsCarIcon fontSize="large" />
         </VehicleImagePlaceholder>
 
-        <VehicleStatusBadge $status={vehicle.status}>
-          {vehicle.status}
+        <VehicleStatusBadge $status={vehicle.isAvailable}>
+          {vehicle.isAvailable}
         </VehicleStatusBadge>
 
-        <VehicleTypeBadge>{vehicle.type}</VehicleTypeBadge>
+        <VehicleTypeBadge>{vehicle.category}</VehicleTypeBadge>
       </VehicleImageArea>
 
       <VehicleCardBody>
@@ -248,7 +249,7 @@ function CompanyVehicleCard({ vehicle }) {
             <VehicleTitle>
               {vehicle.make} {vehicle.model}
             </VehicleTitle>
-            <VehiclePlate>PLATE: {vehicle.plate}</VehiclePlate>
+            <VehiclePlate>PLATE: {vehicle.licenseNumber} · {vehicle.modelYear}</VehiclePlate>
           </div>
 
           <VehicleMenuButton type="button">
@@ -257,7 +258,7 @@ function CompanyVehicleCard({ vehicle }) {
         </VehicleCardHeader>
 
         <VehicleInfoGrid>
-          {vehicle.status === "Available" && (
+          {vehicle.isAvailable === "Available" && (
             <>
               <VehicleInfoItem>
                 <CalendarMonthIcon fontSize="small" />
@@ -277,7 +278,7 @@ function CompanyVehicleCard({ vehicle }) {
             </>
           )}
 
-          {vehicle.status === "In Use" && (
+          {vehicle.isAvailable === "In Use" && (
             <>
               <VehicleInfoItem>
                 <PersonIcon fontSize="small" />
@@ -297,7 +298,7 @@ function CompanyVehicleCard({ vehicle }) {
             </>
           )}
 
-          {vehicle.status === "Maintenance" && (
+          {vehicle.isAvailable === "Maintenance" && (
             <>
               <VehicleInfoItem>
                 <BuildIcon fontSize="small" />
@@ -317,37 +318,16 @@ function CompanyVehicleCard({ vehicle }) {
             </>
           )}
 
-          {vehicle.status === "Pending" && (
-            <>
-              <VehicleInfoItem>
-                <CalendarMonthIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Inspection</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.inspection}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-
-              <VehicleInfoItem>
-                <SpeedIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Status Age</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.statusAge}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-            </>
-          )}
         </VehicleInfoGrid>
 
         <VehicleCardDivider />
 
         <VehicleCardActions>
           <VehicleLinkButton type="button">
-            {vehicle.status === "In Use"
+            {vehicle.isAvailable === "In Use"
               ? "View Journey"
-              : vehicle.status === "Maintenance"
+              : vehicle.isAvailable === "Maintenance"
               ? "View Service Log"
-              : vehicle.status === "Pending"
-              ? "View Report"
               : "View Details"}
           </VehicleLinkButton>
 

@@ -37,8 +37,6 @@ import {
   PlusCircle,
 } from "./OwnerDashboard.style";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5188";
-
 const ownerNavItems = [
   {
     label: "Dashboard",
@@ -86,8 +84,8 @@ function OwnerDashboard() {
 
   // Calculates metrics from live array data
   const totalVehicles = vehicles.length;
-  const availableVehicles = vehicles.filter(v => v.isAvailable === true).length;
-  const unavailableVehicles = vehicles.filter(v => v.isAvailable !== true).length;
+  const availableVehicles = vehicles.filter(v => v.isAvailable === "Available").length;
+  const unavailableVehicles = vehicles.filter(v => v.isAvailable !== "Available").length;
   const estimatedMonthlyRevenue = vehicles.reduce(
     (total, v) => total + Number(v.dailyRate || 0) * 10,
     0
@@ -162,7 +160,7 @@ function OwnerDashboard() {
         <SearchInput
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search by make, model, or category..."
+          placeholder="Search by make, model, license, VIN, year, or category..."
         />
 
         <FilterSelect
@@ -170,8 +168,9 @@ function OwnerDashboard() {
           onChange={(event) => setAvailabilityFilter(event.target.value)}
         >
           <option value="all">All vehicles</option>
-          <option value="available">Available only</option>
-          <option value="unavailable">Unavailable only</option>
+          <option value="Available">Available only</option>
+          <option value="In Use">In Use only</option>
+          <option value="Maintenance">Maintenance only</option>
         </FilterSelect>
       </Toolbar>
 

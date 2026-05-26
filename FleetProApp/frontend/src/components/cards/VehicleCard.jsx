@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -19,6 +20,9 @@ import {
 } from "./VehicleCard.style";
 
 function VehicleCard({ vehicle }) {
+  const navigate = useNavigate();
+  const vehicleId = vehicle.id || vehicle.vehicleId;
+
   return (
     <Card>
       <ImageArea>
@@ -26,8 +30,8 @@ function VehicleCard({ vehicle }) {
           <DirectionsCarIcon />
         </VehicleIcon>
 
-        <StatusBadge $available={vehicle.isAvailable}>
-          {vehicle.isAvailable ? "Available" : "Unavailable"}
+        <StatusBadge $status={vehicle.isAvailable}>
+          {vehicle.isAvailable || "Available"}
         </StatusBadge>
       </ImageArea>
 
@@ -38,6 +42,9 @@ function VehicleCard({ vehicle }) {
 
         <DetailRow>
           <DetailTag>{vehicle.category}</DetailTag>
+          {vehicle.modelYear > 0 && <DetailTag>{vehicle.modelYear}</DetailTag>}
+          {vehicle.licenseNumber && <DetailTag>{vehicle.licenseNumber}</DetailTag>}
+          {vehicle.vinNumber && <DetailTag>VIN: {vehicle.vinNumber}</DetailTag>}
           <DetailTag>Owner #{vehicle.ownerId}</DetailTag>
         </DetailRow>
 
@@ -47,7 +54,7 @@ function VehicleCard({ vehicle }) {
           <ActionButtons>
             <EditButton
               type="button"
-              onClick={() => navigate(`/owner/vehicles/edit/${vehicle.id}`)}
+              onClick={() => navigate(`/owner/vehicles/edit/${vehicleId}`)}
             >
               <EditIcon fontSize="inherit" />
               Edit

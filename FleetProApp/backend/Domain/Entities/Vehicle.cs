@@ -31,19 +31,34 @@ namespace VehicleBook.Domain.Entities
         [Required]
         [StringLength(50)]
         [Column("category")]
-        public string Category { get; set; } = "TBD";
+        public string Category { get; set; } = "Sedan";
 
         [Required]
         [Column("dailyrate")]
         public decimal DailyRate { get; set; }
 
         [Required]
-        [Column("isavailable", TypeName = "boolean")] 
-        public bool IsAvailable { get; set; }
+        [Column("isavailable")]
+        public string IsAvailable { get; set; } = "Available";
 
         [ForeignKey("OwnerId")]
         public virtual User? Owner { get; set; }
          
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+        [Required]
+        [StringLength(20)]
+        [Column("licensenumber")]
+        public string LicenseNumber { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(50)]
+        [Column("vinnumber")]
+        public string VinNumber { get; set; } = string.Empty;
+
+        [Required]
+        [Column("modelyear")]
+        public int ModelYear { get; set; }
+            
     }
 }

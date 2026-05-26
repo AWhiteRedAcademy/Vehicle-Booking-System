@@ -30,16 +30,14 @@ export default function CompanyBookingList({
             const matchesSearch =
                 booking.make?.toLowerCase().includes(searchValue) ||
                 booking.model?.toLowerCase().includes(searchValue) ||
-                booking.registration?.toLowerCase().includes(searchValue) ||
+                booking.licenseNumber?.toLowerCase().includes(searchValue) ||
                 booking.category?.toLowerCase().includes(searchValue);
 
             const matchesCategory =
                 categoryFilter === "all" || booking.category === categoryFilter;
 
             const matchesAvailability =
-                availabilityFilter === "all" ||
-                (availabilityFilter === "available" && booking.isAvailable) ||
-                (availabilityFilter === "unavailable" && !booking.isAvailable);
+                availabilityFilter === "all" || booking.isAvailable === availabilityFilter;
 
             return matchesSearch && matchesCategory && matchesAvailability;
         });
@@ -71,7 +69,7 @@ export default function CompanyBookingList({
                                     <VehicleName>
                                         {bookings.make} {bookings.model}
                                     </VehicleName>
-                                    <VehicleMeta>{bookings.registration}</VehicleMeta>
+                                    <VehicleMeta>{bookings.licenseNumber}</VehicleMeta>
                                 </div>
                             </BookingInfo>
                         </td>
@@ -81,8 +79,8 @@ export default function CompanyBookingList({
                         </td>
 
                         <td>
-                            <StatusText $available={bookings.isAvailable}>
-                                {bookings.isAvailable ? "Available" : "In Use"}
+                            <StatusText $available={bookings.isAvailable === "Available"}>
+                                {bookings.isAvailable || "Available"}
                             </StatusText>
                         </td>
 

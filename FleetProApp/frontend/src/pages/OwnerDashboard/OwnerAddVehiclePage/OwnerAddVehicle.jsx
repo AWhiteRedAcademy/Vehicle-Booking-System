@@ -40,7 +40,7 @@ import {
   DiscardButton,
   SaveButton,
   ErrorMessage,
-} from "./  OwnerAddVehicle.style";
+} from "./OwnerAddVehicle.style";
 
 
 const ownerNavItems = [
@@ -79,9 +79,12 @@ function OwnerAddVehicle() {
     ownerId: userId,
     make: "",
     model: "",
-    category: "Executive Sedan",
+    category: "Sedan",
     dailyRate: "",
-    isAvailable: true,
+    isAvailable: "Available",
+    licenseNumber: "",
+    vinNumber: "",
+    modelYear: "",
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -121,17 +124,25 @@ function OwnerAddVehicle() {
       return;
     }
 
+    if (formData.modelYear && Number(formData.modelYear) < 1900) {
+      setError("Model year must be valid.");
+      return;
+    }
+
     try {
       setIsSaving(true);
       setError("");
 
       const requestBody = {
         ownerId: Number(formData.ownerId),
-        make: formData.make,
-        model: formData.model,
+        make: formData.make.trim(),
+        model: formData.model.trim(),
         category: formData.category,
         dailyRate: Number(formData.dailyRate),
         isAvailable: formData.isAvailable,
+        licenseNumber: formData.licenseNumber.trim(),
+        vinNumber: formData.vinNumber.trim(),
+        modelYear: Number(formData.modelYear || 0),
       };
 
       await addVehicle(requestBody);
@@ -214,13 +225,52 @@ function OwnerAddVehicle() {
                     value={formData.category}
                     onChange={handleChange}
                   >
-                    <option value="Executive Sedan">Executive Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="Luxury">Luxury</option>
-                    <option value="Cargo">Cargo</option>
+                    <option value="Sedan">Sedan</option>
                     <option value="Hatchback">Hatchback</option>
-                    <option value="Coupe">Coupe</option>
+                    <option value="SUV">SUV</option>
+                    <option value="Convertible">Convertible</option>
+                    <option value="Pickup Truck">Pickup Truck</option>
+                    <option value="Minivan/MPV">Minivan/MPV</option>
                   </Select>
+                </FieldGroup>
+              </FormRow>
+
+              <FormRow>
+                <FieldGroup>
+                  <Label>License Number</Label>
+                  <Input
+                    type="text"
+                    name="licenseNumber"
+                    value={formData.licenseNumber}
+                    onChange={handleChange}
+                    placeholder="e.g. CA 123 456"
+                    maxLength="20"
+                  />
+                </FieldGroup>
+
+                <FieldGroup>
+                  <Label>Model Year</Label>
+                  <Input
+                    type="number"
+                    name="modelYear"
+                    value={formData.modelYear}
+                    onChange={handleChange}
+                    placeholder="e.g. 2024"
+                  />
+                </FieldGroup>
+              </FormRow>
+
+              <FormRow>
+                <FieldGroup>
+                  <Label>VIN Number</Label>
+                  <Input
+                    type="text"
+                    name="vinNumber"
+                    value={formData.vinNumber}
+                    onChange={handleChange}
+                    placeholder="Vehicle identification number"
+                    maxLength="50"
+                  />
                 </FieldGroup>
               </FormRow>
             </FormCard>
@@ -250,18 +300,26 @@ function OwnerAddVehicle() {
                 <StatusOptions>
                   <StatusOption
                     type="button"
-                    $active={formData.isAvailable === true}
-                    onClick={() => handleStatusChange(true)}
+                    $active={formData.isAvailable === "Available"}
+                    onClick={() => handleStatusChange("Available")}
                   >
                     Available
                   </StatusOption>
 
                   <StatusOption
                     type="button"
-                    $active={formData.isAvailable === false}
-                    onClick={() => handleStatusChange(false)}
+                    $active={formData.isAvailable === "In Use"}
+                    onClick={() => handleStatusChange("In Use")}
                   >
-                    Unavailable
+                    In Use
+                  </StatusOption>
+
+                  <StatusOption
+                    type="button"
+                    $active={formData.isAvailable === "Maintenance"}
+                    onClick={() => handleStatusChange("Maintenance")}
+                  >
+                    Maintenance
                   </StatusOption>
                 </StatusOptions>
               </FieldGroup>

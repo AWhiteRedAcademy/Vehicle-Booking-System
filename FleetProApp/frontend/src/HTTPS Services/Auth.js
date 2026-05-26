@@ -75,7 +75,5 @@ export const authFetch = async (endpoint, options = {}) => {
         return response.json();
     }
     
-    token = '';
-
     return response.text(); 
 };
