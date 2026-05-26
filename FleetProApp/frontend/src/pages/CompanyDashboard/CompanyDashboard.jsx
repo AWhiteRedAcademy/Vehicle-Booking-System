@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -8,7 +8,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
@@ -31,46 +30,24 @@ import {
   PanelHeader,
   PanelTitle,
   PanelActionButton,
-  VehicleTable,
-  VehicleImage,
-  VehicleInfo,
-  VehicleName,
-  VehicleMeta,
-  Badge,
-  StatusText,
-  ActionButton,
+  BookingTable,
   TableFooter,
   FooterText,
   PaginationButtons,
   PaginationButton,
 } from "./CompanyDashboard.style";
+import CompanyBookingList from "./CompanyBookingsPage/CompanyBookingList";
 
 const companyNavItems = [
-  {
-    label: "Dashboard",
-    to: "/company/dashboard",
-    icon: <GridViewIcon fontSize="small" />,
-  },
-  {
-    label: "Vehicles",
-    to: "/company/vehicles",
-    icon: <DirectionsCarIcon fontSize="small" />,
-  },
-  {
-    label: "Bookings",
-    to: "/company/bookings",
-    icon: <EventAvailableIcon fontSize="small" />,
-  },
-  {
-    label: "Reports",
-    to: "/company/reports",
-    icon: <BarChartIcon fontSize="small" />,
-  },
+  { label: "Dashboard", to: "/company/dashboard", icon: <GridViewIcon fontSize="small" /> },
+  { label: "Vehicles", to: "/company/vehicles", icon: <DirectionsCarIcon fontSize="small" /> },
+  { label: "Bookings", to: "/company/bookings", icon: <EventAvailableIcon fontSize="small" /> },
+  { label: "Reports", to: "/company/reports", icon: <BarChartIcon fontSize="small" /> },
 ];
 
 const mockVehicles = [
   {
-    vehicleId: 1,
+    bookingId: 1, // Changed from vehicleId to match your child component's row keys
     make: "Mercedes-Benz",
     model: "S-Class",
     registration: "CAA 265",
@@ -81,18 +58,18 @@ const mockVehicles = [
     nextService: "Oct 24, 2026",
   },
   {
-    vehicleId: 2,
+    bookingId: 2,
     make: "Ford",
     model: "Transit EV",
     registration: "CA 522 3567",
     category: "Bakkie",
     dailyRate: 950,
     isAvailable: false,
-    currentBooking: "",
+    currentBooking: "In Use",
     nextService: "Nov 12, 2026",
   },
   {
-    vehicleId: 3,
+    bookingId: 3,
     make: "BMW",
     model: "M2",
     registration: "CA 510 2765",
@@ -108,28 +85,6 @@ function CompanyDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
-
-  const filteredVehicles = useMemo(() => {
-    return mockVehicles.filter((vehicle) => {
-      const searchValue = searchTerm.toLowerCase();
-
-      const matchesSearch =
-        vehicle.make.toLowerCase().includes(searchValue) ||
-        vehicle.model.toLowerCase().includes(searchValue) ||
-        vehicle.registration.toLowerCase().includes(searchValue) ||
-        vehicle.category.toLowerCase().includes(searchValue);
-
-      const matchesCategory =
-        categoryFilter === "all" || vehicle.category === categoryFilter;
-
-      const matchesAvailability =
-        availabilityFilter === "all" ||
-        (availabilityFilter === "available" && vehicle.isAvailable) ||
-        (availabilityFilter === "unavailable" && !vehicle.isAvailable);
-
-      return matchesSearch && matchesCategory && matchesAvailability;
-    });
-  }, [searchTerm, categoryFilter, availabilityFilter]);
 
   const availableVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable).length;
   const inProgressVehicles = mockVehicles.filter((vehicle) => !vehicle.isAvailable).length;
@@ -166,7 +121,6 @@ function CompanyDashboard() {
           tone="green"
           icon={<CheckCircleIcon fontSize="small" />}
         />
-
         <StatCard
           label="In Progress"
           value={inProgressVehicles}
@@ -174,7 +128,6 @@ function CompanyDashboard() {
           tone="blue"
           icon={<LocalShippingIcon fontSize="small" />}
         />
-
         <StatCard
           label="Pending Bookings"
           value={pendingBookings}
@@ -182,7 +135,6 @@ function CompanyDashboard() {
           tone="orange"
           icon={<PendingActionsIcon fontSize="small" />}
         />
-
         <StatCard
           label="Total Vehicles"
           value={mockVehicles.length}
@@ -205,6 +157,7 @@ function CompanyDashboard() {
         >
           <option value="all">All categories</option>
           <option value="Sedan">Sedan</option>
+          <option value="Bakkie">Bakkie</option>
           <option value="SUV">SUV</option>
           <option value="Mini Van">Mini Van</option>
         </FilterSelect>
@@ -222,85 +175,42 @@ function CompanyDashboard() {
       <DashboardPanel>
         <PanelHeader>
           <PanelTitle>Fleet Status Overview</PanelTitle>
-
-          <PanelActionButton type="button">
-            Filter
-          </PanelActionButton>
+          <PanelActionButton type="button">Filter</PanelActionButton>
         </PanelHeader>
 
-        {filteredVehicles.length === 0 ? (
-          <EmptyCard>No vehicles found.</EmptyCard>
-        ) : (
-          <>
-            <VehicleTable>
-              <thead>
-                <tr>
-                  <th>Vehicle Details</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Current Booking</th>
-                  <th>Next Service</th>
-                  <th>Daily Rate</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
 
-              <tbody>
-                {filteredVehicles.map((vehicle) => (
-                  <tr key={vehicle.vehicleId}>
-                    <td>
-                      <VehicleInfo>
-                        <VehicleImage>
-                          <DirectionsCarIcon fontSize="small" />
-                        </VehicleImage>
+        <BookingTable>
+          <thead>
+            <tr>
+              <th>Vehicle Details</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Current Booking</th>
+              <th>Next Service</th>
+              <th>Daily Rate</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
 
-                        <div>
-                          <VehicleName>
-                            {vehicle.make} {vehicle.model}
-                          </VehicleName>
-                          <VehicleMeta>{vehicle.registration}</VehicleMeta>
-                        </div>
-                      </VehicleInfo>
-                    </td>
+          <CompanyBookingList
+            bookings={mockVehicles}
+            searchTerm={searchTerm}
+            categoryFilter={categoryFilter}
+            availabilityFilter={availabilityFilter}
+          />
+        </BookingTable>
 
-                    <td>
-                      <Badge>{vehicle.category}</Badge>
-                    </td>
+        <TableFooter>
+          <FooterText>
+            Showing {mockVehicles.length} total vehicles
+          </FooterText>
 
-                    <td>
-                      <StatusText $available={vehicle.isAvailable}>
-                        {vehicle.isAvailable ? "Available" : "In Use"}
-                      </StatusText>
-                    </td>
+          <PaginationButtons>
+            <PaginationButton type="button">‹</PaginationButton>
+            <PaginationButton type="button">›</PaginationButton>
+          </PaginationButtons>
+        </TableFooter>
 
-                    <td>{vehicle.currentBooking}</td>
-
-                    <td>{vehicle.nextService}</td>
-
-                    <td>R{vehicle.dailyRate}</td>
-
-                    <td>
-                      <ActionButton type="button">
-                        <MoreVertIcon fontSize="small" />
-                      </ActionButton>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </VehicleTable>
-
-            <TableFooter>
-              <FooterText>
-                Showing {filteredVehicles.length} of {mockVehicles.length} vehicles
-              </FooterText>
-
-              <PaginationButtons>
-                <PaginationButton type="button">‹</PaginationButton>
-                <PaginationButton type="button">›</PaginationButton>
-              </PaginationButtons>
-            </TableFooter>
-          </>
-        )}
       </DashboardPanel>
     </DashboardLayout>
   );

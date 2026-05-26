@@ -31,6 +31,9 @@ export const handleSignInSubmit = async (email, password, setError) => {
       case 'Company':
         window.location.href = '/company/dashboard';
         break;
+      case 'Guest':
+        throw new Error("Registration Request succeeded, but Admin approval is required.");
+        break;
       default:
         throw new Error("Login succeeded, but user role is unrecognized.");
     }

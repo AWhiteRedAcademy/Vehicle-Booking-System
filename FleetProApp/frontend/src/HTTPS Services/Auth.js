@@ -7,6 +7,27 @@ const API_URL =  '';
 export const authFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('accessToken');
     
+    if (endpoint === 'api/User/register') {
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            ...options,
+            headers: {
+                ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+                ...options.headers,
+            },
+        });
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.message || errData.Message || 'Registration endpoint rejected data.');
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            return response.json();
+        }
+        return response.text();
+    }
+
     if (!token || typeof token !== 'string') {
         throw new Error("You are not logged in. Please sign in again.");
     }
@@ -45,7 +66,6 @@ export const authFetch = async (endpoint, options = {}) => {
     });
 
     if (!response.ok) {
-
         const errorMsg = await response.json().catch(() => ({}));
         throw new Error(errorMsg.message || `API Error: ${response.status} ${response.statusText}`);
     }
@@ -55,5 +75,7 @@ export const authFetch = async (endpoint, options = {}) => {
         return response.json();
     }
     
+    token = '';
+
     return response.text(); 
 };

@@ -40,7 +40,7 @@ export const PanelActionButton = styled.button`
   }
 `;
 
-export const VehicleTable = styled.table`
+export const BookingTable = styled.table`
   width: 100%;
   border-collapse: collapse;
 
@@ -66,7 +66,7 @@ export const VehicleTable = styled.table`
   }
 `;
 
-export const VehicleInfo = styled.div`
+export const BookingInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 14px;
