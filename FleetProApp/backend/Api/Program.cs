@@ -108,7 +108,7 @@ namespace Vehicle_Booking_System
             app.UseAuthorization();
             app.MapControllers();
 
-            app.Run("http://0.0.0.0:5000");
+            app.Run();
         }
     }
 }
