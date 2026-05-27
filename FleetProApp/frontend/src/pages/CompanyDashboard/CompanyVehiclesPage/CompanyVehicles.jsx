@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -9,9 +9,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SpeedIcon from "@mui/icons-material/Speed";
 import PersonIcon from "@mui/icons-material/Person";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import BuildIcon from "@mui/icons-material/Build";
 
 import DashboardLayout from "../../../components/dashboard/DashboardLayout";
+import StatCard from "../../../components/cards/StatCard";
+
+import { getVehicleDetails } from "../../../HTTPS Services/CompanyServices.js";
+
 
 import {
   HeaderRow,
@@ -19,6 +24,7 @@ import {
   SectionTitle,
   SectionText,
   Toolbar,
+  StatsGrid,
   SearchInput,
   FilterSelect,
   EmptyCard,
@@ -48,6 +54,8 @@ import {
   LoadMoreButton,
   ShowingText,
 } from "./CompanyVehicles.style";
+
+import CompanyVehicleList from "./CompanyVehicleDetailsList.jsx";
 
 const companyNavItems = [
   {
@@ -132,26 +140,46 @@ function CompanyVehicles() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
 
-  const filteredVehicles = useMemo(() => {
-    return mockVehicles.filter((vehicle) => {
-      const searchValue = searchTerm.toLowerCase();
+  const [liveVehicles, setLiveVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null)
 
-      const matchesSearch =
-        vehicle.make.toLowerCase().includes(searchValue) ||
-        vehicle.model.toLowerCase().includes(searchValue) ||
-        vehicle.licenseNumber.toLowerCase().includes(searchValue) ||
-        vehicle.vinNumber.toLowerCase().includes(searchValue) ||
-        vehicle.modelYear.toString().includes(searchValue) ||
-        vehicle.category.toLowerCase().includes(searchValue);
+  const [visibleCount, setVisibleCount] = useState(6);
 
-      const matchesStatus =
-        statusFilter === "all" || vehicle.isAvailable === statusFilter;
+  useEffect(() => {
+    const fetchVehicleData = async () => {
+      try {
+        setLoading(true);
+        const data = await getVehicleDetails();
+        setLiveVehicles(data);
+      } catch (err) {
+        setError(err.message || "Failed to load fleet dashboard metrics.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      const matchesType = typeFilter === "all" || vehicle.category === typeFilter;
+    fetchVehicleData();
+  }, []);
 
-      return matchesSearch && matchesStatus && matchesType;
-    });
-  }, [searchTerm, statusFilter, typeFilter]);
+  // Compute live dashboard metrics from API array
+  const availableVehicles = liveVehicles.filter((v) => v.isAvailable === "Available").length;
+
+  if (loading) {
+    return (
+      <DashboardLayout title="Loading Dashboard..." roleLabel="Company Console" userLabel="Company" navItems={companyNavItems}>
+        <div style={{ textAlign: "center", padding: "50px", fontSize: "1.2rem" }}>Loading data from fleet manager API...</div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout title="Dashboard Error" roleLabel="Company Console" userLabel="Company" navItems={companyNavItems}>
+        <div style={{ textAlign: "center", padding: "50px", color: "red" }}>Error: {error}</div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout
@@ -172,6 +200,24 @@ function CompanyVehicles() {
           </SectionText>
         </div>
       </HeaderRow>
+
+      <StatsGrid>
+        <StatCard
+          label="Available Vehicles"
+          value={availableVehicles}
+          helperText="Ready for booking"
+          tone="green"
+          icon={<CheckCircleIcon fontSize="small" />}
+        />
+        <StatCard
+          label="Total Vehicles"
+          value={liveVehicles.length}
+          helperText="Visible fleet records"
+          tone="blue"
+          icon={<DirectionsCarIcon fontSize="small" />}
+        />
+      </StatsGrid>
+
 
       <Toolbar>
         <SearchInput
@@ -204,140 +250,31 @@ function CompanyVehicles() {
         </FilterSelect>
       </Toolbar>
 
-      {filteredVehicles.length === 0 ? (
-        <EmptyCard>No vehicles found.</EmptyCard>
-      ) : (
-        <>
-          <VehicleInventoryGrid>
-            {filteredVehicles.map((vehicle) => (
-              <CompanyVehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
-            ))}
-          </VehicleInventoryGrid>
+      <CompanyVehicleList
+        vehicle={liveVehicles}
+        searchTerm={searchTerm}
+        statusFilter={statusFilter}
+        typeFilter={typeFilter}
+        visibleCount={visibleCount}
+      />
 
-          <LoadMoreWrapper>
-            <LoadMoreButton type="button">Load More Vehicles</LoadMoreButton>
-            <ShowingText>
-              Showing {filteredVehicles.length} of {mockVehicles.length} vehicles
-            </ShowingText>
-          </LoadMoreWrapper>
-        </>
+
+      {/* Only show the wrapper if there are more vehicles left to load */}
+      {liveVehicles.length > visibleCount && (
+        <LoadMoreWrapper>
+          <LoadMoreButton
+            type="button"
+            onClick={() => setVisibleCount(prev => prev + 6)} //Increments visible cards by 6
+          >
+            Load More Vehicles
+          </LoadMoreButton>
+          <ShowingText>
+            Showing {Math.min(visibleCount, liveVehicles.length)} of {liveVehicles.length} vehicles
+          </ShowingText>
+        </LoadMoreWrapper>
       )}
+
     </DashboardLayout>
   );
 }
-
-function CompanyVehicleCard({ vehicle }) {
-  const isBookable = vehicle.isAvailable === "Available";
-
-  return (
-    <VehicleInventoryCard>
-      <VehicleImageArea>
-        <VehicleImagePlaceholder>
-          <DirectionsCarIcon fontSize="large" />
-        </VehicleImagePlaceholder>
-
-        <VehicleStatusBadge $status={vehicle.isAvailable}>
-          {vehicle.isAvailable}
-        </VehicleStatusBadge>
-
-        <VehicleTypeBadge>{vehicle.category}</VehicleTypeBadge>
-      </VehicleImageArea>
-
-      <VehicleCardBody>
-        <VehicleCardHeader>
-          <div>
-            <VehicleTitle>
-              {vehicle.make} {vehicle.model}
-            </VehicleTitle>
-            <VehiclePlate>PLATE: {vehicle.licenseNumber} · {vehicle.modelYear}</VehiclePlate>
-          </div>
-
-          <VehicleMenuButton type="button">
-            <MoreVertIcon fontSize="small" />
-          </VehicleMenuButton>
-        </VehicleCardHeader>
-
-        <VehicleInfoGrid>
-          {vehicle.isAvailable === "Available" && (
-            <>
-              <VehicleInfoItem>
-                <CalendarMonthIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Last Service</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.lastService}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-
-              <VehicleInfoItem>
-                <SpeedIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Mileage</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.mileage}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-            </>
-          )}
-
-          {vehicle.isAvailable === "In Use" && (
-            <>
-              <VehicleInfoItem>
-                <PersonIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Driver</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.driver}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-
-              <VehicleInfoItem>
-                <CalendarMonthIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Return Est.</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.returnEstimate}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-            </>
-          )}
-
-          {vehicle.isAvailable === "Maintenance" && (
-            <>
-              <VehicleInfoItem>
-                <BuildIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Issue</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.issue}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-
-              <VehicleInfoItem>
-                <CalendarMonthIcon fontSize="small" />
-                <div>
-                  <VehicleInfoLabel>Expected</VehicleInfoLabel>
-                  <VehicleInfoValue>{vehicle.expected}</VehicleInfoValue>
-                </div>
-              </VehicleInfoItem>
-            </>
-          )}
-
-        </VehicleInfoGrid>
-
-        <VehicleCardDivider />
-
-        <VehicleCardActions>
-          <VehicleLinkButton type="button">
-            {vehicle.isAvailable === "In Use"
-              ? "View Journey"
-              : vehicle.isAvailable === "Maintenance"
-              ? "View Service Log"
-              : "View Details"}
-          </VehicleLinkButton>
-
-          <VehicleBookButton type="button" disabled={!isBookable}>
-            {isBookable ? "Book Now" : "Book Now"}
-          </VehicleBookButton>
-        </VehicleCardActions>
-      </VehicleCardBody>
-    </VehicleInventoryCard>
-  );
-}
-
 export default CompanyVehicles;

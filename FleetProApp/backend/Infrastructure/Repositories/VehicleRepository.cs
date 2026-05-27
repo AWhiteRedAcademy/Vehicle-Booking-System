@@ -39,44 +39,9 @@ namespace VehicleBook.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync(VehicleQueryObject query)
+        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
         {
             IQueryable<Vehicle> dbQuery = _dbSet;
-
-            if (!string.IsNullOrEmpty(query.Make))
-            {
-                dbQuery = dbQuery.Where(v => v.Make.Contains(query.Make));
-            }
-
-            if (!string.IsNullOrEmpty(query.Model))
-            {
-                dbQuery = dbQuery.Where(v => v.Model.Contains(query.Model));
-            }
-
-            if (!string.IsNullOrEmpty(query.Category))
-            {
-                dbQuery = dbQuery.Where(v => v.Category.Contains(query.Category));
-            }
-            if (!string.IsNullOrEmpty(query.IsAvailable))
-            {
-                dbQuery = dbQuery.Where(v => v.IsAvailable == query.IsAvailable);
-            }
-
-            if (query.OwnerId.HasValue)
-            {
-                dbQuery = dbQuery.Where(v => v.OwnerId == query.OwnerId.Value);
-            }
-
-            if (query.MinDailyRate.HasValue)
-            {
-                dbQuery = dbQuery.Where(v => v.DailyRate >= query.MinDailyRate.Value);
-            }
-
-            if (query.MaxDailyRate.HasValue)
-            {
-                dbQuery = dbQuery.Where(v => v.DailyRate <= query.MaxDailyRate.Value);
-            }
-
             return await dbQuery.ToListAsync();
         }
 

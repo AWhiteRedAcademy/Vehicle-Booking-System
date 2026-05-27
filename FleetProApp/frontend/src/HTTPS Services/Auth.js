@@ -1,14 +1,16 @@
 import { userIdParam, userRoleParam } from '../constants/userHelper';
 import { jwtDecode } from 'jwt-decode';
 
-
-const API_URL =  '';
+const API_URL = '';
 
 export const authFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('accessToken');
     
-    if (endpoint === 'api/User/register') {
-        const response = await fetch(`${API_URL}${endpoint}`, {
+    // Normalize endpoint string so path comparisons look identical
+    const normalizedEndpoint = endpoint.replace(/^\//, '');
+
+    if (normalizedEndpoint === 'api/User/register') {
+        const response = await fetch(`${API_URL}/${normalizedEndpoint}`, {
             ...options,
             headers: {
                 ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
@@ -46,21 +48,23 @@ export const authFetch = async (endpoint, options = {}) => {
         throw new Error("Token claims are missing required identity values.");
     }
 
-    let finalEndpoint = endpoint;
-    if (endpoint === 'api/Vehicle/user/context') {
-        finalEndpoint = `/api/Vehicle/user/${userId}?role=${role}`;
+    let finalEndpoint = normalizedEndpoint;
+    if (normalizedEndpoint === 'api/Vehicle/user/context') {
+        finalEndpoint = `api/Vehicle/user/${userId}?role=${role}`;
     }
 
     const headers = {
         ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`, // Ensure space exists between Bearer and token
         ...options.headers,
     };
 
     const cleanBaseUrl = API_URL.replace(/\/$/, '');
-    const cleanEndpoint = finalEndpoint.replace(/^\//, '');
+    
+    // Explicitly construct URL path string with single separation slash
+    const requestUrl = cleanBaseUrl ? `${cleanBaseUrl}/${finalEndpoint}` : `/${finalEndpoint}`;
 
-    const response = await fetch(`${cleanBaseUrl}/${cleanEndpoint}`, {
+    const response = await fetch(requestUrl, {
         ...options,
         headers,
     });
@@ -77,3 +81,4 @@ export const authFetch = async (endpoint, options = {}) => {
     
     return response.text(); 
 };
+

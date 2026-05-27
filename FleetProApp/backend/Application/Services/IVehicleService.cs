@@ -8,7 +8,7 @@ namespace VehicleBook.Application.Services
 {
     public interface IVehicleService
     {
-        Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync(VehicleQueryObject query);
+        Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync();
         Task<IEnumerable<VehicleDto>> GetVehiclesForUserAsync(int userId, string role);
         Task<VehicleDto?> GetVehicleByIdAsync(int id);
         Task<VehicleDto> CreateVehicleAsync(CreateVehicleDto vehicleDto);

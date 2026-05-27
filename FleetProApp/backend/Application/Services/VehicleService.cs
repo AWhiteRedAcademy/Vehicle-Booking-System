@@ -17,9 +17,9 @@ namespace VehicleBook.Application.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync(VehicleQueryObject query)
+        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync()
         {
-            var vehicles = await _vehicleRepository.GetAllVehiclesAsync(query);
+            var vehicles = await _vehicleRepository.GetAllVehiclesAsync();
             return vehicles.Select(MapToDto);
         }
 

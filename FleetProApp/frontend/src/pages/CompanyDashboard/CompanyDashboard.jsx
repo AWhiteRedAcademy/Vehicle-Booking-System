@@ -9,6 +9,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
+import {getBookingsWithVehicleDetails} from "../../HTTPS Services/CompanyServices.js";
+
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
 
@@ -36,7 +38,7 @@ import {
   PaginationButtons,
   PaginationButton,
 } from "./CompanyDashboard.style";
-import CompanyBookingList from "./CompanyBookingsPage/CompanyBookingList";
+import CompanyBookingList from "./CompanyBookingDetailsList.jsx";
 
 const companyNavItems = [
   { label: "Dashboard", to: "/company/dashboard", icon: <GridViewIcon fontSize="small" /> },
@@ -45,52 +47,51 @@ const companyNavItems = [
   { label: "Reports", to: "/company/reports", icon: <BarChartIcon fontSize="small" /> },
 ];
 
-const mockVehicles = [
-  {
-    bookingId: 1, // Changed from vehicleId to match your child component's row keys
-    make: "Mercedes-Benz",
-    model: "S-Class",
-    licenseNumber: "CAA 265",
-    category: "Sedan",
-    dailyRate: 1800,
-    isAvailable: "Available",
-    currentBooking: "—",
-    nextService: "Oct 24, 2026",
-  },
-  {
-    bookingId: 2,
-    make: "Ford",
-    model: "Transit EV",
-    licenseNumber: "CA 522 3567",
-    category: "Pickup Truck",
-    dailyRate: 950,
-    isAvailable: "In Use",
-    currentBooking: "In Use",
-    nextService: "Nov 12, 2026",
-  },
-  {
-    bookingId: 3,
-    make: "BMW",
-    model: "M2",
-    licenseNumber: "CA 510 2765",
-    category: "Sedan",
-    dailyRate: 1600,
-    isAvailable: "Available",
-    currentBooking: "Starts 16:00",
-    nextService: "Dec 05, 2026",
-  },
-];
-
 function CompanyDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
 
-  const availableVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable === "Available").length;
-  const inProgressVehicles = mockVehicles.filter((vehicle) => vehicle.isAvailable === "In Use").length;
-  const pendingBookings = mockVehicles.filter(
-    (booking) => booking.status === "Pending"
-  ).length;
+  const [liveBookings, setLiveBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        const data = await getBookingsWithVehicleDetails();
+        setLiveBookings(data);
+      } catch (err) {
+        setError(err.message || "Failed to load fleet dashboard metrics.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  // Compute live dashboard metrics from API array
+  const availableVehicles = liveBookings.filter((b) => b.isAvailable === "Available").length;
+  const inProgressVehicles = liveBookings.filter((b) => b.isAvailable === "In Use").length;
+  const pendingBookings = liveBookings.filter((b) => b.currentBooking === "Pending").length;
+
+  if (loading) {
+    return (
+      <DashboardLayout title="Loading Dashboard..." roleLabel="Company Console" userLabel="Company" navItems={companyNavItems}>
+        <div style={{ textAlign: "center", padding: "50px", fontSize: "1.2rem" }}>Loading data from fleet manager API...</div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout title="Dashboard Error" roleLabel="Company Console" userLabel="Company" navItems={companyNavItems}>
+        <div style={{ textAlign: "center", padding: "50px", color: "red" }}>Error: {error}</div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout
@@ -139,7 +140,7 @@ function CompanyDashboard() {
         />
         <StatCard
           label="Total Vehicles"
-          value={mockVehicles.length}
+          value={liveBookings.length}
           helperText="Visible fleet records"
           tone="blue"
           icon={<DirectionsCarIcon fontSize="small" />}
@@ -183,7 +184,6 @@ function CompanyDashboard() {
           <PanelActionButton type="button">Filter</PanelActionButton>
         </PanelHeader>
 
-
         <BookingTable>
           <thead>
             <tr>
@@ -191,14 +191,14 @@ function CompanyDashboard() {
               <th>Type</th>
               <th>Status</th>
               <th>Current Booking</th>
-              <th>Next Service</th>
+              <th></th>
               <th>Daily Rate</th>
               <th>Actions</th>
             </tr>
           </thead>
 
           <CompanyBookingList
-            bookings={mockVehicles}
+            bookings={liveBookings}
             searchTerm={searchTerm}
             categoryFilter={categoryFilter}
             availabilityFilter={availabilityFilter}
@@ -207,7 +207,7 @@ function CompanyDashboard() {
 
         <TableFooter>
           <FooterText>
-            Showing {mockVehicles.length} total vehicles
+            Showing {liveBookings.length} total vehicles
           </FooterText>
 
           <PaginationButtons>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VehicleBook.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aadcad7c929864eabe4cb27c9bcf8b31f0218ce9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5164926d98833eba329e874934dc79b99184486f")]
 [assembly: System.Reflection.AssemblyProductAttribute("VehicleBook.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VehicleBook.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

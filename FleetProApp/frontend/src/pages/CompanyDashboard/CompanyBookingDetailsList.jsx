@@ -2,10 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { authFetch } from "../../../HTTPS Services/Auth.js"; 
 
-
-import { AddVehicleCard, PlusCircle } from "./CompanyBookings.style.js";
+import { AddVehicleCard, PlusCircle } from "./CompanyBookingsPage/CompanyBookings.style.js";
 import { 
     BookingInfo, 
     VehicleImage, 
@@ -14,7 +12,7 @@ import {
     Badge, 
     StatusText, 
     ActionButton 
-} from "../CompanyDashboard.style.js"; 
+} from "./CompanyDashboard.style.js"; 
 
 export default function CompanyBookingList({ 
     bookings = [], 
