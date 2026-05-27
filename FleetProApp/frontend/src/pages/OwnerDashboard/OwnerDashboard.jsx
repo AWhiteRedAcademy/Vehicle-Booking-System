@@ -45,7 +45,7 @@ const ownerNavItems = [
   },
   {
     label: "Vehicles",
-    to: "/owner/vehicles/add",
+    to: "/owner/vehicles",
     icon: <DirectionsCarIcon fontSize="small" />,
   },
   {

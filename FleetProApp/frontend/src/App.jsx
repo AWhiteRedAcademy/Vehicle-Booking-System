@@ -8,10 +8,12 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 //Dashboards
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 
 // Owner Pages
 import OwnerAddVehicle from "./pages/OwnerDashboard/OwnerAddVehiclePage/OwnerAddVehicle";
 import OwnerEditVehicle from "./pages/OwnerDashboard/OwnerEditVehiclePage/OwnerEditVehicle";
+import OwnerVehicles from "./pages/OwnerDashboard/OwnerVehiclesPage/OwnerVehicles";
 
 //Company Pages
 import CompanyVehicle from "./pages/CompanyDashboard/CompanyVehiclesPage/CompanyVehicles";
@@ -26,11 +28,17 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
+        {/* ADMIN ONLY ROUTES */}
+        <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Route>
+
         {/* OWNER ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Owner"]} />}>
           <Route path="/owner/dashboard" element={<OwnerDashboard />} />
           <Route path="/owner/vehicles/add" element={<OwnerAddVehicle />} />
           <Route path="/owner/vehicles/edit/:id" element={<OwnerEditVehicle />} />
+          <Route path="/owner/vehicles" element={<OwnerVehicles />} />
         </Route>
 
         {/* COMPANY ONLY ROUTES */}

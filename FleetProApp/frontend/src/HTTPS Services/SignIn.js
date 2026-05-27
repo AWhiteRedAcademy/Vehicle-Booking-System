@@ -31,6 +31,9 @@ export const handleSignInSubmit = async (email, password, setError) => {
       case 'Company':
         window.location.href = '/company/dashboard';
         break;
+      case 'Admin':
+        window.location.href = '/admin/dashboard';
+        break;
       case 'Guest':
         throw new Error("Registration Request succeeded, but Admin approval is required.");
         break;
