@@ -96,7 +96,6 @@ export const ActionButtons = styled.div`
   align-items: center;
   gap: 8px;
 `;
-
 export const EditButton = styled.button`
   border: none;
   border-radius: ${theme.radius.medium};

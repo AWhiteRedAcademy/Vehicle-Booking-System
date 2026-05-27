@@ -18,7 +18,7 @@ import {
   DeleteButton,
 } from "./VehicleCard.style";
 
-function VehicleCard({ vehicle }) {
+function VehicleCard({ vehicle, onEdit, onDelete }) {
   return (
     <Card>
       <ImageArea>
@@ -45,12 +45,12 @@ function VehicleCard({ vehicle }) {
           <Rate>R{Number(vehicle.dailyRate).toLocaleString()} / day</Rate>
 
           <ActionButtons>
-            <EditButton type="button">
+            <EditButton type="button" onClick={() => onEdit?.(vehicle)}>
               <EditIcon fontSize="inherit" />
               Edit
             </EditButton>
 
-            <DeleteButton type="button">
+            <DeleteButton type="button" onClick={() => onDelete?.(vehicle)}>
               <DeleteIcon fontSize="inherit" />
               Delete
             </DeleteButton>

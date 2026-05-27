@@ -87,7 +87,7 @@ function DashboardLayout({
             <DirectionsCarIcon fontSize="small" />
           </LogoBox>
 
-          {isSidebarOpen && <BrandText>FleetPro</BrandText>}
+          {isSidebarOpen && <BrandText>CarGo</BrandText>}
         </Brand>
 
         {isSidebarOpen && <RoleBadge>{roleLabel}</RoleBadge>}

@@ -29,6 +29,11 @@ import {
   ErrorCard,
 } from "../../components/dashboard/DashboardPage.styles";
 
+import {
+  getMockOwnerVehicles,
+  deleteMockOwnerVehicle,
+} from "../../data/mockOwnerVehicles";
+
 import { AddVehicleCard, PlusCircle } from "./OwnerDashboard.style";
 
 const API_BASE_URL =
@@ -48,11 +53,6 @@ const ownerNavItems = [
     label: "Vehicles",
     to: "/owner/vehicles",
     icon: <DirectionsCarIcon fontSize="small" />,
-  },
-  {
-    label: "Bookings",
-    to: "/owner/bookings",
-    icon: <EventAvailableIcon fontSize="small" />,
   },
   {
     label: "Reports",
@@ -106,7 +106,7 @@ function OwnerDashboard() {
         setError("");
 
         if (USE_MOCK_DATA) {
-          setVehicles(mockVehicles);
+          setVehicles(getMockOwnerVehicles());
           return;
         }
 
@@ -168,6 +168,23 @@ function OwnerDashboard() {
     (total, vehicle) => total + Number(vehicle.dailyRate) * 10,
     0,
   );
+
+  function handleEditVehicle(vehicle) {
+    navigate(`/owner/vehicles/edit/${vehicle.vehicleId}`);
+  }
+
+  function handleDeleteVehicle(vehicle) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const updatedVehicles = deleteMockOwnerVehicle(vehicle.vehicleId);
+    setVehicles(updatedVehicles);
+  }
 
   return (
     <DashboardLayout
@@ -257,7 +274,12 @@ function OwnerDashboard() {
       {!isLoading && !error && filteredVehicles.length > 0 && (
         <VehicleGrid>
           {filteredVehicles.map((vehicle) => (
-            <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
+            <VehicleCard
+              key={vehicle.vehicleId}
+              vehicle={vehicle}
+              onEdit={handleEditVehicle}
+              onDelete={handleDeleteVehicle}
+            />
           ))}
 
           <AddVehicleCard
