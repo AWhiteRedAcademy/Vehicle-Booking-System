@@ -57,7 +57,7 @@ function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   function handleLogout() {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
     localStorage.removeItem("role");
 
@@ -87,7 +87,7 @@ function DashboardLayout({
             <DirectionsCarIcon fontSize="small" />
           </LogoBox>
 
-          {isSidebarOpen && <BrandText>FleetPro</BrandText>}
+          {isSidebarOpen && <BrandText>CarGo</BrandText>}
         </Brand>
 
         {isSidebarOpen && <RoleBadge>{roleLabel}</RoleBadge>}
@@ -176,7 +176,7 @@ function DashboardLayout({
                     onClick={handleLogout}
                     role="menuitem"
                   >
-                    <LogoutIcon fontSize="small" />
+                  <LogoutIcon fontSize="small" />
                     Logout
                   </UserDropdownItem>
                 </UserDropdown>

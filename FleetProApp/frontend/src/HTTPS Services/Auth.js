@@ -1,23 +1,44 @@
 import { userIdParam, userRoleParam } from '../constants/userHelper';
 import { jwtDecode } from 'jwt-decode';
 
-const API_URL = '';
+
+const API_URL =  '';
 
 export const authFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('accessToken');
     
+    if (endpoint === 'api/User/register') {
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            ...options,
+            headers: {
+                ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+                ...options.headers,
+            },
+        });
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.message || errData.Message || 'Registration endpoint rejected data.');
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            return response.json();
+        }
+        return response.text();
+    }
+
     if (!token || typeof token !== 'string') {
         throw new Error("You are not logged in. Please sign in again.");
     }
 
     if (token.split('.').length !== 3) {
         console.error("Malformed token detected:", token);
-        localStorage.removeItem('accessToken'); // Clear the corrupt token
+        localStorage.removeItem('accessToken'); 
         throw new Error("Your session has expired or is invalid. Please log in again.");
     }
 
     const decoded = jwtDecode(token);
-
     const userId = decoded[userIdParam];
     const role = decoded[userRoleParam];
 
@@ -31,18 +52,28 @@ export const authFetch = async (endpoint, options = {}) => {
     }
 
     const headers = {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+        'Authorization': `Bearer ${token}`,
         ...options.headers,
     };
 
-    const response = await fetch(`${API_URL.replace(/\/$/, '')}/${finalEndpoint.replace(/^\//, '')}`, {
+    const cleanBaseUrl = API_URL.replace(/\/$/, '');
+    const cleanEndpoint = finalEndpoint.replace(/^\//, '');
+
+    const response = await fetch(`${cleanBaseUrl}/${cleanEndpoint}`, {
         ...options,
         headers,
     });
+
     if (!response.ok) {
-        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        const errorMsg = await response.json().catch(() => ({}));
+        throw new Error(errorMsg.message || `API Error: ${response.status} ${response.statusText}`);
     }
 
-    return response.json();
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+        return response.json();
+    }
+    
+    return response.text(); 
 };

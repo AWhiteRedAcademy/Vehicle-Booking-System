@@ -14,16 +14,20 @@ export default function OwnerVehicleList({ vehicles = [], searchTerm = "", avail
       const make = vehicle.make?.toLowerCase() || "";
       const model = vehicle.model?.toLowerCase() || "";
       const category = vehicle.category?.toLowerCase() || "";
+      const licenseNumber = vehicle.licenseNumber?.toLowerCase() || "";
+      const vinNumber = vehicle.vinNumber?.toLowerCase() || "";
+      const modelYear = vehicle.modelYear?.toString() || "";
 
       const matchesSearch =
         make.includes(searchValue) ||
         model.includes(searchValue) ||
-        category.includes(searchValue);
+        category.includes(searchValue) ||
+        licenseNumber.includes(searchValue) ||
+        vinNumber.includes(searchValue) ||
+        modelYear.includes(searchValue);
 
       const matchesAvailability =
-        availabilityFilter === "all" ||
-        (availabilityFilter === "available" && vehicle.isAvailable) ||
-        (availabilityFilter === "unavailable" && !vehicle.isAvailable);
+        availabilityFilter === "all" || vehicle.isAvailable === availabilityFilter;
 
       return matchesSearch && matchesAvailability;
     });

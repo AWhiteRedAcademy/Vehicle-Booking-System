@@ -20,6 +20,11 @@ namespace VehicleBook.Domain.Entities
         [Required]
         [Column("vehicleid")]
         public int VehicleId { get; set; }
+        
+        [Required]
+        [StringLength(20)]
+        [Column("licensenumber")]
+        public string LicenseNumber { get; set; } = string.Empty;
 
         [Required]
         [Column("startdate")]
@@ -44,5 +49,7 @@ namespace VehicleBook.Domain.Entities
 
         [ForeignKey("VehicleId")]
         public virtual Vehicle? Vehicle { get; set; }
+
+        
     }
 }

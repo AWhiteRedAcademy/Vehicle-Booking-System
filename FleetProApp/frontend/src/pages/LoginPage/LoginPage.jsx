@@ -56,7 +56,7 @@ function LoginPage() {
           <LogoBox>
             <DirectionsCarIcon fontSize="small" />
           </LogoBox>
-          <LogoText>FleetPro</LogoText>
+          <LogoText>CarGo</LogoText>
         </LogoArea>
 
         <Header>
@@ -90,7 +90,7 @@ function LoginPage() {
           Sign In
           </PrimaryButton>
 
-
+          <ForgotPassword href="/register">No Account? Register Here</ForgotPassword>
           <ForgotPassword href="#">Forgot password?</ForgotPassword>
         </LoginCard>
 

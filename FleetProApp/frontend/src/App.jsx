@@ -1,12 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
-import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 
-function RegisterPage() {
-  return <h1>Register Page</h1>;
-}
+// Login & Registration
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+
+//Dashboards
+import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
+import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
+
+// Owner Pages
+import OwnerAddVehicle from "./pages/OwnerDashboard/OwnerAddVehiclePage/OwnerAddVehicle";
+import OwnerEditVehicle from "./pages/OwnerDashboard/OwnerEditVehiclePage/OwnerEditVehicle";
+
+//Company Pages
+import CompanyVehicle from "./pages/CompanyDashboard/CompanyVehiclesPage/CompanyVehicles";
+import CompanyBooking from "./pages/CompanyDashboard/CompanyBookingsPage/CompanyBookings";
 
 function App() {
   return (
@@ -20,12 +29,15 @@ function App() {
         {/* OWNER ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Owner"]} />}>
           <Route path="/owner/dashboard" element={<OwnerDashboard />} />
-          {/* Add future owner-specific paths here, e.g., /owner/vehicles */}
+          <Route path="/owner/vehicles/add" element={<OwnerAddVehicle />} />
+          <Route path="/owner/vehicles/edit/:id" element={<OwnerEditVehicle />} />
         </Route>
 
         {/* COMPANY ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Company"]} />}>
           <Route path="/company/dashboard" element={<CompanyDashboard />} />
+          <Route path="/company/vehicles" element={<CompanyVehicle />} />
+          <Route path="/company/bookings" element={<CompanyBooking />} />
         </Route>
 
         {/* General Fallback Route */}

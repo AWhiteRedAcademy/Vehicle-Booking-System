@@ -30,12 +30,21 @@ namespace VehicleBook.Infrastructure.Data
             modelBuilder.Entity<Vehicle>(entity =>
             {
                 entity.Property(e => e.DailyRate).HasPrecision(10, 2);
-                entity.Property(e => e.Category).HasDefaultValue("TBD");
+                entity.Property(e => e.Category).HasDefaultValue("Sedan");
+                entity.Property(e => e.IsAvailable)
+                    .HasColumnType("status_type")
+                    .HasDefaultValueSql("'Available'::status_type");
+                entity.Property(e => e.LicenseNumber).HasDefaultValue("");
+                entity.Property(e => e.VinNumber).HasDefaultValue("");
+                entity.Property(e => e.ModelYear).HasDefaultValue(0);
 
-                entity.ToTable("vehicles", t => t.HasCheckConstraint(
-                    "vehicles_category_check",
-                    "category = ANY (ARRAY['Sedan', 'Hatchback', 'SUV', 'Convertible', 'Pickup Truck', 'Minivan/MPV']::text[])"
-                ));
+                entity.ToTable("vehicles", t =>
+                {
+                    t.HasCheckConstraint(
+                        "vehicles_category_check",
+                        "category = ANY (ARRAY['Sedan', 'Hatchback', 'SUV', 'Convertible', 'Pickup Truck', 'Minivan/MPV']::text[])"
+                    );
+                });
 
                 entity.HasOne(v => v.Owner)
                     .WithMany(u => u.Vehicles)
@@ -48,6 +57,7 @@ namespace VehicleBook.Infrastructure.Data
             {
                 entity.Property(e => e.TotalCost).HasPrecision(10, 2);
                 entity.Property(e => e.Status).HasDefaultValue("Pending");
+                entity.Property(e => e.LicenseNumber).HasDefaultValue("");
 
                 entity.ToTable("bookings", t => t.HasCheckConstraint(
                     "bookings_status_check",

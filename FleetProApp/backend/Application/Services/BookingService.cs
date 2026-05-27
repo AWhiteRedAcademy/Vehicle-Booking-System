@@ -40,6 +40,11 @@ namespace VehicleBook.Application.Services
                 throw new ArgumentException("Vehicle not found.");
             }
 
+            if (vehicle.IsAvailable != "Available")
+            {
+                throw new ArgumentException("Vehicle is not available for booking.");
+            }
+
             var hasOverlap = await _bookingRepository.HasOverlappingBookingAsync(
                 bookingDto.VehicleId,
                 bookingDto.StartDate,
@@ -59,7 +64,8 @@ namespace VehicleBook.Application.Services
                 StartDate = bookingDto.StartDate,
                 EndDate = bookingDto.EndDate,
                 TotalCost = vehicle.DailyRate * days,
-                Status = bookingDto.Status
+                Status = bookingDto.Status,
+                LicenseNumber = string.IsNullOrWhiteSpace(bookingDto.LicenseNumber) ? vehicle.LicenseNumber : bookingDto.LicenseNumber,
             };
 
             await _bookingRepository.AddAsync(booking);
@@ -86,6 +92,11 @@ namespace VehicleBook.Application.Services
                 throw new ArgumentException("Vehicle not found.");
             }
 
+            if (vehicle.IsAvailable != "Available")
+            {
+                throw new ArgumentException("Vehicle is not available for booking.");
+            }
+
             var hasOverlap = await _bookingRepository.HasOverlappingBookingAsync(
                 bookingDto.VehicleId,
                 bookingDto.StartDate,
@@ -105,6 +116,7 @@ namespace VehicleBook.Application.Services
             booking.EndDate = bookingDto.EndDate;
             booking.TotalCost = vehicle.DailyRate * days;
             booking.Status = bookingDto.Status;
+            booking.LicenseNumber = string.IsNullOrWhiteSpace(bookingDto.LicenseNumber) ? vehicle.LicenseNumber : bookingDto.LicenseNumber;
 
             _bookingRepository.Update(booking);
             await _bookingRepository.SaveChangesAsync();
@@ -134,7 +146,8 @@ namespace VehicleBook.Application.Services
                 StartDate = booking.StartDate,
                 EndDate = booking.EndDate,
                 TotalCost = booking.TotalCost,
-                Status = booking.Status
+                Status = booking.Status,
+                LicenseNumber = booking.LicenseNumber
             };
         }
     }

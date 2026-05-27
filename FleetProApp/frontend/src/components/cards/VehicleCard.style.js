@@ -46,8 +46,18 @@ export const StatusBadge = styled.span`
   font-size: 11px;
   font-weight: 900;
 
-  color: ${({ $available }) => ($available ? "#15803d" : "#c2410c")};
-  background: ${({ $available }) => ($available ? "#dcfce7" : "#fff7ed")};
+  color: ${({ $status }) => {
+    if ($status === "Available") return "#15803d";
+    if ($status === "In Use") return "#0b5ed7";
+    if ($status === "Maintenance") return "#92400e";
+    return "#334155";
+  }};
+  background: ${({ $status }) => {
+    if ($status === "Available") return "#dcfce7";
+    if ($status === "In Use") return "#dbeafe";
+    if ($status === "Maintenance") return "#fef3c7";
+    return "#e2e8f0";
+  }};
 `;
 
 export const Body = styled.div`
@@ -76,7 +86,6 @@ export const DetailTag = styled.span`
   font-size: 12px;
   font-weight: 800;
 `;
-
 export const Footer = styled.div`
   margin-top: 18px;
   display: flex;
@@ -89,6 +98,13 @@ export const Rate = styled.strong`
   color: ${theme.colors.textDark};
   font-size: 15px;
   font-weight: 900;
+`;
+
+
+export const ActionButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 export const EditButton = styled.button`
@@ -109,3 +125,25 @@ export const EditButton = styled.button`
     background: #dceafe;
   }
 `;
+
+export const DeleteButton = styled.button`
+  border: none;
+  border-radius: ${theme.radius.medium};
+  padding: 9px 12px;
+  background: #edf4ff;
+  color: ${theme.colors.textRed};
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: #dceafe;
+  }
+`;
+
+
+

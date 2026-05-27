@@ -28,7 +28,7 @@ namespace VehicleBook.Infrastructure.Repositories
             }
             else if (role.Equals("Company", StringComparison.OrdinalIgnoreCase))
             {
-                query = query.Where(v => v.IsAvailable == true);
+                query = query.Where(v => v.IsAvailable == "Available");
             }
             else
             {
@@ -57,9 +57,9 @@ namespace VehicleBook.Infrastructure.Repositories
             {
                 dbQuery = dbQuery.Where(v => v.Category.Contains(query.Category));
             }
-            if (query.IsAvailable.HasValue)
+            if (!string.IsNullOrEmpty(query.IsAvailable))
             {
-                dbQuery = dbQuery.Where(v => v.IsAvailable == query.IsAvailable.Value);
+                dbQuery = dbQuery.Where(v => v.IsAvailable == query.IsAvailable);
             }
 
             if (query.OwnerId.HasValue)
