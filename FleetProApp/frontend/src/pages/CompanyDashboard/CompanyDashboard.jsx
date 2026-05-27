@@ -103,7 +103,7 @@ function CompanyDashboard() {
     >
       <HeaderRow>
         <div>
-          <SectionEyebrow>Booking Console</SectionEyebrow>
+          <SectionEyebrow>Dashboard</SectionEyebrow>
           <SectionTitle>Fleet Management Overview</SectionTitle>
           <SectionText>
             Real-time vehicle availability and booking information for your company.
