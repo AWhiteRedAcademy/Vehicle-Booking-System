@@ -61,13 +61,26 @@ export const authFetch = async (endpoint, options = {}) => {
 
     const cleanBaseUrl = API_URL.replace(/\/$/, '');
     
-    // Explicitly construct URL path string with single separation slash
     const requestUrl = cleanBaseUrl ? `${cleanBaseUrl}/${finalEndpoint}` : `/${finalEndpoint}`;
 
     const response = await fetch(requestUrl, {
         ...options,
         headers,
     });
+
+    //If Session Expiression or Unauthorized Access Detected, Clear Token and Redirect to Login
+    if (response.status === 401) {
+        localStorage.removeItem('accessToken'); // Clear the bad token 
+        
+        // Show confirmation to user
+        alert("Your session has expired. Please sign in again to continue.");
+        
+        // Redirect browser to login page 
+        window.location.href = '/login'; 
+        
+        // Throw error to stop component state logic from continuing
+        throw new Error("Session expired. Redirecting to login page...");
+    }
 
     if (!response.ok) {
         const errorMsg = await response.json().catch(() => ({}));
