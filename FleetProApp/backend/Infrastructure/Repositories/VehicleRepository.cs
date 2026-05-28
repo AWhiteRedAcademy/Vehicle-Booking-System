@@ -1,4 +1,4 @@
-﻿using Application.Helpers;
+using Application.Helpers;
 using Microsoft.EntityFrameworkCore;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Domain.Entities;
@@ -20,7 +20,7 @@ namespace VehicleBook.Infrastructure.Repositories
 
         public async Task<IEnumerable<Vehicle>> GetVehiclesForUserAsync(int userId, string role)
         {
-            IQueryable<Vehicle> query = _dbSet;
+            IQueryable<Vehicle> query = _dbSet.Include(v => v.Owner).AsNoTracking();
 
             if (role.Equals("Owner", StringComparison.OrdinalIgnoreCase))
             {
@@ -39,50 +39,17 @@ namespace VehicleBook.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync(VehicleQueryObject query)
+        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
         {
-            IQueryable<Vehicle> dbQuery = _dbSet;
-
-            if (!string.IsNullOrEmpty(query.Make))
-            {
-                dbQuery = dbQuery.Where(v => v.Make.Contains(query.Make));
-            }
-
-            if (!string.IsNullOrEmpty(query.Model))
-            {
-                dbQuery = dbQuery.Where(v => v.Model.Contains(query.Model));
-            }
-
-            if (!string.IsNullOrEmpty(query.Category))
-            {
-                dbQuery = dbQuery.Where(v => v.Category.Contains(query.Category));
-            }
-            if (!string.IsNullOrEmpty(query.IsAvailable))
-            {
-                dbQuery = dbQuery.Where(v => v.IsAvailable == query.IsAvailable);
-            }
-
-            if (query.OwnerId.HasValue)
-            {
-                dbQuery = dbQuery.Where(v => v.OwnerId == query.OwnerId.Value);
-            }
-
-            if (query.MinDailyRate.HasValue)
-            {
-                dbQuery = dbQuery.Where(v => v.DailyRate >= query.MinDailyRate.Value);
-            }
-
-            if (query.MaxDailyRate.HasValue)
-            {
-                dbQuery = dbQuery.Where(v => v.DailyRate <= query.MaxDailyRate.Value);
-            }
-
+            IQueryable<Vehicle> dbQuery = _dbSet.Include(v => v.Owner).AsNoTracking();
             return await dbQuery.ToListAsync();
         }
 
         public async Task<Vehicle?> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet
+                .Include(v => v.Owner)
+                .FirstOrDefaultAsync(v => v.VehicleId == id);
         }
 
         public async Task AddAsync(Vehicle vehicle)

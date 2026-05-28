@@ -22,9 +22,9 @@ namespace Vehicle_Booking_System.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Company")]
-        public async Task<IActionResult> GetAllVehicles([FromQuery] VehicleQueryObject query)
+        public async Task<IActionResult> GetAllVehicles()
         {
-            var vehicles = await _vehicleService.GetAllVehiclesAsync(query);
+            var vehicles = await _vehicleService.GetAllVehiclesAsync();
             return Ok(vehicles);
         }
 

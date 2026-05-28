@@ -8,6 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import BuildIcon from "@mui/icons-material/Build";
 import PaidIcon from "@mui/icons-material/Paid";
+import { deleteVehicle } from "../../HTTPS Services/OwnerServices";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
@@ -45,7 +46,7 @@ const ownerNavItems = [
   },
   {
     label: "Vehicles",
-    to: "/owner/vehicles/add",
+    to: "/owner/vehicles",
     icon: <DirectionsCarIcon fontSize="small" />,
   },
   {
@@ -59,6 +60,30 @@ const ownerNavItems = [
     icon: <BarChartIcon fontSize="small" />,
   },
 ];
+
+  async function handleDeleteVehicle(vehicle) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const vehicleId = vehicle.vehicleId || vehicle.id;
+
+    try {
+      await deleteVehicle(vehicleId);
+      setVehicles((currentVehicles) =>
+        currentVehicles.filter(
+          (currentVehicle) =>
+            (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId
+        )
+      );
+    } catch (err) {
+      setError(err.message || "Unable to delete vehicle.");
+    }
+  }
 
 function OwnerDashboard() {
   const navigate = useNavigate();
@@ -179,6 +204,7 @@ function OwnerDashboard() {
           vehicles={vehicles || []}
           searchTerm={searchTerm}
           availabilityFilter={availabilityFilter}
+          onDelete={handleDeleteVehicle}
         />
       )}
     </DashboardLayout>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -20,6 +20,9 @@ namespace VehicleBook.Application.DTOs
         public string VinNumber { get; set; } = string.Empty;
         [Range(0, 2100)]
         public int ModelYear { get; set; }
+        public string OwnerName { get; set; } = string.Empty;
+        public string OwnerEmail { get; set; } = string.Empty;
+        public string OwnerPhone { get; set; } = string.Empty;
     }
 
     public class CreateVehicleDto

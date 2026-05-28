@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Application.Helpers;
@@ -17,9 +17,9 @@ namespace VehicleBook.Application.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync(VehicleQueryObject query)
+        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync()
         {
-            var vehicles = await _vehicleRepository.GetAllVehiclesAsync(query);
+            var vehicles = await _vehicleRepository.GetAllVehiclesAsync();
             return vehicles.Select(MapToDto);
         }
 
@@ -110,6 +110,9 @@ namespace VehicleBook.Application.Services
                 LicenseNumber = vehicle.LicenseNumber,
                 VinNumber = vehicle.VinNumber,
                 ModelYear = vehicle.ModelYear,
+                OwnerName = vehicle.Owner?.Name ?? string.Empty,
+                OwnerEmail = vehicle.Owner?.Email ?? string.Empty,
+                OwnerPhone = vehicle.Owner?.PhoneNumber ?? string.Empty,
             };
         }
     }

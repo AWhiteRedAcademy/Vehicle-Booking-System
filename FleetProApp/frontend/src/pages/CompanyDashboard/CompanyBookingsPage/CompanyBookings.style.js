@@ -200,3 +200,197 @@ export const PaginationButton = styled.button`
     color: ${theme.colors.primary};
   }
 `;
+
+export const ActionMenuWrapper = styled.div`
+  position: relative;
+  display: inline-flex;
+`;
+
+export const ActionMenu = styled.div`
+  position: absolute;
+  right: 0;
+  top: 38px;
+  width: 170px;
+  background: white;
+  border: 1px solid #e3e8f0;
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+  padding: 8px;
+  z-index: 20;
+`;
+
+export const ActionMenuItem = styled.button`
+  width: 100%;
+  border: none;
+  background: white;
+  color: ${({ $danger }) => ($danger ? "#dc2626" : theme.colors.textDark)};
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ $danger }) => ($danger ? "#fef2f2" : "#eef5ff")};
+    color: ${({ $danger }) => ($danger ? "#b91c1c" : theme.colors.primary)};
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+`;
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.46);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 24px;
+`;
+
+export const ModalCard = styled.div`
+  width: min(620px, 100%);
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+  border: 1px solid #e3e8f0;
+  overflow: hidden;
+`;
+
+export const ModalHeader = styled.div`
+  padding: 26px;
+  background: linear-gradient(135deg, #061827, #12345a);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+`;
+
+export const ModalTitle = styled.h2`
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+`;
+
+export const ModalSubtitle = styled.p`
+  margin: 8px 0 0;
+  color: #dbeafe;
+  font-weight: 700;
+`;
+
+export const ModalCloseButton = styled.button`
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+export const ModalBody = styled.div`
+  padding: 26px;
+`;
+
+export const DetailGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 620px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const DetailItem = styled.div`
+  border: 1px solid #e3e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  background: #f8fbff;
+`;
+
+export const DetailLabel = styled.p`
+  margin: 0 0 6px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+`;
+
+export const DetailValue = styled.p`
+  margin: 0;
+  color: ${theme.colors.textDark};
+  font-size: 16px;
+  font-weight: 800;
+  word-break: break-word;
+`;
+
+export const ModalActions = styled.div`
+  padding: 0 26px 26px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+`;
+
+export const ModalSecondaryButton = styled.button`
+  border: 1px solid #cbd5e1;
+  background: white;
+  color: #334155;
+  border-radius: 12px;
+  padding: 11px 18px;
+  font-weight: 900;
+  cursor: pointer;
+
+  &:hover {
+    border-color: ${theme.colors.primary};
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const ModalPrimaryButton = styled.button`
+  border: none;
+  background: ${({ disabled }) => (disabled ? "#94a3b8" : theme.colors.primary)};
+  color: white;
+  border-radius: 12px;
+  padding: 11px 18px;
+  font-weight: 900;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+
+  &:hover {
+    background: ${({ disabled }) =>
+      disabled ? "#94a3b8" : theme.colors.primaryDark};
+  }
+`;
+
+export const ModalDangerButton = styled.button`
+  border: none;
+  background: #dc2626;
+  color: white;
+  border-radius: 12px;
+  padding: 11px 18px;
+  font-weight: 900;
+  cursor: pointer;
+
+  &:hover {
+    background: #b91c1c;
+  }
+`;
+
+export const ModalInput = styled.input`
+  width: 100%;
+  height: 46px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0 12px;
+  margin-top: 6px;
+  font-weight: 700;
+`;

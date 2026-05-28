@@ -27,6 +27,26 @@ namespace VehicleBook.Application.Services
             return booking == null ? null : MapToDto(booking);
         }
 
+        public async Task<IEnumerable<BookingDto>> GetBookingsByOwnerIdAsync(int ownerId)
+        {
+            var bookings = await _bookingRepository.GetBookingsByOwnerIdAsync(ownerId);
+            return bookings.Select(MapToDto);
+        }
+
+        public async Task<IEnumerable<CompanyBookingDto>> GetCurrentCompanyBookingsAsync(int companyId)
+        {
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var bookings = await _bookingRepository.GetCurrentBookingsByCompanyIdAsync(companyId, today);
+            return bookings.Select(booking => MapToCompanyBookingDto(booking, today));
+        }
+
+        public async Task<IEnumerable<CompanyBookingDto>> GetCompanyBookingHistoryAsync(int companyId)
+        {
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var bookings = await _bookingRepository.GetBookingHistoryByCompanyIdAsync(companyId, today);
+            return bookings.Select(booking => MapToCompanyBookingDto(booking, today));
+        }
+
         public async Task<BookingDto> CreateBookingAsync(CreateBookingDto bookingDto)
         {
             if (bookingDto.StartDate >= bookingDto.EndDate)
@@ -63,7 +83,7 @@ namespace VehicleBook.Application.Services
                 VehicleId = bookingDto.VehicleId,
                 StartDate = bookingDto.StartDate,
                 EndDate = bookingDto.EndDate,
-                TotalCost = vehicle.DailyRate * days,
+                TotalCost = bookingDto.TotalCost > 0 ? bookingDto.TotalCost : vehicle.DailyRate * days,
                 Status = bookingDto.Status,
                 LicenseNumber = string.IsNullOrWhiteSpace(bookingDto.LicenseNumber) ? vehicle.LicenseNumber : bookingDto.LicenseNumber,
             };
@@ -134,6 +154,59 @@ namespace VehicleBook.Application.Services
             _bookingRepository.Delete(booking);
             await _bookingRepository.SaveChangesAsync();
             return true;
+        }
+
+
+
+        private static CompanyBookingDto MapToCompanyBookingDto(Booking booking, DateOnly today)
+        {
+            var vehicle = booking.Vehicle;
+            var owner = vehicle?.Owner;
+
+            return new CompanyBookingDto
+            {
+                BookingId = booking.BookingId,
+                CompanyId = booking.CompanyId,
+                VehicleId = booking.VehicleId,
+                Make = vehicle?.Make ?? string.Empty,
+                Model = vehicle?.Model ?? string.Empty,
+                Category = vehicle?.Category ?? string.Empty,
+                LicenseNumber = vehicle?.LicenseNumber ?? booking.LicenseNumber,
+                OwnerName = owner?.Name ?? string.Empty,
+                OwnerEmail = owner?.Email ?? string.Empty,
+                OwnerPhone = owner?.PhoneNumber ?? string.Empty,
+                StartDate = booking.StartDate,
+                EndDate = booking.EndDate,
+                TotalCost = booking.TotalCost,
+                DailyRate = vehicle?.DailyRate ?? 0,
+                Status = booking.Status,
+                CurrentBooking = GetCurrentBookingStatus(booking, today)
+            };
+        }
+
+        private static string GetCurrentBookingStatus(Booking booking, DateOnly today)
+        {
+            if (booking.Status == "Cancelled")
+            {
+                return "Cancelled";
+            }
+
+            if (booking.EndDate < today)
+            {
+                return "Completed";
+            }
+
+            if (booking.Status == "Pending")
+            {
+                return "Pending";
+            }
+
+            if (booking.StartDate <= today && booking.EndDate >= today)
+            {
+                return "Active";
+            }
+
+            return "Upcoming";
         }
 
         private static BookingDto MapToDto(Booking booking)

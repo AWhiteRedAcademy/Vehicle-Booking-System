@@ -42,7 +42,17 @@ namespace Vehicle_Booking_System
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowReactApp",
+<<<<<<< HEAD
                     policy => policy.WithOrigins("http://localhost:5173", "http://frontend:5173")
+=======
+                    policy => policy.WithOrigins(
+                        "http://localhost:5174",
+                        "http://localhost:5173",
+                        "http://10.150.5.65:5174",
+                        "http://10.150.5.65:5173",
+                        "http://127.0.0.1:5174",
+                        "http://127.0.0.1:5173")
+>>>>>>> 2026/05/27-ChangedAPI_Db
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
@@ -104,6 +114,11 @@ namespace Vehicle_Booking_System
                 app.UseSwaggerUI();
             }
 
+<<<<<<< HEAD
+=======
+            app.UseCors("AllowReactApp");
+            app.UseHttpsRedirection();
+>>>>>>> 2026/05/27-ChangedAPI_Db
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

@@ -26,6 +26,41 @@ namespace VehicleBook.Infrastructure.Repositories
             return await _dbSet.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Booking>> GetBookingsByOwnerIdAsync(int ownerId)
+        {
+            return await _dbSet
+                .Include(b => b.Vehicle)
+                .Where(b => b.Vehicle != null && b.Vehicle.OwnerId == ownerId)
+                .ToListAsync();
+        }
+
+
+
+        public async Task<IEnumerable<Booking>> GetCurrentBookingsByCompanyIdAsync(int companyId, DateOnly today)
+        {
+            return await _dbSet
+                .Include(b => b.Vehicle)
+                    .ThenInclude(v => v!.Owner)
+                .AsNoTracking()
+                .Where(b => b.CompanyId == companyId
+                    && b.EndDate >= today
+                    && b.Status != "Cancelled")
+                .OrderBy(b => b.StartDate)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Booking>> GetBookingHistoryByCompanyIdAsync(int companyId, DateOnly today)
+        {
+            return await _dbSet
+                .Include(b => b.Vehicle)
+                    .ThenInclude(v => v!.Owner)
+                .AsNoTracking()
+                .Where(b => b.CompanyId == companyId
+                    && (b.EndDate < today || b.Status == "Cancelled"))
+                .OrderByDescending(b => b.EndDate)
+                .ToListAsync();
+        }
+
         public async Task<bool> HasOverlappingBookingAsync(int vehicleId, DateOnly startDate, DateOnly endDate, int? ignoreBookingId = null)
         {
             return await _dbSet.AnyAsync(b =>
