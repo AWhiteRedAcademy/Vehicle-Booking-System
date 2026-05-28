@@ -5,6 +5,9 @@ namespace VehicleBook.Application.Services
     public interface IBookingService
     {
         Task<IEnumerable<BookingDto>> GetAllBookingsAsync();
+        Task<IEnumerable<BookingDto>> GetBookingsByOwnerIdAsync(int ownerId);
+        Task<IEnumerable<CompanyBookingDto>> GetCurrentCompanyBookingsAsync(int companyId);
+        Task<IEnumerable<CompanyBookingDto>> GetCompanyBookingHistoryAsync(int companyId);
         Task<BookingDto?> GetBookingByIdAsync(int id);
         Task<BookingDto> CreateBookingAsync(CreateBookingDto bookingDto);
         Task<bool> UpdateBookingAsync(int id, UpdateBookingDto bookingDto);

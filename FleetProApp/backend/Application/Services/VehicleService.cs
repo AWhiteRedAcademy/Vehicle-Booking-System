@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Application.Helpers;
@@ -110,6 +110,9 @@ namespace VehicleBook.Application.Services
                 LicenseNumber = vehicle.LicenseNumber,
                 VinNumber = vehicle.VinNumber,
                 ModelYear = vehicle.ModelYear,
+                OwnerName = vehicle.Owner?.Name ?? string.Empty,
+                OwnerEmail = vehicle.Owner?.Email ?? string.Empty,
+                OwnerPhone = vehicle.Owner?.PhoneNumber ?? string.Empty,
             };
         }
     }

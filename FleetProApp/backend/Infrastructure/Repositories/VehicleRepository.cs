@@ -1,4 +1,4 @@
-﻿using Application.Helpers;
+using Application.Helpers;
 using Microsoft.EntityFrameworkCore;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Domain.Entities;
@@ -20,7 +20,7 @@ namespace VehicleBook.Infrastructure.Repositories
 
         public async Task<IEnumerable<Vehicle>> GetVehiclesForUserAsync(int userId, string role)
         {
-            IQueryable<Vehicle> query = _dbSet;
+            IQueryable<Vehicle> query = _dbSet.Include(v => v.Owner).AsNoTracking();
 
             if (role.Equals("Owner", StringComparison.OrdinalIgnoreCase))
             {
@@ -41,13 +41,15 @@ namespace VehicleBook.Infrastructure.Repositories
 
         public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
         {
-            IQueryable<Vehicle> dbQuery = _dbSet;
+            IQueryable<Vehicle> dbQuery = _dbSet.Include(v => v.Owner).AsNoTracking();
             return await dbQuery.ToListAsync();
         }
 
         public async Task<Vehicle?> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet
+                .Include(v => v.Owner)
+                .FirstOrDefaultAsync(v => v.VehicleId == id);
         }
 
         public async Task AddAsync(Vehicle vehicle)

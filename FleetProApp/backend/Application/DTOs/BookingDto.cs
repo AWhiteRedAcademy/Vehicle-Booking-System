@@ -34,6 +34,8 @@ namespace VehicleBook.Application.DTOs
         [Required]
         public DateOnly EndDate { get; set; }
 
+        public decimal TotalCost { get; set; }
+
         public string Status { get; set; } = "Pending";
     }
 
@@ -57,4 +59,30 @@ namespace VehicleBook.Application.DTOs
 
         public string Status { get; set; } = "Pending";
     }
+
+
+    public class CompanyBookingDto
+    {
+        public int BookingId { get; set; }
+        public int CompanyId { get; set; }
+        public int VehicleId { get; set; }
+
+        public string Make { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string LicenseNumber { get; set; } = string.Empty;
+
+        public string OwnerName { get; set; } = string.Empty;
+        public string OwnerEmail { get; set; } = string.Empty;
+        public string OwnerPhone { get; set; } = string.Empty;
+
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal DailyRate { get; set; }
+
+        public string Status { get; set; } = string.Empty;
+        public string CurrentBooking { get; set; } = string.Empty;
+    }
+
 }

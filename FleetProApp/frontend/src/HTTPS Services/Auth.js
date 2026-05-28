@@ -3,6 +3,33 @@ import { jwtDecode } from 'jwt-decode';
 
 const API_URL = '';
 
+let isRedirectingToLogin = false;
+
+function handleUnauthorized() {
+    if (isRedirectingToLogin) {
+        return;
+    }
+
+    isRedirectingToLogin = true;
+
+    localStorage.removeItem("accessToken");
+
+    alert("Your session has expired. Please sign in again to continue.");
+
+    window.location.href = "/login";
+}
+
+export const getCurrentUserId = () => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token || token.split(".").length !== 3) {
+        return null;
+    }
+
+    const decoded = jwtDecode(token);
+    return decoded[userIdParam] || null;
+};
+
 export const authFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('accessToken');
     
@@ -30,16 +57,17 @@ export const authFetch = async (endpoint, options = {}) => {
         return response.text();
     }
 
-    if (!token || typeof token !== 'string') {
-        throw new Error("You are not logged in. Please sign in again.");
+    if (!token || typeof token !== "string") {
+        handleUnauthorized();
+        throw new Error("You are not logged in. Redirecting to login page...");
     }
 
-    if (token.split('.').length !== 3) {
+    if (token.split(".").length !== 3) {
         console.error("Malformed token detected:", token);
-        localStorage.removeItem('accessToken'); 
-        throw new Error("Your session has expired or is invalid. Please log in again.");
+        handleUnauthorized();
+        throw new Error("Your session is invalid. Redirecting to login page...");
     }
-
+    
     const decoded = jwtDecode(token);
     const userId = decoded[userIdParam];
     const role = decoded[userRoleParam];
@@ -51,6 +79,10 @@ export const authFetch = async (endpoint, options = {}) => {
     let finalEndpoint = normalizedEndpoint;
     if (normalizedEndpoint === 'api/Vehicle/user/context') {
         finalEndpoint = `api/Vehicle/user/${userId}?role=${role}`;
+    }
+
+    if (normalizedEndpoint === "api/Booking/owner/context") {
+        finalEndpoint = `api/Booking/owner/${userId}`;
     }
 
     const headers = {
@@ -68,17 +100,8 @@ export const authFetch = async (endpoint, options = {}) => {
         headers,
     });
 
-    //If Session Expiression or Unauthorized Access Detected, Clear Token and Redirect to Login
     if (response.status === 401) {
-        localStorage.removeItem('accessToken'); // Clear the bad token 
-        
-        // Show confirmation to user
-        alert("Your session has expired. Please sign in again to continue.");
-        
-        // Redirect browser to login page 
-        window.location.href = '/login'; 
-        
-        // Throw error to stop component state logic from continuing
+        handleUnauthorized();
         throw new Error("Session expired. Redirecting to login page...");
     }
 

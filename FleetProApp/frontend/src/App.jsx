@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import OwnerAddVehicle from "./pages/OwnerDashboard/OwnerAddVehiclePage/OwnerAddVehicle";
 import OwnerEditVehicle from "./pages/OwnerDashboard/OwnerEditVehiclePage/OwnerEditVehicle";
 import OwnerVehicles from "./pages/OwnerDashboard/OwnerVehiclesPage/OwnerVehicles";
+import OwnerBookings from "./pages/OwnerDashboard/OwnerBookingsPage/OwnerBookings";
 
 //Company Pages
 import CompanyVehicle from "./pages/CompanyDashboard/CompanyVehiclesPage/CompanyVehicles";
@@ -39,6 +40,7 @@ function App() {
           <Route path="/owner/vehicles/add" element={<OwnerAddVehicle />} />
           <Route path="/owner/vehicles/edit/:id" element={<OwnerEditVehicle />} />
           <Route path="/owner/vehicles" element={<OwnerVehicles />} />
+          <Route path="/owner/bookings" element={<OwnerBookings />} />
         </Route>
 
         {/* COMPANY ONLY ROUTES */}

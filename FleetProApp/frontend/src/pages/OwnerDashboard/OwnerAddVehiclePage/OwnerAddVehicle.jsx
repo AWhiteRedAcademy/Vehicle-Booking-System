@@ -12,7 +12,7 @@ import PaymentsIcon from '@mui/icons-material/Payments';
 import SaveIcon from "@mui/icons-material/Save";
 
 import DashboardLayout from "../../../components/dashboard/DashboardLayout";
-import { addVehicle } from "../../../HTTPS Services/VehicleServices";
+import { addVehicle } from "../../../HTTPS Services/OwnerServices";
 
 import {
   HeaderRow,

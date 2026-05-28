@@ -19,7 +19,7 @@ import {
   DeleteButton,
 } from "./VehicleCard.style";
 
-function VehicleCard({ vehicle }) {
+function VehicleCard({ vehicle, onDelete }) {
   const navigate = useNavigate();
   const vehicleId = vehicle.id || vehicle.vehicleId;
 
@@ -60,7 +60,10 @@ function VehicleCard({ vehicle }) {
               Edit
             </EditButton>
 
-            <DeleteButton type="button">
+            <DeleteButton
+              type="button"
+              onClick={() => onDelete(vehicle)}
+            >
               <DeleteIcon fontSize="inherit" />
               Delete
             </DeleteButton>

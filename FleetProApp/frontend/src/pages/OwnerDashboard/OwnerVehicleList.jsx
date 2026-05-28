@@ -4,8 +4,12 @@ import { authFetch } from "../../HTTPS Services/Auth.js";
 import { VehicleGrid, EmptyCard, ErrorCard } from "../../components/dashboard/DashboardPage.styles.js";
 import { AddVehicleCard, PlusCircle } from "./OwnerDashboard.style";
 
-export default function OwnerVehicleList({ vehicles = [], searchTerm = "", availabilityFilter = "all" }) {
-  
+export default function OwnerVehicleList({
+  vehicles = [],
+  searchTerm = "",
+  availabilityFilter = "all",
+  onDelete,
+}) {
   // Filter the vehicles 
   const filteredVehicles = useMemo(() => {
     return vehicles.filter((vehicle) => {
@@ -35,24 +39,14 @@ export default function OwnerVehicleList({ vehicles = [], searchTerm = "", avail
 
   return (
     <VehicleGrid>
-      {filteredVehicles.length === 0 ? (
-        <p style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: '#6b7280' }}>
-          No vehicles match your search criteria.
-        </p>
-      ) : (
-        filteredVehicles.map((vehicle) => (
-          <VehicleCard
-            key={vehicle.id || vehicle.vehicleId}
-            vehicle={vehicle} 
-          />
-        ))
-      )}
+      {filteredVehicles.map((vehicle) => (
+        <VehicleCard
+          key={vehicle.vehicleId || vehicle.id}
+          vehicle={vehicle}
+          onDelete={onDelete}
+        />
+      ))}
 
-      <AddVehicleCard type="button">
-        <PlusCircle>+</PlusCircle>
-        <h3>Add New Vehicle</h3>
-        <p>Expand your fleet by adding another vehicle profile.</p>
-      </AddVehicleCard>
     </VehicleGrid>
   );
 }
