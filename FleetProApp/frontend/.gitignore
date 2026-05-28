@@ -29,3 +29,32 @@ obj/
 *.dll
 *.pdb
 
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET Core / Visual Studio Cache folders
+.vs/
+.vs-code/
+App_Data/
+
+# NuGet Packages
+*.nupkg
+# Include the packages folder if you use older NuGet package restore
+**/packages/
+!**/packages/repositories.config
+
+# Local environment secrets
+.env
+.env.local
+.env.*.local
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# TypeScript / Build Caches
+.eslintcache
+.stylelintcache
+.turbo/
