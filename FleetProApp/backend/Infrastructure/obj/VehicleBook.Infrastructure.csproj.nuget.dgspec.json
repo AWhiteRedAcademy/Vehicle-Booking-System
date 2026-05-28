@@ -1,19 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
-    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
-        "projectName": "VehicleBook.Application",
-        "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
-        "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\obj\\",
-=======
     "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {}
   },
   "projects": {
@@ -25,16 +12,9 @@
         "projectPath": "/workspace/backend/Application/VehicleBook.Application.csproj",
         "packagesPath": "/root/.nuget/packages/",
         "outputPath": "/workspace/backend/Application/obj/",
->>>>>>> 2026/05/27-ChangedAPI_Db
         "projectStyle": "PackageReference",
         "configFilePaths": [
-<<<<<<< HEAD
-          "C:\\Users\\Backspace_SD\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-=======
           "/root/.nuget/NuGet/NuGet.Config"
->>>>>>> 2026/05/27-ChangedAPI_Db
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -47,13 +27,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-<<<<<<< HEAD
-              "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj": {
-                "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj"
-=======
               "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
                 "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj"
->>>>>>> 2026/05/27-ChangedAPI_Db
               }
             }
           }
@@ -96,11 +71,7 @@
               "privateAssets": "all"
             }
           },
-<<<<<<< HEAD
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
-=======
           "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
->>>>>>> 2026/05/27-ChangedAPI_Db
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -378,16 +349,6 @@
         }
       }
     },
-<<<<<<< HEAD
-    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
-        "projectName": "VehicleBook.Domain",
-        "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
-        "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\obj\\",
-=======
     "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -396,16 +357,9 @@
         "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj",
         "packagesPath": "/root/.nuget/packages/",
         "outputPath": "/workspace/backend/Domain/obj/",
->>>>>>> 2026/05/27-ChangedAPI_Db
         "projectStyle": "PackageReference",
         "configFilePaths": [
-<<<<<<< HEAD
-          "C:\\Users\\Backspace_SD\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-=======
           "/root/.nuget/NuGet/NuGet.Config"
->>>>>>> 2026/05/27-ChangedAPI_Db
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -468,11 +422,7 @@
               "privateAssets": "all"
             }
           },
-<<<<<<< HEAD
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
-=======
           "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
->>>>>>> 2026/05/27-ChangedAPI_Db
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -750,16 +700,6 @@
         }
       }
     },
-<<<<<<< HEAD
-    "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj",
-        "projectName": "VehicleBook.Infrastructure",
-        "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\obj\\",
-=======
     "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -768,16 +708,9 @@
         "projectPath": "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj",
         "packagesPath": "/root/.nuget/packages/",
         "outputPath": "/workspace/backend/Infrastructure/obj/",
->>>>>>> 2026/05/27-ChangedAPI_Db
         "projectStyle": "PackageReference",
         "configFilePaths": [
-<<<<<<< HEAD
-          "C:\\Users\\Backspace_SD\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-=======
           "/root/.nuget/NuGet/NuGet.Config"
->>>>>>> 2026/05/27-ChangedAPI_Db
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -790,19 +723,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-<<<<<<< HEAD
-              "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj": {
-                "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj"
-              },
-              "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj": {
-                "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj"
-=======
               "/workspace/backend/Application/VehicleBook.Application.csproj": {
                 "projectPath": "/workspace/backend/Application/VehicleBook.Application.csproj"
               },
               "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
                 "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj"
->>>>>>> 2026/05/27-ChangedAPI_Db
               }
             }
           }
@@ -849,11 +774,7 @@
               "privateAssets": "all"
             }
           },
-<<<<<<< HEAD
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
-=======
           "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
->>>>>>> 2026/05/27-ChangedAPI_Db
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

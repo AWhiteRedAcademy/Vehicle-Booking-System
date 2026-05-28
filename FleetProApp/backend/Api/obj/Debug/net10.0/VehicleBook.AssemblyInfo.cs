@@ -13,11 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VehicleBook")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3586d1cd26d1a505a60fab39febee7c21cd0a3ba")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8492f5ee8519ed18aeeb2b489c180ab56c2f49df")]
->>>>>>> 2026/05/27-ChangedAPI_Db
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81e193013d29b0cdb688f7192b8f4fc5dd3562d0")]
 [assembly: System.Reflection.AssemblyProductAttribute("VehicleBook")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VehicleBook")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
