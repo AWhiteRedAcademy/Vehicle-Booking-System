@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "Azure.Core/1.47.1": {
@@ -2793,36 +2793,29 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Backspace_SD\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
+      "projectUniqueName": "/workspace/backend/Domain/VehicleBook.Domain.csproj",
       "projectName": "VehicleBook.Domain",
-      "projectPath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
-      "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\obj\\",
+      "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/workspace/backend/Domain/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Backspace_SD\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {}
         }
@@ -2837,10 +2830,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
@@ -2874,7 +2868,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

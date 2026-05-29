@@ -176,7 +176,7 @@ function OwnerEditVehicle() {
   }
 
   function validateForm() {
-    if (!formData.make.trim() || !formData.model.trim()) {
+    if (!formData.make?.trim() || !formData.model?.trim()) {
       return "Vehicle make and model details cannot be left blank.";
     }
 
@@ -190,6 +190,40 @@ function OwnerEditVehicle() {
 
     if (!formData.ownerId) {
       return "Owner ID is missing from this vehicle record.";
+    }
+
+    // --- VIN Validation ---
+    if (formData.vinNumber) {
+      const cleanVin = formData.vinNumber.trim().toUpperCase();
+      const vinRegex = /^[A-HJ-NPR-Z0-9]{17}$/;
+
+      if (!vinRegex.test(cleanVin)) {
+        return "VIN number must be exactly 17 characters long and cannot contain the letters I, O, or Q.";
+      }
+    }
+
+    // --- License Plate Validation ---
+    if (!formData.licenseNumber || !formData.licenseNumber.trim()) {
+      return "License plate cannot be empty.";
+    }
+
+    const cleanPlate = formData.licenseNumber.trim().toUpperCase();
+
+    // 1. New Alphanumeric Standard (GP, ZN, FS, MP, L, NW, NC)
+    const nationalRegex = /^[A-Z]{2}\s?\d{2}\s?[A-Z]{2}\s?(GP|ZN|FS|MP|L|NW|NC)$/;
+
+    // 2. Western Cape & Older Province Formats (Allows CA123-456)
+    const provincialRegex = /^[A-Z]{2,3}\s?\d{1,3}([- ]?\d{1,3})?(\s?(WP|EC))?$/;
+
+    // 3. Personalized Plates
+    const personalizedRegex = /^[A-Z0-9\s-]{1,7}\s?(GP|ZN|FS|MP|L|NW|NC|WP|EC)$/;
+
+    const isValid = nationalRegex.test(cleanPlate) ||
+      provincialRegex.test(cleanPlate) ||
+      personalizedRegex.test(cleanPlate);
+
+    if (!isValid) {
+      return "Invalid South African plate format. Examples: BB 12 CC GP or CA 123-456.";
     }
 
     return "";
@@ -209,7 +243,15 @@ function OwnerEditVehicle() {
       setIsSaving(true);
       setError("");
 
-      await updateVehicle(id, buildUpdateRequest(formData));
+      const sanitizedData = {
+        ...formData,
+        make: formData.make.trim(),
+        model: formData.model.trim(),
+        licenseNumber: formData.licenseNumber.trim().toUpperCase(),
+        vinNumber: formData.vinNumber ? formData.vinNumber.trim().toUpperCase() : ""
+      };
+
+      await updateVehicle(id, buildUpdateRequest(sanitizedData));
 
       navigate("/owner/dashboard");
     } catch (err) {
@@ -218,6 +260,7 @@ function OwnerEditVehicle() {
       setIsSaving(false);
     }
   }
+
 
   return (
     <DashboardLayout

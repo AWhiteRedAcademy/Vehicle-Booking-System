@@ -51,3 +51,21 @@ C:\Users\Backspace_SD\Documents\Vehicle-Booking-System\FleetProApp\backend\Infra
 C:\Users\Backspace_SD\Documents\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\refint\VehicleBook.Infrastructure.dll
 C:\Users\Backspace_SD\Documents\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.pdb
 C:\Users\Backspace_SD\Documents\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\ref\VehicleBook.Infrastructure.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Infrastructure.deps.json
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Infrastructure.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Infrastructure.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Application.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Domain.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Application.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\bin\Debug\net10.0\VehicleBook.Domain.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.AssemblyInfo.cs
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.sourcelink.json
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleB.03A46EC3.Up2Date
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\refint\VehicleBook.Infrastructure.dll
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\VehicleBook.Infrastructure.pdb
+C:\Users\Backspace_SD\OneDrive - redAcademy (Pty) Ltd\Documents\GitHub\Vehicle-Booking-System\FleetProApp\backend\Infrastructure\obj\Debug\net10.0\ref\VehicleBook.Infrastructure.dll

@@ -1,12 +1,12 @@
 services:
   backend:
     image: mcr.microsoft.com/dotnet/sdk:10.0
-    working_dir: /workspace/backend/Api
+    working_dir: /workspace/backend
     volumes:
       - ..:/workspace:cached
     ports:
       - "5000:5000"
-    command: sh -c "dotnet restore && dotnet run --no-launch-profile"
+    command: sh -c "dotnet restore && dotnet build && dotnet run --project Api/VehicleBook.csproj --no-launch-profile"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:5000
@@ -16,11 +16,12 @@ services:
     working_dir: /workspace/frontend
     volumes:
       - ..:/workspace:cached
+      - /workspace/frontend/node_modules
     ports:
       - "0.0.0.0:5174:5174"
     environment:
       - WATCHPACK_POLLING=true
-      - VITE_API_URL=http://10.150.5.65:5000
-    command: sh -c "VITE_API_URL=http://10.150.5.65:5000 npm run dev -- --host 0.0.0.0"
+      - VITE_API_URL=http://backend:5000
+    command: sh -c "npm install && VITE_API_URL=http://backend:5000 npm run dev -- --host 0.0.0.0"
     depends_on:
       - backend

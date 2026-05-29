@@ -2,5 +2,5 @@
   <Project Path="Application/VehicleBook.Application.csproj" />
   <Project Path="Domain/VehicleBook.Domain.csproj" />
   <Project Path="Infrastructure/VehicleBook.Infrastructure.csproj" />
-  <Project Path="Vehicle Booking System/VehicleBook.csproj" />
+  <Project Path="Api/VehicleBook.csproj" />
 </Solution>
