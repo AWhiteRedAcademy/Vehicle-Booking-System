@@ -35,7 +35,6 @@ namespace VehicleBook.Infrastructure.Repositories
         }
 
 
-
         public async Task<IEnumerable<Booking>> GetCurrentBookingsByCompanyIdAsync(int companyId, DateOnly today)
         {
             return await _dbSet
@@ -85,6 +84,16 @@ namespace VehicleBook.Infrastructure.Repositories
         {
             _dbSet.Remove(booking);
         }
+
+        public async Task<IEnumerable<Booking>> GetActiveAndPendingBookingsAsync(DateOnly date, CancellationToken cancellationToken)
+        {
+            return await _context.Bookings
+                .Where(b => (b.StartDate == date && b.Status != "Cancelled")
+                         || (b.EndDate < date && b.Status == "Active"))
+                .ToListAsync(cancellationToken);
+        }
+
+
 
         public async Task SaveChangesAsync()
         {

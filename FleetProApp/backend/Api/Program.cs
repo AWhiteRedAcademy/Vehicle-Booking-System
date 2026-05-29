@@ -6,6 +6,7 @@ using System.Text;
 using VehicleBook.Application.Authentication;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Application.Services;
+using VehicleBook.Infrastructure.Services;
 using VehicleBook.Infrastructure.Authentication;
 using VehicleBook.Infrastructure.Data;
 using VehicleBook.Infrastructure.Repositories;
@@ -100,6 +101,9 @@ namespace Vehicle_Booking_System
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+            builder.Services.AddScoped<IVehicleStatusService, VehicleStatusService>();
+
+            builder.Services.AddHostedService<VehicleStatusWorker>();
 
             var app = builder.Build();
 

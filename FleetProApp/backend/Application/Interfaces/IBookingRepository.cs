@@ -13,6 +13,7 @@ namespace VehicleBook.Application.Interfaces
         Task AddAsync(Booking booking);
         void Update(Booking booking);
         void Delete(Booking booking);
+        Task<IEnumerable<Booking>> GetActiveAndPendingBookingsAsync(DateOnly date, CancellationToken cancellationToken);
         Task SaveChangesAsync();
     }
 }
