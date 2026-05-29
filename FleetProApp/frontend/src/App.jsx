@@ -10,6 +10,10 @@ import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 
+// Admin Pages
+import AdminAddUser from "./pages/AdminDashboard/AdminAddUserPage/AdminAddUser";
+import AdminUserDetails from "./pages/AdminDashboard/AdminUserDetailPage/AdminUserDetails";
+
 // Owner Pages
 import OwnerAddVehicle from "./pages/OwnerDashboard/OwnerAddVehiclePage/OwnerAddVehicle";
 import OwnerEditVehicle from "./pages/OwnerDashboard/OwnerEditVehiclePage/OwnerEditVehicle";
@@ -32,6 +36,9 @@ function App() {
         {/* ADMIN ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminDashboard />} />
+          <Route path="/admin/users/add" element={<AdminAddUser />} />
+          <Route path="/admin/users/:id" element={<AdminUserDetails />} />
         </Route>
 
         {/* OWNER ONLY ROUTES */}

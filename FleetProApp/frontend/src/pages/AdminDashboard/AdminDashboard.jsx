@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import GridViewIcon from "@mui/icons-material/GridView";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
@@ -9,9 +9,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import TuneIcon from "@mui/icons-material/Tune";
 import BusinessIcon from "@mui/icons-material/Business";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
+import EditUserModal from "../../components/modals/EditUserModal/EditUserModal";
 
 import {
   HeaderRow,
@@ -38,6 +42,10 @@ import {
   UserName,
   UserEmail,
   StatusBadge,
+  ActionButtons,
+  ViewDetailsButton,
+  EditUserButton,
+  DeleteUserButton,
   RoleText,
   TableFooter,
   FooterText,
@@ -45,17 +53,17 @@ import {
   PaginationButton,
 } from "./AdminDashboard.style";
 
+import {
+  getUsers,
+  updateUser,
+  deleteUser,
+} from "../../HTTPS Services/AdminServices";
+
 const adminNavItems = [
   {
     label: "Dashboard",
     to: "/admin/dashboard",
     icon: <GridViewIcon fontSize="small" />,
-  },
-
-  {
-    label: "Users",
-    to: "/admin/users",
-    icon: <PeopleAltIcon fontSize="small" />,
   },
   {
     label: "Analytics",
@@ -64,73 +72,100 @@ const adminNavItems = [
   },
 ];
 
-const mockUsers = [
-  {
-    userId: 1,
-    name: "Thaqib Ubayd",
-    email: "Thaqib@Owner.com",
-    role: "Owner",
-    status: "",
-    lastLogin: "24 mins ago",
-  },
-  {
-    userId: 2,
-    name: "Aids",
-    email: "aids@Owner.com",
-    role: "Owner",
-    status: "",
-    lastLogin: "2 hours ago",
-  },
-  {
-    userId: 3,
-    name: "Lisa ",
-    email: "Mvu@Company.com",
-    role: "",
-    status: "",
-    lastLogin: "8 days ago",
-  },
-];
+const pageSize = 8;
+
+function getUserRole(user) {
+  const role = user.role?.trim();
+
+  if (!role || role === "Guest") {
+    return "Guest";
+  }
+
+  return role;
+}
+
+function getUserStatus(user) {
+  const role = user.role?.trim();
+
+  if (!role || role === "Guest") {
+    return "Pending";
+  }
+
+  return "Active";
+}
 
 function AdminDashboard() {
+  const navigate = useNavigate();
+
+  const [users, setUsers] = useState([]);
+  const [editingUser, setEditingUser] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // const filteredUsers = useMemo(() => {
-  //   return mockUsers.filter((user) => {
-  //     const searchValue = searchTerm.toLowerCase().trim();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  //     const matchesSearch =
-  //       searchValue === "" ||
-  //       user.name.toLowerCase().includes(searchValue) ||
-  //       user.email.toLowerCase().includes(searchValue) ||
-  //       user.role.toLowerCase().includes(searchValue) ||
-  //       user.status.toLowerCase().includes(searchValue) ||
-  //       user.userId.toString().includes(searchValue);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
-  //     const matchesRole = roleFilter === "all" || user.role === roleFilter;
+  useEffect(() => {
+    let ignore = false;
 
-  //     const matchesStatus =
-  //       statusFilter === "all" || user.role === statusFilter;
+    async function loadUsers() {
+      try {
+        setIsLoading(true);
+        setError("");
 
-  //     return matchesSearch && matchesRole && matchesStatus;
-  //   });
-  // }, [searchTerm, roleFilter, statusFilter]);
+        const data = await getUsers();
+
+        if (!ignore) {
+          setUsers(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(err.message || "Failed to load users.");
+          setUsers([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadUsers();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, roleFilter, statusFilter]);
 
   const filteredUsers = useMemo(() => {
-    return mockUsers.filter((user) => {
+    return users.filter((user) => {
       const searchValue = searchTerm.toLowerCase().trim();
 
       const displayRole = getUserRole(user);
       const displayStatus = getUserStatus(user);
 
+      const name = user.name?.toLowerCase() || "";
+      const email = user.email?.toLowerCase() || "";
+      const phoneNumber = user.phoneNumber?.toLowerCase() || "";
+      const userId = user.userId?.toString() || "";
+
       const matchesSearch =
         searchValue === "" ||
-        user.name.toLowerCase().includes(searchValue) ||
-        user.email.toLowerCase().includes(searchValue) ||
+        name.includes(searchValue) ||
+        email.includes(searchValue) ||
+        phoneNumber.includes(searchValue) ||
         displayRole.toLowerCase().includes(searchValue) ||
         displayStatus.toLowerCase().includes(searchValue) ||
-        user.userId.toString().includes(searchValue);
+        userId.includes(searchValue);
 
       const matchesRole = roleFilter === "all" || displayRole === roleFilter;
 
@@ -139,50 +174,114 @@ function AdminDashboard() {
 
       return matchesSearch && matchesRole && matchesStatus;
     });
-  }, [searchTerm, roleFilter, statusFilter]);
+  }, [users, searchTerm, roleFilter, statusFilter]);
 
-  //   const ActiveUsers = mockUsers.filter(
-  //   (user) => !user.role === "Guest")
-  //   .fill((users) => user.status === "Active");
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
-
-  const pendingUsers = mockUsers.filter(
-    (user) => getUserStatus(user) === "Pending",
+  const pendingUsers = users.filter(
+    (user) => getUserStatus(user) === "Pending"
   ).length;
 
-  // const pendingUsers = mockUsers.filter(
-  //   (user) => user.role === "Guest")
-  //   .fill((users) => user.status === "Pending");
-
-  const companyUsers = mockUsers.filter(
-    (user) => user.role === "Company",
+  const companyUsers = users.filter(
+    (user) => getUserRole(user) === "Company"
   ).length;
 
-  function getUserRole(user) {
-    const role = user.role?.trim();
+  const ownerUsers = users.filter(
+    (user) => getUserRole(user) === "Owner"
+  ).length;
 
-    if (!role || role === "Guest") {
-      return "Unassigned";
-    }
+  const activeUsers = users.filter(
+    (user) => getUserStatus(user) === "Active"
+  ).length;
 
-    return role;
+  function handleEditUser(user) {
+    setEditingUser(user);
   }
 
-  function getUserStatus(user) {
-    const role = user.role?.trim();
+  async function handleSaveEditedUser(updatedUser) {
+    try {
+      setIsSaving(true);
+      setError("");
 
-    if (!role || role === "Guest") {
-      return "Pending";
+      await updateUser(updatedUser.userId, updatedUser);
+
+      setUsers((currentUsers) =>
+        currentUsers.map((user) =>
+          user.userId === updatedUser.userId
+            ? {
+                ...user,
+                ...updatedUser,
+                role: updatedUser.role || "Guest",
+              }
+            : user
+        )
+      );
+
+      setEditingUser(null);
+    } catch (err) {
+      setError(err.message || "Unable to update user.");
+    } finally {
+      setIsSaving(false);
     }
-
-    return "Active";
   }
 
-  const ownerUsers = mockUsers.filter((user) => user.role === "Owner").length;
-  
-   const activeUsers = mockUsers.filter(
-    (user) => getUserStatus(user) === "Active",
-  ).length;
+  async function handleDeleteUser(user) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${user.name}?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setError("");
+
+      await deleteUser(user.userId);
+
+      setUsers((currentUsers) =>
+        currentUsers.filter((currentUser) => currentUser.userId !== user.userId)
+      );
+    } catch (err) {
+      setError(err.message || "Unable to delete user.");
+    }
+  }
+
+  function handleViewUserDetails(user) {
+    navigate(`/admin/users/${user.userId}`);
+  }
+
+  function handleClearFilters() {
+    setSearchTerm("");
+    setRoleFilter("all");
+    setStatusFilter("all");
+  }
+
+  function handlePreviousPage() {
+    setCurrentPage((page) => Math.max(1, page - 1));
+  }
+
+  function handleNextPage() {
+    setCurrentPage((page) => Math.min(totalPages, page + 1));
+  }
+
+  if (isLoading) {
+    return (
+      <DashboardLayout
+        title="User Management"
+        subtitle="Loading users..."
+        roleLabel="Admin Console"
+        userLabel="Admin"
+        navItems={adminNavItems}
+      >
+        <EmptyCard>Loading users...</EmptyCard>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout
@@ -197,18 +296,17 @@ function AdminDashboard() {
           <SectionTitle>User Management</SectionTitle>
 
           <AdminMetaRow>
-            <MetaItem $color="blue">{mockUsers.length} Total Users</MetaItem>
-
+            <MetaItem $color="blue">{users.length} Total Users</MetaItem>
             <MetaItem $color="green">{activeUsers} Active Users</MetaItem>
+            <MetaItem $color="orange">{pendingUsers} Pending Users</MetaItem>
           </AdminMetaRow>
 
           <SectionText>
-            Search, filter, and manage platform users across companies and
-            owners.
+            Search, filter, and manage platform users across companies and owners.
           </SectionText>
         </div>
 
-        <AddButton type="button">
+        <AddButton type="button" onClick={() => navigate("/admin/users/add")}>
           <PersonAddAltIcon fontSize="small" />
           Add New User
         </AddButton>
@@ -218,7 +316,7 @@ function AdminDashboard() {
         <StatCard
           label="Company Users"
           value={companyUsers}
-          helperText="+12% this month"
+          helperText="Company accounts"
           tone="green"
           icon={<BusinessIcon fontSize="small" />}
         />
@@ -226,14 +324,14 @@ function AdminDashboard() {
         <StatCard
           label="Owner Users"
           value={ownerUsers}
-          helperText="Verified active"
+          helperText="Vehicle owner accounts"
           tone="blue"
           icon={<CheckCircleIcon fontSize="small" />}
         />
 
         <StatCard
           label="Total Users"
-          value={mockUsers.length}
+          value={users.length}
           helperText="Across all roles"
           tone="blue"
           icon={<PeopleAltIcon fontSize="small" />}
@@ -255,7 +353,7 @@ function AdminDashboard() {
             <SearchInput
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder="Search by name, email, role, status, or ID..."
+              placeholder="Search by name, email, phone, role, status, or ID..."
             />
           </SearchBox>
 
@@ -267,84 +365,153 @@ function AdminDashboard() {
               <option value="all">All Roles</option>
               <option value="Company">Company</option>
               <option value="Owner">Owner</option>
-              <option value="Driver">Guest</option>
+              <option value="Admin">Admin</option>
+              <option value="Guest">Guest</option>
             </FilterSelect>
 
             <FilterSelect
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
             >
-              <option value="all">Status</option>
+              <option value="all">All Statuses</option>
               <option value="Active">Active</option>
               <option value="Pending">Pending</option>
             </FilterSelect>
 
-            <FilterButton type="button">
+            <FilterButton
+              type="button"
+              onClick={handleClearFilters}
+              title="Clear search and filters"
+            >
               <TuneIcon fontSize="small" />
             </FilterButton>
           </FilterGroup>
         </UsersToolbar>
 
-        {filteredUsers.length === 0 ? (
+        {error && <EmptyCard>{error}</EmptyCard>}
+
+        {!error && filteredUsers.length === 0 ? (
           <EmptyCard>No users found.</EmptyCard>
         ) : (
-          <>
-            <UsersTable>
-              <thead>
-                <tr>
-                  <th>User Information</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Last Login</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredUsers.map((user) => (
-                  <tr key={user.userId}>
-                    <td>
-                      <UserInfo>
-                        <AvatarCircle>{user.name.charAt(0)}</AvatarCircle>
-
-                        <div>
-                          <UserName>{user.name}</UserName>
-                          <UserEmail>{user.email}</UserEmail>
-                        </div>
-                      </UserInfo>
-                    </td>
-
-                    <td>
-                      <RoleText>{getUserRole(user)}</RoleText>
-                    </td>
-
-                    <td>
-                      <StatusBadge $status={getUserStatus(user)}>
-                        {getUserStatus(user)}
-                      </StatusBadge>
-                    </td>
-
-                    <td>{user.lastLogin}</td>
+          !error && (
+            <>
+              <UsersTable>
+                <thead>
+                  <tr>
+                    <th>User Information</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Last Login</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </UsersTable>
+                </thead>
 
-            <TableFooter>
-              <FooterText>
-                Showing {filteredUsers.length} of {mockUsers.length} users
-              </FooterText>
+                <tbody>
+                  {paginatedUsers.map((user) => {
+                    const displayRole = getUserRole(user);
+                    const displayStatus = getUserStatus(user);
 
-              <PaginationActions>
-                <PaginationButton type="button" disabled>
-                  Previous
-                </PaginationButton>
+                    return (
+                      <tr key={user.userId}>
+                        <td>
+                          <UserInfo>
+                            <AvatarCircle>
+                              {(user.name || "?").charAt(0)}
+                            </AvatarCircle>
 
-                <PaginationButton type="button">Next</PaginationButton>
-              </PaginationActions>
-            </TableFooter>
-          </>
+                            <div>
+                              <UserName>{user.name || "Unnamed User"}</UserName>
+                              <UserEmail>{user.email || "No email"}</UserEmail>
+                            </div>
+                          </UserInfo>
+                        </td>
+
+                        <td>
+                          <RoleText>{displayRole}</RoleText>
+                        </td>
+
+                        <td>
+                          <StatusBadge $status={displayStatus}>
+                            {displayStatus}
+                          </StatusBadge>
+                        </td>
+
+                        <td>{user.lastLogin || "Never"}</td>
+
+                        <td>
+                          <ActionButtons>
+                            <ViewDetailsButton
+                              type="button"
+                              onClick={() => handleViewUserDetails(user)}
+                            >
+                              <VisibilityIcon fontSize="small" />
+                              View
+                            </ViewDetailsButton>
+
+                            <EditUserButton
+                              type="button"
+                              onClick={() => handleEditUser(user)}
+                            >
+                              <EditIcon fontSize="small" />
+                              Edit
+                            </EditUserButton>
+
+                            <DeleteUserButton
+                              type="button"
+                              onClick={() => handleDeleteUser(user)}
+                            >
+                              <DeleteIcon fontSize="small" />
+                              Delete
+                            </DeleteUserButton>
+                          </ActionButtons>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </UsersTable>
+
+              <TableFooter>
+                <FooterText>
+                  Showing {filteredUsers.length === 0 ? 0 : startIndex + 1}
+                  {" - "}
+                  {Math.min(endIndex, filteredUsers.length)}
+                  {" of "}
+                  {filteredUsers.length}
+                  {" users"}
+                </FooterText>
+
+                <PaginationActions>
+                  <PaginationButton
+                    type="button"
+                    disabled={safeCurrentPage === 1}
+                    onClick={handlePreviousPage}
+                  >
+                    Previous
+                  </PaginationButton>
+
+                  <PaginationButton
+                    type="button"
+                    disabled={safeCurrentPage === totalPages}
+                    onClick={handleNextPage}
+                  >
+                    Next
+                  </PaginationButton>
+                </PaginationActions>
+              </TableFooter>
+            </>
+          )
         )}
       </UsersPanel>
+
+      {editingUser && (
+        <EditUserModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onSave={handleSaveEditedUser}
+          isSaving={isSaving}
+        />
+      )}
     </DashboardLayout>
   );
 }

@@ -184,6 +184,67 @@ export const StatusBadge = styled.span`
     $status === "Active" ? "#dcfce7" : "#f1f5f9"};
 `;
 
+export const ActionButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const EditUserButton = styled.button`
+  border: none;
+  border-radius: ${theme.radius.medium};
+  background: #edf4ff;
+  color: ${theme.colors.primary};
+  padding: 8px 11px;
+  font-weight: 900;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: #dbeafe;
+  }
+`;
+
+export const DeleteUserButton = styled.button`
+  border: none;
+  border-radius: ${theme.radius.medium};
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 8px 11px;
+  font-weight: 900;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: #fee2e2;
+  }
+`;
+
+export const ViewDetailsButton = styled.button`
+  border: none;
+  border-radius: ${theme.radius.medium};
+  background: #f1f5f9;
+  color: #334155;
+  padding: 8px 11px;
+  font-weight: 900;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: #e2e8f0;
+    color: ${theme.colors.primary};
+  }
+`;
+
 export const TableFooter = styled.div`
   padding: 20px 28px;
 
