@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import EditVehicleModal from "../../components/modals/  EditVehicleModal";
+
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -31,6 +33,7 @@ import {
 
 import {
   getMockOwnerVehicles,
+  updateMockOwnerVehicle,
   deleteMockOwnerVehicle,
 } from "../../data/mockOwnerVehicles";
 
@@ -98,6 +101,8 @@ function OwnerDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const [editingVehicle, setEditingVehicle] = useState(null);
 
   useEffect(() => {
     async function loadVehicles() {
@@ -169,8 +174,18 @@ function OwnerDashboard() {
     0,
   );
 
+  // function handleEditVehicle(vehicle) {
+  //   navigate(`/owner/vehicles/edit/${vehicle.vehicleId}`);
+  // }
   function handleEditVehicle(vehicle) {
-    navigate(`/owner/vehicles/edit/${vehicle.vehicleId}`);
+    setEditingVehicle(vehicle);
+  }
+
+  function handleSaveEditedVehicle(updatedVehicle) {
+    const updatedVehicles = updateMockOwnerVehicle(updatedVehicle);
+
+    setVehicles(updatedVehicles);
+    setEditingVehicle(null);
   }
 
   function handleDeleteVehicle(vehicle) {
@@ -291,6 +306,14 @@ function OwnerDashboard() {
             <p>Expand your fleet by adding another vehicle profile.</p>
           </AddVehicleCard>
         </VehicleGrid>
+      )}
+
+      {editingVehicle && (
+        <EditVehicleModal
+          vehicle={editingVehicle}
+          onClose={() => setEditingVehicle(null)}
+          onSave={handleSaveEditedVehicle}
+        />
       )}
     </DashboardLayout>
   );

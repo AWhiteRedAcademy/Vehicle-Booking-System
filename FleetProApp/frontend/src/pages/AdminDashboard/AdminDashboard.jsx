@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
@@ -9,6 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TuneIcon from "@mui/icons-material/Tune";
 import BusinessIcon from "@mui/icons-material/Business";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
@@ -38,12 +41,29 @@ import {
   UserName,
   UserEmail,
   StatusBadge,
+  ActionButtons,
+  ViewDetailsButton,
+  EditUserButton,
+  DeleteUserButton,
   RoleText,
   TableFooter,
   FooterText,
   PaginationActions,
   PaginationButton,
 } from "./AdminDashboard.style";
+
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditUserModal from "../../components/modals/EditUserModal/  EditUserModal";
+
+import {
+  getMockUsers,
+  getUserRole,
+  getUserStatus,
+  getMockUserById,
+  updateMockUser,
+  deleteMockUser,
+} from "../../data/mockUser";
 
 const adminNavItems = [
   {
@@ -52,11 +72,11 @@ const adminNavItems = [
     icon: <GridViewIcon fontSize="small" />,
   },
 
-  {
-    label: "Users",
-    to: "/admin/users",
-    icon: <PeopleAltIcon fontSize="small" />,
-  },
+  // {
+  //   label: "Users",
+  //   to: "/admin/users",
+  //   icon: <PeopleAltIcon fontSize="small" />,
+  // },
   {
     label: "Analytics",
     to: "/admin/analytics",
@@ -96,6 +116,10 @@ function AdminDashboard() {
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  const navigate = useNavigate();
+  const [users, setUsers] = useState(getMockUsers());
+  const [editingUser, setEditingUser] = useState(null);
+
   // const filteredUsers = useMemo(() => {
   //   return mockUsers.filter((user) => {
   //     const searchValue = searchTerm.toLowerCase().trim();
@@ -118,7 +142,7 @@ function AdminDashboard() {
   // }, [searchTerm, roleFilter, statusFilter]);
 
   const filteredUsers = useMemo(() => {
-    return mockUsers.filter((user) => {
+    return users.filter((user) => {
       const searchValue = searchTerm.toLowerCase().trim();
 
       const displayRole = getUserRole(user);
@@ -139,14 +163,13 @@ function AdminDashboard() {
 
       return matchesSearch && matchesRole && matchesStatus;
     });
-  }, [searchTerm, roleFilter, statusFilter]);
+  }, [users, searchTerm, roleFilter, statusFilter]);
 
   //   const ActiveUsers = mockUsers.filter(
   //   (user) => !user.role === "Guest")
   //   .fill((users) => user.status === "Active");
 
-
-  const pendingUsers = mockUsers.filter(
+  const pendingUsers = users.filter(
     (user) => getUserStatus(user) === "Pending",
   ).length;
 
@@ -154,15 +177,13 @@ function AdminDashboard() {
   //   (user) => user.role === "Guest")
   //   .fill((users) => user.status === "Pending");
 
-  const companyUsers = mockUsers.filter(
-    (user) => user.role === "Company",
-  ).length;
+  const companyUsers = users.filter((user) => user.role === "Company").length;
 
   function getUserRole(user) {
     const role = user.role?.trim();
 
     if (!role || role === "Guest") {
-      return "Unassigned";
+      return "Guest";
     }
 
     return role;
@@ -178,11 +199,39 @@ function AdminDashboard() {
     return "Active";
   }
 
-  const ownerUsers = mockUsers.filter((user) => user.role === "Owner").length;
-  
-   const activeUsers = mockUsers.filter(
+  const ownerUsers = users.filter((user) => user.role === "Owner").length;
+
+  const activeUsers = users.filter(
     (user) => getUserStatus(user) === "Active",
   ).length;
+
+  function handleEditUser(user) {
+    setEditingUser(user);
+  }
+
+  function handleSaveEditedUser(updatedUser) {
+    const updatedUsers = updateMockUser(updatedUser);
+
+    setUsers(updatedUsers);
+    setEditingUser(null);
+  }
+
+  function handleDeleteUser(user) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${user.name}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const updatedUsers = deleteMockUser(user.userId);
+    setUsers(updatedUsers);
+  }
+
+  function handleViewUserDetails(user) {
+    navigate(`/admin/users/${user.userId}`);
+  }
 
   return (
     <DashboardLayout
@@ -197,7 +246,7 @@ function AdminDashboard() {
           <SectionTitle>User Management</SectionTitle>
 
           <AdminMetaRow>
-            <MetaItem $color="blue">{mockUsers.length} Total Users</MetaItem>
+            <MetaItem $color="blue">{users.length} Total Users</MetaItem>
 
             <MetaItem $color="green">{activeUsers} Active Users</MetaItem>
           </AdminMetaRow>
@@ -208,7 +257,7 @@ function AdminDashboard() {
           </SectionText>
         </div>
 
-        <AddButton type="button">
+        <AddButton type="button" onClick={() => navigate("/admin/users/add")}>
           <PersonAddAltIcon fontSize="small" />
           Add New User
         </AddButton>
@@ -267,7 +316,7 @@ function AdminDashboard() {
               <option value="all">All Roles</option>
               <option value="Company">Company</option>
               <option value="Owner">Owner</option>
-              <option value="Driver">Guest</option>
+              <option value="Guest">Guest</option>
             </FilterSelect>
 
             <FilterSelect
@@ -296,6 +345,7 @@ function AdminDashboard() {
                   <th>Role</th>
                   <th>Status</th>
                   <th>Last Login</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
 
@@ -324,6 +374,34 @@ function AdminDashboard() {
                     </td>
 
                     <td>{user.lastLogin}</td>
+
+                    <td>
+                      <ActionButtons>
+                        <ViewDetailsButton
+                          type="button"
+                          onClick={() => handleViewUserDetails(user)}
+                        >
+                          <VisibilityIcon fontSize="small" />
+                          View
+                        </ViewDetailsButton>
+
+                        <EditUserButton
+                          type="button"
+                          onClick={() => handleEditUser(user)}
+                        >
+                          <EditIcon fontSize="small" />
+                          Edit
+                        </EditUserButton>
+
+                        <DeleteUserButton
+                          type="button"
+                          onClick={() => handleDeleteUser(user)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                          Delete
+                        </DeleteUserButton>
+                      </ActionButtons>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -331,7 +409,7 @@ function AdminDashboard() {
 
             <TableFooter>
               <FooterText>
-                Showing {filteredUsers.length} of {mockUsers.length} users
+                Showing {filteredUsers.length} of {users.length} users
               </FooterText>
 
               <PaginationActions>
@@ -345,6 +423,14 @@ function AdminDashboard() {
           </>
         )}
       </UsersPanel>
+
+      {editingUser && (
+        <EditUserModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onSave={handleSaveEditedUser}
+        />
+      )}
     </DashboardLayout>
   );
 }

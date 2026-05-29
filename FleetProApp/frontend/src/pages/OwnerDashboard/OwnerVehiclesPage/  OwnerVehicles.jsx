@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import EditVehicleModal from "../../../components/modals/  EditVehicleModal";
+
 import GridViewIcon from "@mui/icons-material/GridView";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -28,11 +30,12 @@ import {
   SummaryDot,
   LoadMoreWrapper,
   ShowingText,
-} from "./  OwnerVehicles.style";
+} from "./  OwnerVehicles.style"
 
 import {
   getMockOwnerVehicles,
   deleteMockOwnerVehicle,
+  updateMockOwnerVehicle,
 } from "../../../data/mockOwnerVehicles";
 
 const ownerNavItems = [
@@ -61,6 +64,8 @@ function OwnerVehicles() {
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
+  const [editingVehicle, setEditingVehicle] = useState(null);
+
   const filteredVehicles = useMemo(() => {
     return vehicles.filter((vehicle) => {
       const searchValue = searchTerm.toLowerCase().trim();
@@ -84,16 +89,31 @@ function OwnerVehicles() {
     });
   }, [vehicles, searchTerm, availabilityFilter, categoryFilter]);
 
-  const availableCount = vehicles.filter((vehicle) => vehicle.isAvailable).length;
-  const unavailableCount = vehicles.filter((vehicle) => !vehicle.isAvailable).length;
+  const availableCount = vehicles.filter(
+    (vehicle) => vehicle.isAvailable,
+  ).length;
+  const unavailableCount = vehicles.filter(
+    (vehicle) => !vehicle.isAvailable,
+  ).length;
+
+  //   function handleEditVehicle(vehicle) {
+  //     navigate(`/owner/vehicles/edit/${vehicle.vehicleId}`);
+  //   }
 
   function handleEditVehicle(vehicle) {
-    navigate(`/owner/vehicles/edit/${vehicle.vehicleId}`);
+    setEditingVehicle(vehicle);
+  }
+
+  function handleSaveEditedVehicle(updatedVehicle) {
+    const updatedVehicles = updateMockOwnerVehicle(updatedVehicle);
+
+    setVehicles(updatedVehicles);
+    setEditingVehicle(null);
   }
 
   function handleDeleteVehicle(vehicle) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
     );
 
     if (!confirmed) {
@@ -135,11 +155,15 @@ function OwnerVehicles() {
           </PageSummary>
 
           <SectionText>
-            Manage your vehicles, update availability, edit pricing, or remove vehicles from your fleet.
+            Manage your vehicles, update availability, edit pricing, or remove
+            vehicles from your fleet.
           </SectionText>
         </div>
 
-        <AddButton type="button" onClick={() => navigate("/owner/vehicles/add")}>
+        <AddButton
+          type="button"
+          onClick={() => navigate("/owner/vehicles/add")}
+        >
           <AddIcon fontSize="small" />
           Add New Vehicle
         </AddButton>
@@ -197,6 +221,14 @@ function OwnerVehicles() {
             </ShowingText>
           </LoadMoreWrapper>
         </>
+      )}
+
+      {editingVehicle && (
+        <EditVehicleModal
+          vehicle={editingVehicle}
+          onClose={() => setEditingVehicle(null)}
+          onSave={handleSaveEditedVehicle}
+        />
       )}
     </DashboardLayout>
   );
