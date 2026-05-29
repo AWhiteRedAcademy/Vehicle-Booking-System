@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "33qWMD8DQsY=",
+  "dgSpecHash": "TB+qBOvDNwg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
+  "projectFilePath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Backspace_SD\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Backspace_SD\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
@@ -71,9 +71,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'System.Security.Cryptography.Xml' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-37gx-xxp4-5rgx",
-      "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
+      "projectPath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
+      "filePath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
       "libraryId": "System.Security.Cryptography.Xml",
       "targetGraphs": [
         "net10.0"
@@ -83,9 +83,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'System.Security.Cryptography.Xml' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-w3x6-4m5h-cxqf",
-      "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
+      "projectPath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
+      "filePath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj",
       "libraryId": "System.Security.Cryptography.Xml",
       "targetGraphs": [
         "net10.0"

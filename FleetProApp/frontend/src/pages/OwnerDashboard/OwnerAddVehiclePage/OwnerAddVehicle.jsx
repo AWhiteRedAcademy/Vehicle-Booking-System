@@ -129,6 +129,45 @@ function OwnerAddVehicle() {
       return;
     }
 
+    if (formData.vinNumber && formData.vinNumber.length !== 17) {
+      setError("VIN number must be 17 characters long.");
+      return;
+    }
+
+    if (formData.licenseNumber && formData.licenseNumber.length < 5) {
+      setError("License number must be at least 5 characters long.");
+      return;
+    }
+    // License plate validation - South African
+    const cleanPlate = formData.licenseNumber.trim().toUpperCase();
+
+    if (cleanPlate === '') {
+      setError("License plate cannot be empty.");
+      return false;
+    }
+
+    // 1. New Alphanumeric Standard (GP, ZN, FS, MP, L, NW, NC)
+    // Pattern: XX NN XX - PROVINCE (e.g., BB 12 CC GP, or BB 12 CC ZN)
+    const nationalRegex = /^[A-Z]{2}\s?\d{2}\s?[A-Z]{2}\s?(GP|ZN|FS|MP|L|NW|NC)$/;
+
+    // 2. Western Cape & Older Province Formats (Town Prefix + Numbers + Optional WP/EC)
+    // Pattern: CA 123456, CEO 123, or old formats ending in EC / WP
+    const provincialRegex = /^[A-Z]{2,3}\s?\d{1,6}(\s?(WP|EC))?$/;
+
+    // 3. Personalized Plates (Up to 7 custom characters + Province suffix)
+    // Pattern: BRU 1-GP, METEOR-WP, LION7-ZN
+    const personalizedRegex = /^[A-Z0-9\s-]{1,7}\s?(GP|ZN|FS|MP|L|NW|NC|WP|EC)$/;
+
+    // Test input against all valid combinations
+    const isValid = nationalRegex.test(cleanPlate) ||
+      provincialRegex.test(cleanPlate) ||
+      personalizedRegex.test(cleanPlate);
+
+    if (!isValid) {
+      setError("Invalid South African plate format. Examples: BB 12 CC GP or CA 123-456.");
+      return false;
+    }
+
     try {
       setIsSaving(true);
       setError("");

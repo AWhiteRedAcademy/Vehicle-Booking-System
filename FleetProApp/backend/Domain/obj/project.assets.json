@@ -2799,11 +2799,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
       "projectName": "VehicleBook.Domain",
-      "projectPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
+      "projectPath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\VehicleBook.Domain.csproj",
       "packagesPath": "C:\\Users\\Backspace_SD\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Backspace_SD\\Documents\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\obj\\",
+      "outputPath": "C:\\Users\\Backspace_SD\\OneDrive - redAcademy (Pty) Ltd\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
