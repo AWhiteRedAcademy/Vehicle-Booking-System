@@ -45,14 +45,7 @@ namespace Vehicle_Booking_System
                 options.AddPolicy("AllowFrontend", policy =>
                 {
                     policy
-                        .WithOrigins(
-                            "http://localhost:5174",
-                            "http://127.0.0.1:5174",
-                            "http://localhost:5175",
-                            "http://127.0.0.1:5175",
-                            "http://192.168.155.144:5174",
-                            "http://192.168.155.144:5175"
-                        )
+                        .AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
