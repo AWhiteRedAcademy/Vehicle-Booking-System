@@ -80,3 +80,5 @@ compose.override.yaml
 **/publish/
 **/out/
 
+.env
+
