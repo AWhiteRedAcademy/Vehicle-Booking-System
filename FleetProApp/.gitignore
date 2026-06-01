@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Ignore local build and application caches
+*.cache
+
+
 # Ignore build outputs
 bin/
 obj/
