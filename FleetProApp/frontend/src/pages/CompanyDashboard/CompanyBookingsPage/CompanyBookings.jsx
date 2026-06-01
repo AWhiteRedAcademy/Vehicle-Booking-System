@@ -102,13 +102,13 @@ function dateMatchesFilter(booking, dateFilter) {
   const bookingDay = new Date(
     bookingDate.getFullYear(),
     bookingDate.getMonth(),
-    bookingDate.getDate()
+    bookingDate.getDate(),
   );
 
   const todayDay = new Date(
     today.getFullYear(),
     today.getMonth(),
-    today.getDate()
+    today.getDate(),
   );
 
   if (dateFilter === "today") {
@@ -139,7 +139,8 @@ function filterBookings(bookings, searchTerm, dateFilter) {
   const searchValue = searchTerm.toLowerCase().trim();
 
   return bookings.filter((booking) => {
-    const vehicleName = `${booking.make || ""} ${booking.model || ""}`.toLowerCase();
+    const vehicleName =
+      `${booking.make || ""} ${booking.model || ""}`.toLowerCase();
     const licenseNumber = booking.licenseNumber?.toLowerCase() || "";
     const category = booking.category?.toLowerCase() || "";
     const ownerName = booking.ownerName?.toLowerCase() || "";
@@ -205,6 +206,21 @@ function CompanyBookings() {
   const [currentActivePage, setCurrentActivePage] = useState(1);
   const [currentHistoryPage, setCurrentHistoryPage] = useState(1);
 
+  //mobile
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 760);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 760);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     let ignore = false;
 
@@ -250,19 +266,26 @@ function CompanyBookings() {
     return filterBookings(historyBookings, searchTerm, dateFilter);
   }, [historyBookings, searchTerm, dateFilter]);
 
-  const currentPagination = paginate(filteredCurrentBookings, currentActivePage);
-  const historyPagination = paginate(filteredHistoryBookings, currentHistoryPage);
+  const currentPagination = paginate(
+    filteredCurrentBookings,
+    currentActivePage,
+  );
+  const historyPagination = paginate(
+    filteredHistoryBookings,
+    currentHistoryPage,
+  );
 
   const confirmedCount = currentBookings.filter(
-    (booking) => booking.status === "Confirmed"
+    (booking) => booking.status === "Confirmed",
   ).length;
 
   const inProgressCount = currentBookings.filter(
-    (booking) => booking.status === "Confirmed" || booking.currentBooking === "Confirmed"
+    (booking) =>
+      booking.status === "Confirmed" || booking.currentBooking === "Confirmed",
   ).length;
 
   const pendingCount = currentBookings.filter(
-    (booking) => booking.status === "Pending"
+    (booking) => booking.status === "Pending",
   ).length;
 
   async function handleLoadHistory() {
@@ -310,47 +333,49 @@ function CompanyBookings() {
   }
 
   function getTodayDateString() {
-  const today = new Date();
-  const offset = today.getTimezoneOffset();
-  const localToday = new Date(today.getTime() - offset * 60 * 1000);
+    const today = new Date();
+    const offset = today.getTimezoneOffset();
+    const localToday = new Date(today.getTime() - offset * 60 * 1000);
 
-  return localToday.toISOString().split("T")[0];
-}
-
-function calculateBookingDays(startDate, endDate) {
-  if (!startDate || !endDate) {
-    return 0;
+    return localToday.toISOString().split("T")[0];
   }
 
-  const start = new Date(startDate);
-  const end = new Date(endDate);
+  function calculateBookingDays(startDate, endDate) {
+    if (!startDate || !endDate) {
+      return 0;
+    }
 
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    return 0;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return 0;
+    }
+
+    const difference = end.getTime() - start.getTime();
+    const days = Math.ceil(difference / (1000 * 60 * 60 * 24));
+
+    return days > 0 ? days : 0;
   }
 
-  const difference = end.getTime() - start.getTime();
-  const days = Math.ceil(difference / (1000 * 60 * 60 * 24));
+  function canModifyBooking(booking) {
+    if (!booking.startDate) return false;
 
-  return days > 0 ? days : 0;
-}
+    const today = getTodayDateString();
 
-function canModifyBooking(booking) {
-  if (!booking.startDate) return false;
+    return booking.startDate > today;
+  }
 
-  const today = getTodayDateString();
-
-  return booking.startDate > today;
-}
-
-function handleViewBooking(booking) {
-  setSelectedBooking(booking);
-  setModalError("");
-}
+  function handleViewBooking(booking) {
+    setSelectedBooking(booking);
+    setModalError("");
+  }
 
   function handleEditBooking(booking) {
     if (!canModifyBooking(booking)) {
-      setModalError("This booking can no longer be edited because it has already started.");
+      setModalError(
+        "This booking can no longer be edited because it has already started.",
+      );
       setSelectedBooking(booking);
       return;
     }
@@ -365,7 +390,9 @@ function handleViewBooking(booking) {
 
   function handleDeleteBooking(booking) {
     if (!canModifyBooking(booking)) {
-      setModalError("This booking can no longer be deleted because it has already started.");
+      setModalError(
+        "This booking can no longer be deleted because it has already started.",
+      );
       setSelectedBooking(booking);
       return;
     }
@@ -410,24 +437,28 @@ function handleViewBooking(booking) {
   function updateBookingInState(updatedBooking) {
     setCurrentBookings((currentItems) =>
       currentItems.map((booking) =>
-        booking.bookingId === updatedBooking.bookingId ? updatedBooking : booking
-      )
+        booking.bookingId === updatedBooking.bookingId
+          ? updatedBooking
+          : booking,
+      ),
     );
 
     setHistoryBookings((currentItems) =>
       currentItems.map((booking) =>
-        booking.bookingId === updatedBooking.bookingId ? updatedBooking : booking
-      )
+        booking.bookingId === updatedBooking.bookingId
+          ? updatedBooking
+          : booking,
+      ),
     );
   }
 
   function removeBookingFromState(bookingId) {
     setCurrentBookings((currentItems) =>
-      currentItems.filter((booking) => booking.bookingId !== bookingId)
+      currentItems.filter((booking) => booking.bookingId !== bookingId),
     );
 
     setHistoryBookings((currentItems) =>
-      currentItems.filter((booking) => booking.bookingId !== bookingId)
+      currentItems.filter((booking) => booking.bookingId !== bookingId),
     );
   }
 
@@ -465,7 +496,7 @@ function handleViewBooking(booking) {
       const requestBody = buildUpdatedBookingRequest(
         editingBooking,
         editForm.startDate,
-        editForm.endDate
+        editForm.endDate,
       );
 
       await updateBooking(editingBooking.bookingId, requestBody);
@@ -513,7 +544,7 @@ function handleViewBooking(booking) {
 
   function goToNextCurrentPage() {
     setCurrentActivePage((page) =>
-      Math.min(currentPagination.totalPages, page + 1)
+      Math.min(currentPagination.totalPages, page + 1),
     );
   }
 
@@ -523,7 +554,7 @@ function handleViewBooking(booking) {
 
   function goToNextHistoryPage() {
     setCurrentHistoryPage((page) =>
-      Math.min(historyPagination.totalPages, page + 1)
+      Math.min(historyPagination.totalPages, page + 1),
     );
   }
 
@@ -566,7 +597,8 @@ function handleViewBooking(booking) {
           <SectionEyebrow>Dashboard &gt; Bookings</SectionEyebrow>
           <SectionTitle>Booking Management</SectionTitle>
           <SectionText>
-            Track active bookings now, and load older booking history only when needed.
+            Track active bookings now, and load older booking history only when
+            needed.
           </SectionText>
         </div>
 
@@ -604,7 +636,9 @@ function handleViewBooking(booking) {
         <StatCard
           label="Loaded Bookings"
           value={currentBookings.length + historyBookings.length}
-          helperText={historyLoaded ? "Current + history loaded" : "Current only"}
+          helperText={
+            historyLoaded ? "Current + history loaded" : "Current only"
+          }
           tone="blue"
           icon={<DirectionsCarIcon fontSize="small" />}
         />
@@ -615,7 +649,11 @@ function handleViewBooking(booking) {
           <SearchInput
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Search bookings by owner name, vehicle, license, status, or booking ID..."
+            placeholder={
+              isMobile
+                ? "Search bookings..."
+                : "Search by booking ID, vehicle, client, or status..."
+            }
           />
 
           <FilterSelect
@@ -660,8 +698,8 @@ function handleViewBooking(booking) {
 
         <TableFooter>
           <FooterText>
-            Showing page {currentActivePage} of {currentPagination.totalPages}{" "}
-            ({filteredCurrentBookings.length} current entries)
+            Showing page {currentActivePage} of {currentPagination.totalPages} (
+            {filteredCurrentBookings.length} current entries)
           </FooterText>
 
           <PaginationButtons>
@@ -711,12 +749,20 @@ function handleViewBooking(booking) {
             </PanelActionButton>
           </PanelHeader>
 
-          <div style={{ padding: "24px 26px", color: "#64748b", fontWeight: 700 }}>
+          <div
+            style={{ padding: "24px 26px", color: "#64748b", fontWeight: 700 }}
+          >
             Older booking records are not loaded until you press the button.
           </div>
 
           {historyError && (
-            <div style={{ padding: "0 26px 24px", color: "#dc2626", fontWeight: 800 }}>
+            <div
+              style={{
+                padding: "0 26px 24px",
+                color: "#dc2626",
+                fontWeight: 800,
+              }}
+            >
               {historyError}
             </div>
           )}
@@ -725,7 +771,10 @@ function handleViewBooking(booking) {
         <DashboardPanel>
           <PanelHeader>
             <PanelTitle>Booking History</PanelTitle>
-            <PanelActionButton type="button" onClick={() => setHistoryLoaded(false)}>
+            <PanelActionButton
+              type="button"
+              onClick={() => setHistoryLoaded(false)}
+            >
               Hide History
             </PanelActionButton>
           </PanelHeader>
@@ -752,8 +801,9 @@ function handleViewBooking(booking) {
 
           <TableFooter>
             <FooterText>
-              Showing page {currentHistoryPage} of {historyPagination.totalPages}{" "}
-              ({filteredHistoryBookings.length} past items)
+              Showing page {currentHistoryPage} of{" "}
+              {historyPagination.totalPages} ({filteredHistoryBookings.length}{" "}
+              past items)
             </FooterText>
 
             <PaginationButtons>
@@ -775,7 +825,9 @@ function handleViewBooking(booking) {
                 onClick={goToNextHistoryPage}
                 style={{
                   opacity:
-                    currentHistoryPage === historyPagination.totalPages ? 0.4 : 1,
+                    currentHistoryPage === historyPagination.totalPages
+                      ? 0.4
+                      : 1,
                   cursor:
                     currentHistoryPage === historyPagination.totalPages
                       ? "not-allowed"
@@ -807,25 +859,33 @@ function handleViewBooking(booking) {
 
             <ModalBody>
               {modalError && (
-                <p style={{ color: "#dc2626", fontWeight: 800 }}>{modalError}</p>
+                <p style={{ color: "#dc2626", fontWeight: 800 }}>
+                  {modalError}
+                </p>
               )}
 
               <DetailGrid>
                 <DetailItem>
                   <DetailLabel>Status</DetailLabel>
-                  <DetailValue>{selectedBooking.status || "Pending"}</DetailValue>
+                  <DetailValue>
+                    {selectedBooking.status || "Pending"}
+                  </DetailValue>
                 </DetailItem>
 
                 <DetailItem>
                   <DetailLabel>Current Booking</DetailLabel>
                   <DetailValue>
-                    {selectedBooking.currentBooking || selectedBooking.status || "Pending"}
+                    {selectedBooking.currentBooking ||
+                      selectedBooking.status ||
+                      "Pending"}
                   </DetailValue>
                 </DetailItem>
 
                 <DetailItem>
                   <DetailLabel>Start Date</DetailLabel>
-                  <DetailValue>{selectedBooking.startDate || "N/A"}</DetailValue>
+                  <DetailValue>
+                    {selectedBooking.startDate || "N/A"}
+                  </DetailValue>
                 </DetailItem>
 
                 <DetailItem>
@@ -849,7 +909,9 @@ function handleViewBooking(booking) {
 
                 <DetailItem>
                   <DetailLabel>Owner</DetailLabel>
-                  <DetailValue>{selectedBooking.ownerName || "N/A"}</DetailValue>
+                  <DetailValue>
+                    {selectedBooking.ownerName || "N/A"}
+                  </DetailValue>
                 </DetailItem>
 
                 <DetailItem>
@@ -942,15 +1004,19 @@ function handleViewBooking(booking) {
                     <DetailValue>
                       R
                       {(
-                        calculateBookingDays(editForm.startDate, editForm.endDate) *
-                        Number(editingBooking.dailyRate || 0)
+                        calculateBookingDays(
+                          editForm.startDate,
+                          editForm.endDate,
+                        ) * Number(editingBooking.dailyRate || 0)
                       ).toLocaleString()}
                     </DetailValue>
                   </DetailItem>
                 </DetailGrid>
 
                 {modalError && (
-                  <p style={{ color: "#dc2626", fontWeight: 800 }}>{modalError}</p>
+                  <p style={{ color: "#dc2626", fontWeight: 800 }}>
+                    {modalError}
+                  </p>
                 )}
               </ModalBody>
 
@@ -987,11 +1053,14 @@ function handleViewBooking(booking) {
 
             <ModalBody>
               <p style={{ marginTop: 0, color: "#334155", fontWeight: 800 }}>
-                Are you sure you want to delete this booking? This cannot be undone.
+                Are you sure you want to delete this booking? This cannot be
+                undone.
               </p>
 
               {modalError && (
-                <p style={{ color: "#dc2626", fontWeight: 800 }}>{modalError}</p>
+                <p style={{ color: "#dc2626", fontWeight: 800 }}>
+                  {modalError}
+                </p>
               )}
             </ModalBody>
 

@@ -252,9 +252,9 @@ function OwnerBookings() {
                         <tbody>
                             {filteredBookings.map((booking) => (
                                 <tr key={booking.bookingId}>
-                                    <td>#{booking.bookingId}</td>
+                                    <td data-label = "Booking">#{booking.bookingId}</td>
 
-                                    <td>
+                                    <td data-label = "Vehicle">
                                         <strong>
                                             {booking.make} {booking.model}
                                         </strong>
@@ -262,19 +262,19 @@ function OwnerBookings() {
                                         <span>{booking.licenseNumber || "No license number"}</span>
                                     </td>
 
-                                    <td>
+                                    <td data-label = "Company">
                                         {booking.companyName || `Company #${booking.companyId}`}
                                     </td>
 
-                                    <td>
+                                    <td data-label = "Dates">
                                         {formatDate(booking.startDate)} - {formatDate(booking.endDate)}
                                     </td>
 
-                                    <td>
+                                    <td data-label = "Status">
                                         <strong>{booking.status}</strong>
                                     </td>
 
-                                    <td>
+                                    <td data-label = "Total">
                                         R{Number(booking.totalCost || 0).toLocaleString()}
                                     </td>
                                 </tr>

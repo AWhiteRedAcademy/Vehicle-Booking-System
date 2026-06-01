@@ -39,11 +39,11 @@ export default function CompanyBookingDetailsList({
     setOpenMenuId((currentId) => (currentId === rowId ? null : rowId));
   }
 
-  function handleAction(action, booking) {
+  function handleAction(action, vehicle) {
     setOpenMenuId(null);
 
     if (action) {
-      action(booking);
+      action(vehicle);
     }
   }
 
@@ -55,7 +55,7 @@ export default function CompanyBookingDetailsList({
 
         return (
           <tr key={rowId}>
-            <td>
+            <td data-label="Vehicle Details">
               <BookingInfo>
                 <VehicleImage>
                   <DirectionsCarIcon fontSize="small" />
@@ -74,21 +74,25 @@ export default function CompanyBookingDetailsList({
               </BookingInfo>
             </td>
 
-            <td>
+            <td data-label="Type">
               <Badge>{booking.category || "Uncategorised"}</Badge>
             </td>
 
-            <td>
+            <td data-label="Status">
               <StatusText $available={isAvailable}>
                 {booking.isAvailable || "Available"}
               </StatusText>
             </td>
 
-            <td>{booking.currentBooking || "No booking"}</td>
+            <td data-label="Current Booking">
+              {booking.currentBooking || "No booking"}
+            </td>
 
-            <td>R{Number(booking.dailyRate || 0).toLocaleString()}</td>
+            <td data-label="Daily Rate">
+              R{Number(booking.dailyRate || 0).toLocaleString()}
+            </td>
 
-            <td>
+            <td data-label="Actions">
               <ActionMenuWrapper>
                 <ActionButton
                   type="button"
