@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "Azure.Core/1.47.1": {
@@ -2611,33 +2611,33 @@
     ]
   },
   "packageFolders": {
-    "/Users/thaqibubayd/.nuget/packages/": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj",
+      "projectUniqueName": "/workspace/backend/Application/VehicleBook.Application.csproj",
       "projectName": "VehicleBook.Application",
-      "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj",
-      "packagesPath": "/Users/thaqibubayd/.nuget/packages/",
-      "outputPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/",
+      "projectPath": "/workspace/backend/Application/VehicleBook.Application.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/workspace/backend/Application/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/thaqibubayd/.nuget/NuGet/NuGet.Config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj": {
-              "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj"
+            "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
+              "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj"
             }
           }
         }
@@ -2652,10 +2652,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.AspNetCore.Identity": {
@@ -2679,7 +2680,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

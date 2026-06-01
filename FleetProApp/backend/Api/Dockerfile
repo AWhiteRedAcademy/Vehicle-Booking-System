@@ -1,10 +1,11 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM ://microsoft.com AS build
 WORKDIR /src
 COPY . .
-RUN dotnet build "VehicleBook.csproj" -c Release -o /app/build
+RUN dotnet publish "VehicleBook.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM ://microsoft.com
 WORKDIR /app
-COPY --from=build /app/build .
-EXPOSE 5000 5001
+COPY --from=build /app/publish .
+EXPOSE 5000
 ENTRYPOINT ["dotnet", "VehicleBook.dll"]
+
