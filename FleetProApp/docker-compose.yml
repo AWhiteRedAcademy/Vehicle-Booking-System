@@ -15,7 +15,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5174:5174"
+      - "5175:5174"
     environment:
       VITE_API_URL: http://localhost:5020
       VITE_PROXY_TARGET: http://backend:5000
