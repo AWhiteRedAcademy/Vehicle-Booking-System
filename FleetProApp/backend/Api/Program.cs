@@ -39,21 +39,22 @@ namespace Vehicle_Booking_System
                     [new OpenApiSecuritySchemeReference("bearer", document)] = []
                 });
             });
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowReactApp",
-                    policy => policy.WithOrigins(
-                        "http://localhost:5174",
-                        "http://localhost:5173",
-                        "http://10.150.5.65:5174",
-                        "http://10.150.5.65:5173",
-                        "http://127.0.0.1:5174",
-                        "http://127.0.0.1:5189",
-                        "http://127.0.0.1:5173")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
-            });
+            
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5174",
+                "http://127.0.0.1:5174",
+                "http://localhost:5175",
+                "http://127.0.0.1:5175"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -113,7 +114,7 @@ namespace Vehicle_Booking_System
                 app.UseSwaggerUI();
             }
 
-            app.UseCors("AllowReactApp");
+            app.UseCors("AllowFrontend");
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

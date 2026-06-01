@@ -1,7 +1,7 @@
 import { userIdParam, userRoleParam } from '../constants/userHelper';
 import { jwtDecode } from 'jwt-decode';
 
-const API_URL = '';
+const API_URL = import.meta.env.VITE_API_URL;
 
 let isRedirectingToLogin = false;
 
