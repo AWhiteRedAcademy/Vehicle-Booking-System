@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
   backend:
     build:
-      context: ./backend/Api
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: Api/Dockerfile
     ports:
       - "5020:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0
-      - ConnectionStrings__DefaultConnection=Host=${REMOTE_DB_HOST};Port=${REMOTE_DB_PORT};Database=${REMOTE_DB_NAME};Username=${REMOTE_DB_USER};Password=${REMOTE_DB_PASSWORD};
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: Host=${REMOTE_DB_HOST};Port=${REMOTE_DB_PORT};Username=${REMOTE_DB_USER};Password=${REMOTE_DB_PASSWORD};Database=${REMOTE_DB_NAME};
 
   frontend:
     build:
@@ -19,10 +17,11 @@ services:
     ports:
       - "5174:5174"
     environment:
-      - VITE_API_URL=http://localhost:5020
+      VITE_API_URL: http://localhost:5020
+      VITE_PROXY_TARGET: http://backend:5000
+      CHOKIDAR_USEPOLLING: "true"
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
       - /app/node_modules
-
