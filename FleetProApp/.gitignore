@@ -1,5 +1,5 @@
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,93 +7,72 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Node / React
+node_modules/
+dist/
+dist-ssr/
+build/
 *.local
 
-*.AssemblyReference.cache
-
-AssemblyInfo.cs
-AssemblyInfo.vb
-
-# Ignore build artifacts and temporary folders
-[Bb]in/
-[Oo]bj/
-
-
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Ignore local build and application caches
-*.cache
-
-
-# Ignore build outputs
-bin/
-obj/
-*.dll
-*.pdb
-
-# User-specific files
-*.user
-*.userosscache
-*.sln.docstates
-
-# .NET Core / Visual Studio Cache folders
-.vs/
-.vs-code/
-App_Data/
-
-# NuGet Packages
-*.nupkg
-# Include the packages folder if you use older NuGet package restore
-**/packages/
-!**/packages/repositories.config
-
-# Local environment secrets
-.env
-.env.local
-.env.*.local
-
-# OS generated files
-Thumbs.db
-ehthumbs.db
-
-# TypeScript / Build Caches
+# TypeScript / build caches
 .eslintcache
 .stylelintcache
 .turbo/
+*.cache
 
-
-.docker/
-.containers/
-
-
-.devcontainer/
-
-
-docker-compose.override.yml
-compose.override.yaml
-
-
-**/db-data/
-**/postgres-data/
-
-*.slnx.user
-
-
+# .NET build/output folders
+**/bin/
+**/obj/
 **/publish/
 **/out/
 
-.env
+# .NET / Visual Studio generated files
+*.AssemblyReference.cache
+AssemblyInfo.cs
+AssemblyInfo.vb
+*.dll
+*.pdb
+*.user
+*.userosscache
+*.sln.docstates
+*.slnx.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+.vs/
+App_Data/
 
+# NuGet packages
+*.nupkg
+**/packages/
+!**/packages/repositories.config
+
+# Environment files / secrets
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.production.local
+
+# Editor / IDE files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.editorconfig
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Docker / containers
+.docker/
+.containers/
+.devcontainer/
+docker-compose.override.yml
+compose.override.yaml
+
+# Local database volumes
+**/db-data/
+**/postgres-data/
