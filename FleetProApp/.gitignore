@@ -12,6 +12,17 @@ dist
 dist-ssr
 *.local
 
+*.AssemblyReference.cache
+
+AssemblyInfo.cs
+AssemblyInfo.vb
+
+# Ignore build artifacts and temporary folders
+[Bb]in/
+[Oo]bj/
+
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
