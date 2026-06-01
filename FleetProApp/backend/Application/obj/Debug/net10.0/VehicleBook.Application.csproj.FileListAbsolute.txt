@@ -61,3 +61,19 @@ C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-B
 C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-Booking-System/FleetProApp/backend/Application/obj/Debug/net10.0/refint/VehicleBook.Application.dll
 C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-Booking-System/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.pdb
 C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-Booking-System/FleetProApp/backend/Application/obj/Debug/net10.0/ref/VehicleBook.Application.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/bin/Debug/net10.0/VehicleBook.Application.deps.json
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/bin/Debug/net10.0/VehicleBook.Application.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/bin/Debug/net10.0/VehicleBook.Application.pdb
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/bin/Debug/net10.0/VehicleBook.Domain.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/bin/Debug/net10.0/VehicleBook.Domain.pdb
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.csproj.AssemblyReference.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.AssemblyInfoInputs.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.AssemblyInfo.cs
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.csproj.CoreCompileInputs.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.sourcelink.json
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleB.83AD0DEB.Up2Date
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/refint/VehicleBook.Application.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/VehicleBook.Application.pdb
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/Debug/net10.0/ref/VehicleBook.Application.dll

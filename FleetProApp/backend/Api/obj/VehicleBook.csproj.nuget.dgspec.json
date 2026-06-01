@@ -1,37 +1,37 @@
 {
   "format": 1,
   "restore": {
-    "/workspace/backend/Api/VehicleBook.csproj": {}
+    "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/VehicleBook.csproj": {}
   },
   "projects": {
-    "/workspace/backend/Api/VehicleBook.csproj": {
+    "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/VehicleBook.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspace/backend/Api/VehicleBook.csproj",
+        "projectUniqueName": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/VehicleBook.csproj",
         "projectName": "VehicleBook",
-        "projectPath": "/workspace/backend/Api/VehicleBook.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/workspace/backend/Api/obj/",
+        "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/VehicleBook.csproj",
+        "packagesPath": "/Users/thaqibubayd/.nuget/packages/",
+        "outputPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "/Users/thaqibubayd/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/workspace/backend/Application/VehicleBook.Application.csproj": {
-                "projectPath": "/workspace/backend/Application/VehicleBook.Application.csproj"
+              "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj": {
+                "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj"
               },
-              "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {
-                "projectPath": "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj"
+              "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {
+                "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj"
               }
             }
           }
@@ -46,11 +46,10 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
@@ -95,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
@@ -513,31 +512,31 @@
         }
       }
     },
-    "/workspace/backend/Application/VehicleBook.Application.csproj": {
+    "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspace/backend/Application/VehicleBook.Application.csproj",
+        "projectUniqueName": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj",
         "projectName": "VehicleBook.Application",
-        "projectPath": "/workspace/backend/Application/VehicleBook.Application.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/workspace/backend/Application/obj/",
+        "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj",
+        "packagesPath": "/Users/thaqibubayd/.nuget/packages/",
+        "outputPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "/Users/thaqibubayd/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
-                "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj"
+              "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj": {
+                "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj"
               }
             }
           }
@@ -552,11 +551,10 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity": {
@@ -580,7 +578,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -858,27 +856,27 @@
         }
       }
     },
-    "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
+    "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspace/backend/Domain/VehicleBook.Domain.csproj",
+        "projectUniqueName": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj",
         "projectName": "VehicleBook.Domain",
-        "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/workspace/backend/Domain/obj/",
+        "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj",
+        "packagesPath": "/Users/thaqibubayd/.nuget/packages/",
+        "outputPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "/Users/thaqibubayd/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -893,11 +891,10 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
@@ -931,7 +928,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -1209,34 +1206,34 @@
         }
       }
     },
-    "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {
+    "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj",
+        "projectUniqueName": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj",
         "projectName": "VehicleBook.Infrastructure",
-        "projectPath": "/workspace/backend/Infrastructure/VehicleBook.Infrastructure.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/workspace/backend/Infrastructure/obj/",
+        "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/VehicleBook.Infrastructure.csproj",
+        "packagesPath": "/Users/thaqibubayd/.nuget/packages/",
+        "outputPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "/Users/thaqibubayd/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/workspace/backend/Application/VehicleBook.Application.csproj": {
-                "projectPath": "/workspace/backend/Application/VehicleBook.Application.csproj"
+              "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj": {
+                "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Application/VehicleBook.Application.csproj"
               },
-              "/workspace/backend/Domain/VehicleBook.Domain.csproj": {
-                "projectPath": "/workspace/backend/Domain/VehicleBook.Domain.csproj"
+              "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj": {
+                "projectPath": "/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/VehicleBook.Domain.csproj"
               }
             }
           }
@@ -1251,11 +1248,10 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
@@ -1283,7 +1279,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

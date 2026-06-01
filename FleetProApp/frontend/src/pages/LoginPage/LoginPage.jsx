@@ -62,8 +62,7 @@ function LoginPage() {
         <Header>
           <Title>Welcome back</Title>
           <Subtitle>
-            Select your workspace to continue managing your vehicle operations
-            efficiently.
+            Access your executive dashboard
           </Subtitle>
         </Header>
 
