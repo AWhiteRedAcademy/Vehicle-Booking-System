@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {theme } from "../../../styles/theme"
+import { theme } from "../../../styles/theme";
 
 export const FormGrid = styled.div`
   display: grid;
@@ -24,8 +24,8 @@ export const SideColumn = styled.div`
 `;
 
 export const FormCard = styled.section`
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   padding: 26px;
@@ -68,7 +68,7 @@ export const FieldGroup = styled.div`
 `;
 
 export const Label = styled.label`
-  color: #64748b;
+  color: ${theme.colors.textMuted};
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
@@ -86,9 +86,18 @@ export const Input = styled.input`
   color: ${theme.colors.textDark};
   outline: none;
 
+  &::placeholder {
+    color: ${theme.colors.textMuted};
+  }
+
   &:focus {
     border-color: ${theme.colors.primary};
-    background: white;
+    background: ${theme.colors.cardBackground};
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
   }
 `;
 
@@ -104,7 +113,7 @@ export const Select = styled.select`
 
   &:focus {
     border-color: ${theme.colors.primary};
-    background: white;
+    background: ${theme.colors.cardBackground};
   }
 `;
 
@@ -116,9 +125,11 @@ export const StatusOptions = styled.div`
 
 export const StatusOption = styled.button`
   height: 48px;
-  border: 1px solid ${({ $active }) => ($active ? theme.colors.primary : "#dbe4ef")};
+  border: 1px solid
+    ${({ $active }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: ${theme.radius.medium};
-  background: ${({ $active }) => ($active ? "#eaf2ff" : "white")};
+  background: ${({ $active }) =>
+    $active ? "rgba(11, 94, 215, 0.12)" : theme.colors.inputBackground};
   color: ${theme.colors.textDark};
   font-weight: 900;
   cursor: pointer;
@@ -134,7 +145,7 @@ export const StatusOption = styled.button`
     width: 12px;
     height: 12px;
     border-radius: 999px;
-    background: ${({ $active }) => ($active ? "#22c55e" : "#cbd5e1")};
+    background: ${({ $active }) => ($active ? "#22c55e" : theme.colors.border)};
   }
 
   &:hover {
@@ -146,15 +157,16 @@ export const ErrorMessage = styled.div`
   margin-top: 18px;
   padding: 14px 16px;
   border-radius: ${theme.radius.medium};
-  background: #fef2f2;
-  color: #b91c1c;
+  background: rgba(127, 29, 29, 0.22);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.35);
   font-weight: 800;
 `;
 
 export const FooterBar = styled.div`
   margin-top: 28px;
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   padding: 22px 26px;
@@ -172,8 +184,9 @@ export const FooterBar = styled.div`
 
 export const FooterText = styled.p`
   margin: 0;
-  color: #334155;
+  color: ${theme.colors.textMuted};
   font-size: 14px;
+  font-weight: 700;
 `;
 
 export const FooterActions = styled.div`
@@ -189,7 +202,7 @@ export const FooterActions = styled.div`
 export const DiscardButton = styled.button`
   border: none;
   background: transparent;
-  color: #334155;
+  color: ${theme.colors.textDark};
   font-weight: 900;
   cursor: pointer;
 
@@ -201,13 +214,13 @@ export const DiscardButton = styled.button`
 export const SaveButton = styled.button`
   border: none;
   border-radius: ${theme.radius.medium};
-  background: ${theme.colors.textDark};
+  background: ${theme.colors.primary};
   color: white;
   min-width: 170px;
   height: 48px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+  box-shadow: ${theme.shadows.button};
 
   display: flex;
   align-items: center;
@@ -215,7 +228,7 @@ export const SaveButton = styled.button`
   gap: 8px;
 
   &:hover {
-    background: #020617;
+    background: ${theme.colors.primaryDark};
   }
 
   &:disabled {

@@ -241,14 +241,14 @@ export const PageHeading = styled.div`
  
 export const PageTitle = styled.h1`
   margin: 0;
-  color: #102a43;
+   color: ${theme.colors.textDark};
   font-size: 24px;
   font-weight: 900;
 `;
  
 export const PageSubtitle = styled.p`
   margin: 4px 0 0;
-  color: #64748b;
+color: ${theme.colors.textMuted};
   font-size: 14px;
 `;
  

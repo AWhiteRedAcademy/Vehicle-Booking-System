@@ -6,12 +6,23 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+ 
 node_modules
 dist
 dist-ssr
 *.local
-
+ 
+*.AssemblyReference.cache
+ 
+AssemblyInfo.cs
+AssemblyInfo.vb
+ 
+# Ignore build artifacts and temporary folders
+[Bb]in/
+[Oo]bj/
+ 
+ 
+ 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,63 +33,66 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
+ 
+# Ignore local build and application caches
+*.cache
+ 
+ 
 # Ignore build outputs
 bin/
 obj/
 *.dll
 *.pdb
-
+ 
 # User-specific files
 *.user
 *.userosscache
 *.sln.docstates
-
+ 
 # .NET Core / Visual Studio Cache folders
 .vs/
 .vs-code/
 App_Data/
-
+ 
 # NuGet Packages
 *.nupkg
 # Include the packages folder if you use older NuGet package restore
 **/packages/
 !**/packages/repositories.config
-
+ 
 # Local environment secrets
 .env
 .env.local
 .env.*.local
-
+ 
 # OS generated files
 Thumbs.db
 ehthumbs.db
-
+ 
 # TypeScript / Build Caches
 .eslintcache
 .stylelintcache
 .turbo/
-
-
+ 
+ 
 .docker/
 .containers/
-
-
+ 
+ 
 .devcontainer/
-
-
+ 
+ 
 docker-compose.override.yml
 compose.override.yaml
-
-
+ 
+ 
 **/db-data/
 **/postgres-data/
-
+ 
 *.slnx.user
-
-
+ 
+ 
 **/publish/
 **/out/
-
+ 
 .env
-

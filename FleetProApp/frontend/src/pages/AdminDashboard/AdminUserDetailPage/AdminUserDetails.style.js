@@ -12,8 +12,8 @@ export const DetailsGrid = styled.div`
 `;
 
 export const ProfileCard = styled.section`
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   padding: 28px;
@@ -48,12 +48,12 @@ export const UserName = styled.h2`
 
 export const UserEmailText = styled.p`
   margin: 8px 0 14px;
-  color: #64748b;
+  color: ${theme.colors.textMuted};
 `;
 
 export const DetailCard = styled.section`
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   padding: 28px;
@@ -82,8 +82,9 @@ export const DetailIcon = styled.div`
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #eef5ff;
+  background: ${theme.colors.inputBackground};
   color: ${theme.colors.primary};
+  border: 1px solid ${theme.colors.border};
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -91,7 +92,7 @@ export const DetailIcon = styled.div`
 
 export const DetailLabel = styled.p`
   margin: 0;
-  color: #64748b;
+  color: ${theme.colors.textMuted};
   font-size: 13px;
   font-weight: 800;
 `;
@@ -116,15 +117,16 @@ export const StatusBadge = styled.span`
 `;
 
 export const BackButton = styled.button`
-  border: none;
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.medium};
-  background: #edf4ff;
+  background: ${theme.colors.inputBackground};
   color: ${theme.colors.primary};
   padding: 12px 16px;
   font-weight: 900;
   cursor: pointer;
 
   &:hover {
-    background: #dbeafe;
+    border-color: ${theme.colors.primary};
+    background: ${theme.colors.cardBackground};
   }
 `;

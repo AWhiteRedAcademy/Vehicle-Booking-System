@@ -14,41 +14,12 @@ import {
   ActionMenuWrapper,
   ActionMenu,
   ActionMenuItem,
-} from "./CompanyBookings.style.js";
+} from "../CompanyDashboard.style.js";
 
-function formatDate(value) {
-  if (!value) return "—";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleDateString("en-ZA", {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  });
-}
-
-function canModifyBooking(booking) {
-  if (!booking.startDate) return false;
-
-  const today = new Date();
-  const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-  const start = new Date(booking.startDate);
-  const startOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-
-  return startOnly > todayOnly;
-}
-
-export default function CompanyBookingList({
+export default function CompanyBookingDetailsList({
   bookings = [],
-  onViewBooking,
-  onEditBooking,
-  onDeleteBooking,
+  onViewVehicle,
+  onBookVehicle,
 }) {
   const [openMenuId, setOpenMenuId] = useState(null);
 
@@ -57,30 +28,34 @@ export default function CompanyBookingList({
       <tbody>
         <tr>
           <td colSpan={6} style={{ textAlign: "center", padding: "20px" }}>
-            No bookings found matching the criteria.
+            No vehicles found matching the criteria.
           </td>
         </tr>
       </tbody>
     );
   }
 
-  function handleToggleMenu(bookingId) {
-    setOpenMenuId((currentId) => (currentId === bookingId ? null : bookingId));
+  function handleToggleMenu(rowId) {
+    setOpenMenuId((currentId) => (currentId === rowId ? null : rowId));
   }
 
-  function handleAction(action, booking) {
+  function handleAction(action, vehicle) {
     setOpenMenuId(null);
-    action(booking);
+
+    if (action) {
+      action(vehicle);
+    }
   }
 
   return (
     <tbody>
       {bookings.map((booking) => {
-        const canModify = canModifyBooking(booking);
+        const rowId = booking.vehicleId || booking.bookingId;
+        const isAvailable = booking.isAvailable === "Available";
 
         return (
-          <tr key={booking.bookingId}>
-            <td>
+          <tr key={rowId}>
+            <td data-label="Vehicle Details">
               <BookingInfo>
                 <VehicleImage>
                   <DirectionsCarIcon fontSize="small" />
@@ -88,77 +63,65 @@ export default function CompanyBookingList({
 
                 <div>
                   <VehicleName>
-                    #{booking.bookingId} · {booking.make} {booking.model}
+                    {booking.make} {booking.model}
                   </VehicleName>
 
                   <VehicleMeta>
-                    {booking.licenseNumber || "No license"} ·{" "}
-                    {formatDate(booking.startDate)} - {formatDate(booking.endDate)}
+                    {booking.licenseNumber || "No license"}{" "}
+                    {booking.modelYear > 0 ? `• ${booking.modelYear}` : ""}
                   </VehicleMeta>
                 </div>
               </BookingInfo>
             </td>
 
-            <td>
-              <Badge>{booking.category || "Booking"}</Badge>
+            <td data-label="Type">
+              <Badge>{booking.category || "Uncategorised"}</Badge>
             </td>
 
-            <td>
-              <StatusText $available={booking.status === "Confirmed"}>
-                {booking.status || "Pending"}
+            <td data-label="Status">
+              <StatusText $available={isAvailable}>
+                {booking.isAvailable || "Available"}
               </StatusText>
             </td>
 
-            <td>{booking.currentBooking || booking.status || "Pending"}</td>
-
-            <td>
-              R{Number(booking.totalCost || booking.dailyRate || 0).toLocaleString()}
+            <td data-label="Current Booking">
+              {booking.currentBooking || "No booking"}
             </td>
 
-            <td>
+            <td data-label="Daily Rate">
+              R{Number(booking.dailyRate || 0).toLocaleString()}
+            </td>
+
+            <td data-label="Actions">
               <ActionMenuWrapper>
                 <ActionButton
                   type="button"
-                  onClick={() => handleToggleMenu(booking.bookingId)}
-                  title="Booking actions"
+                  onClick={() => handleToggleMenu(rowId)}
+                  title="Vehicle actions"
                 >
                   <MoreVertIcon fontSize="small" />
                 </ActionButton>
 
-                {openMenuId === booking.bookingId && (
+                {openMenuId === rowId && (
                   <ActionMenu>
                     <ActionMenuItem
                       type="button"
-                      onClick={() => handleAction(onViewBooking, booking)}
+                      onClick={() => handleAction(onViewVehicle, booking)}
                     >
                       View Details
                     </ActionMenuItem>
 
                     <ActionMenuItem
                       type="button"
-                      disabled={!canModify}
-                      onClick={() => handleAction(onEditBooking, booking)}
+                      disabled={!isAvailable}
+                      onClick={() => handleAction(onBookVehicle, booking)}
                       title={
-                        canModify
-                          ? "Edit booking dates"
-                          : "Cannot edit once the booking has started"
+                        isAvailable
+                          ? "Book this vehicle"
+                          : "Only available vehicles can be booked"
                       }
                     >
-                      Edit Dates
-                    </ActionMenuItem>
-
-                    <ActionMenuItem
-                      type="button"
-                      $danger
-                      disabled={!canModify}
-                      onClick={() => handleAction(onDeleteBooking, booking)}
-                      title={
-                        canModify
-                          ? "Delete booking"
-                          : "Cannot delete once the booking has started"
-                      }
-                    >
-                      Delete Booking
+                      Book Vehicle
                     </ActionMenuItem>
                   </ActionMenu>
                 )}

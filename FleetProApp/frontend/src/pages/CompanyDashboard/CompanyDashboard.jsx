@@ -42,10 +42,26 @@ import {
 import CompanyBookingList from "./CompanyBookingDetailsList.jsx";
 
 const companyNavItems = [
-  { label: "Dashboard", to: "/company/dashboard", icon: <GridViewIcon fontSize="small" /> },
-  { label: "Vehicles", to: "/company/vehicles", icon: <DirectionsCarIcon fontSize="small" /> },
-  { label: "Bookings", to: "/company/bookings", icon: <EventAvailableIcon fontSize="small" /> },
-  { label: "Reports", to: "/company/reports", icon: <BarChartIcon fontSize="small" /> },
+  {
+    label: "Dashboard",
+    to: "/company/dashboard",
+    icon: <GridViewIcon fontSize="small" />,
+  },
+  {
+    label: "Vehicles",
+    to: "/company/vehicles",
+    icon: <DirectionsCarIcon fontSize="small" />,
+  },
+  {
+    label: "Bookings",
+    to: "/company/bookings",
+    icon: <EventAvailableIcon fontSize="small" />,
+  },
+  {
+    label: "Reports",
+    to: "/company/reports",
+    icon: <BarChartIcon fontSize="small" />,
+  },
 ];
 
 const pageSize = 5;
@@ -63,6 +79,20 @@ function CompanyDashboard() {
   const [liveBookings, setLiveBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 760);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 760);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -122,7 +152,8 @@ function CompanyDashboard() {
         categoryFilter === "all" || booking.category === categoryFilter;
 
       const matchesAvailability =
-        availabilityFilter === "all" || booking.isAvailable === availabilityFilter;
+        availabilityFilter === "all" ||
+        booking.isAvailable === availabilityFilter;
 
       return matchesSearch && matchesCategory && matchesAvailability;
     });
@@ -136,15 +167,15 @@ function CompanyDashboard() {
   const paginatedBookings = filteredBookings.slice(startIndex, endIndex);
 
   const availableVehicles = liveBookings.filter(
-    (booking) => booking.isAvailable === "Available"
+    (booking) => booking.isAvailable === "Available",
   ).length;
 
   const inProgressVehicles = liveBookings.filter(
-    (booking) => booking.isAvailable === "In Use"
+    (booking) => booking.isAvailable === "In Use",
   ).length;
 
   const pendingBookings = liveBookings.filter(
-    (booking) => booking.currentBooking === "Pending"
+    (booking) => booking.currentBooking === "Pending",
   ).length;
 
   function handleFindVehicle() {
@@ -153,12 +184,23 @@ function CompanyDashboard() {
 
     setTimeout(() => {
       searchInputRef.current?.focus();
-      tablePanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      tablePanelRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }, 0);
   }
 
   function handleToggleFilters() {
     setShowTableFilters((currentValue) => !currentValue);
+  }
+
+  function handleViewVehicle(vehicle) {
+    console.log("View vehicle:", vehicle);
+  }
+
+  function handleBookVehicle(vehicle) {
+    console.log("Book vehicle:", vehicle);
   }
 
   function handlePreviousPage() {
@@ -208,7 +250,8 @@ function CompanyDashboard() {
           <SectionEyebrow>Dashboard</SectionEyebrow>
           <SectionTitle>Fleet Management Overview</SectionTitle>
           <SectionText>
-            Real-time vehicle availability and booking information for your company.
+            Real time vehicle availability and booking information for your
+            company.
           </SectionText>
         </div>
 
@@ -258,7 +301,11 @@ function CompanyDashboard() {
             ref={searchInputRef}
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Search vehicles by make, model, license, VIN, year, or category..."
+            placeholder={
+              isMobile
+                ? "Search make, model, license..."
+                : "Search vehicles by make, model, license, VIN, year, or category..."
+            }
           />
 
           <FilterSelect
@@ -305,8 +352,11 @@ function CompanyDashboard() {
               <th>Actions</th>
             </tr>
           </thead>
-
-          <CompanyBookingList bookings={paginatedBookings} />
+          <CompanyBookingList
+            bookings={paginatedBookings}
+            onViewVehicle={handleViewVehicle}
+            onBookVehicle={handleBookVehicle}
+          />
         </BookingTable>
 
         <TableFooter>

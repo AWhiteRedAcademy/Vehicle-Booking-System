@@ -306,8 +306,8 @@ export const VehicleGrid = styled.section`
  
 export const EmptyCard = styled.div`
   padding: 26px;
-background: ${theme.colors.cardBackground};
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   color: ${theme.colors.textMuted};
   box-shadow: ${theme.shadows.card};
@@ -323,13 +323,13 @@ export const ErrorCard = styled(EmptyCard)`
 //Add floating add button for owner mobile
 export const FloatingActionButton = styled.button`
   display: none;
- 
+
   @media (max-width: 760px) {
     position: fixed;
     right: 26px;
-    bottom: 104px;
+    bottom: calc(104px + env(safe-area-inset-bottom));
     z-index: 120;
- 
+
     width: 64px;
     height: 64px;
     border: none;
@@ -338,10 +338,10 @@ export const FloatingActionButton = styled.button`
     color: white;
     box-shadow: 0 16px 35px rgba(11, 94, 215, 0.36);
     cursor: pointer;
- 
+
     display: grid;
     place-items: center;
- 
+
     svg {
       font-size: 32px;
     }
