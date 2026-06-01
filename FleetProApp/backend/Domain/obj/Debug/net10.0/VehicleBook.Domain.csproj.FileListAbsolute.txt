@@ -57,3 +57,18 @@ C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-B
 C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-Booking-System/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.pdb
 C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-Booking-System/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.genruntimeconfig.cache
 C:/Users/Backspace_SD/OneDrive - redAcademy (Pty) Ltd/Documents/GitHub/Vehicle-Booking-System/FleetProApp/backend/Domain/obj/Debug/net10.0/ref/VehicleBook.Domain.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/bin/Debug/net10.0/VehicleBook.Domain.deps.json
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/bin/Debug/net10.0/VehicleBook.Domain.runtimeconfig.json
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/bin/Debug/net10.0/VehicleBook.Domain.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/bin/Debug/net10.0/VehicleBook.Domain.pdb
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.csproj.AssemblyReference.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.AssemblyInfoInputs.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.AssemblyInfo.cs
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.csproj.CoreCompileInputs.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.sourcelink.json
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/refint/VehicleBook.Domain.dll
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.pdb
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/VehicleBook.Domain.genruntimeconfig.cache
+/Users/thaqibubayd/Documents/GitHub/Vehicle_Book/FleetProApp/backend/Domain/obj/Debug/net10.0/ref/VehicleBook.Domain.dll

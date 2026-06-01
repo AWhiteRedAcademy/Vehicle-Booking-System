@@ -9,6 +9,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+
+
 import {
   Shell,
   Sidebar,
@@ -39,6 +43,11 @@ import {
   UserDropdownItem,
   LogoutNavButton,
   Content,
+MobileBrand,
+DesktopOnly,
+UserLabelText,
+MobileBottomNav,
+MobileNavLink,
 } from "./DashboardLayout.styles";
 
 function DashboardLayout({
@@ -49,6 +58,10 @@ function DashboardLayout({
   userLabel = "Owner",
   navItems = [],
 }) {
+  const [themeMode, setThemeMode] = useState(() => {
+    return localStorage.getItem("themeMode") || "light";
+  });
+
   const location = useLocation();
   const navigate = useNavigate();
   const menuRef = useRef(null);
@@ -78,6 +91,15 @@ function DashboardLayout({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", themeMode);
+    localStorage.setItem("themeMode", themeMode);
+  }, [themeMode]);
+
+  function handleToggleTheme() {
+    setThemeMode((currentMode) => (currentMode === "light" ? "dark" : "light"));
+  }
 
   return (
     <Shell>
@@ -125,7 +147,7 @@ function DashboardLayout({
       </Sidebar>
 
       <Main>
-        <Topbar>
+        {/* <Topbar>
           <SidebarToggleButton
             type="button"
             onClick={() => setIsSidebarOpen((currentValue) => !currentValue)}
@@ -137,13 +159,106 @@ function DashboardLayout({
               <MenuIcon fontSize="small" />
             )}
           </SidebarToggleButton>
-
+ 
           <PageHeading>
             <PageTitle>{title}</PageTitle>
             {subtitle && <PageSubtitle>{subtitle}</PageSubtitle>}
           </PageHeading>
+ 
+          <TopActions>
+            <IconButton
+              type="button"
+              onClick={handleToggleTheme}
+              aria-label="Toggle theme"
+            >
+              {themeMode === "light" ? (
+                <DarkModeIcon fontSize="small" />
+              ) : (
+                <LightModeIcon fontSize="small" />
+              )}
+            </IconButton>
+ 
+            <IconButton type="button" aria-label="Notifications">
+              <NotificationsNoneIcon fontSize="small" />
+            </IconButton>
+ 
+            <UserMenuWrapper ref={menuRef}>
+              <UserMenuButton
+                type="button"
+                onClick={() =>
+                  setIsUserMenuOpen((currentValue) => !currentValue)
+                }
+                aria-haspopup="menu"
+                aria-expanded={isUserMenuOpen}
+              >
+                <AccountCircleIcon fontSize="small" />
+                {userLabel}
+                <KeyboardArrowDownIcon fontSize="small" />
+              </UserMenuButton>
+ 
+              {isUserMenuOpen && (
+                <UserDropdown role="menu">
+                  <UserDropdownHeader>
+                    <UserDropdownName>{userLabel}</UserDropdownName>
+                    <UserDropdownRole>{roleLabel}</UserDropdownRole>
+                  </UserDropdownHeader>
+ 
+                  <UserDropdownDivider />
+ 
+                  <UserDropdownItem
+                    type="button"
+                    onClick={handleLogout}
+                    role="menuitem"
+                  >
+                    <LogoutIcon fontSize="small" />
+                    Logout
+                  </UserDropdownItem>
+                </UserDropdown>
+              )}
+            </UserMenuWrapper>
+          </TopActions>
+        </Topbar> */}
+
+        <Topbar>
+          <MobileBrand>
+            <LogoBox>
+              <DirectionsCarIcon fontSize="small" />
+            </LogoBox>
+            <BrandText>FleetManager</BrandText>
+          </MobileBrand>
+
+          <DesktopOnly>
+            <SidebarToggleButton
+              type="button"
+              onClick={() => setIsSidebarOpen((currentValue) => !currentValue)}
+              aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+            >
+              {isSidebarOpen ? (
+                <MenuOpenIcon fontSize="small" />
+              ) : (
+                <MenuIcon fontSize="small" />
+              )}
+            </SidebarToggleButton>
+
+            <PageHeading>
+              <PageTitle>{title}</PageTitle>
+              {subtitle && <PageSubtitle>{subtitle}</PageSubtitle>}
+            </PageHeading>
+          </DesktopOnly>
 
           <TopActions>
+            <IconButton
+              type="button"
+              onClick={handleToggleTheme}
+              aria-label="Toggle theme"
+            >
+              {themeMode === "light" ? (
+                <DarkModeIcon fontSize="small" />
+              ) : (
+                <LightModeIcon fontSize="small" />
+              )}
+            </IconButton>
+
             <IconButton type="button" aria-label="Notifications">
               <NotificationsNoneIcon fontSize="small" />
             </IconButton>
@@ -158,7 +273,9 @@ function DashboardLayout({
                 aria-expanded={isUserMenuOpen}
               >
                 <AccountCircleIcon fontSize="small" />
-                {userLabel}
+
+                <UserLabelText>{userLabel}</UserLabelText>
+
                 <KeyboardArrowDownIcon fontSize="small" />
               </UserMenuButton>
 
@@ -176,7 +293,7 @@ function DashboardLayout({
                     onClick={handleLogout}
                     role="menuitem"
                   >
-                  <LogoutIcon fontSize="small" />
+                    <LogoutIcon fontSize="small" />
                     Logout
                   </UserDropdownItem>
                 </UserDropdown>
@@ -187,6 +304,19 @@ function DashboardLayout({
 
         <Content>{children}</Content>
       </Main>
+
+      <MobileBottomNav>
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.to;
+
+          return (
+            <MobileNavLink key={item.label} to={item.to} $active={isActive}>
+              {item.icon}
+              <span>{item.label}</span>
+            </MobileNavLink>
+          );
+        })}
+      </MobileBottomNav>
     </Shell>
   );
 }
