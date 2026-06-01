@@ -83,7 +83,7 @@ export const LogoBox = styled.div`
  
 export const BrandText = styled.h2`
   margin: 0;
-  color: #102a43;
+ color: ${theme.colors.textDark};
   font-size: 22px;
   font-weight: 900;
   white-space: nowrap;
@@ -320,7 +320,7 @@ export const UserDropdown = styled.div`
   top: calc(100% + 10px);
   right: 0;
   width: 220px;
-  background: #ffffff;
+ background: ${theme.colors.cardBackground};
   border: 1px solid #e5eaf1;
   border-radius: 18px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.14);
@@ -334,13 +334,13 @@ export const UserDropdownHeader = styled.div`
  
 export const UserDropdownName = styled.p`
   margin: 0;
-  color: #102a43;
+color: ${theme.colors.textDark};
   font-weight: 900;
 `;
  
 export const UserDropdownRole = styled.p`
   margin: 4px 0 0;
-  color: #64748b;
+ color: ${theme.colors.textDark};
   font-size: 13px;
 `;
  
