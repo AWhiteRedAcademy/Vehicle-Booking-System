@@ -161,7 +161,7 @@ function RegisterPage() {
           <TextInput
             label="Full Name"
             name="fullName"
-            placeholder="John Doe"
+            placeholder=""
             value={formData.fullName}
             onChange={handleChange}
             leftIcon={<PersonIcon fontSize="small" />}
@@ -182,7 +182,7 @@ function RegisterPage() {
           <TextInput
             label="Phone Number"
             name="phone"
-            placeholder="10 digits"
+            placeholder=""
             value={formData.phone}
             onChange={handleChange}
             icon={<PhoneIcon fontSize="small" />}
