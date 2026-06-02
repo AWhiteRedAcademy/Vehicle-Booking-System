@@ -256,7 +256,7 @@ export const ActionMenuWrapper = styled.div`
 export const ActionMenu = styled.div`
   position: absolute;
   right: 0;
-  top: 20px;
+  top: 18px;
   width: 170px;
   background: ${theme.colors.cardBackground};
   border: 1px solid ${theme.colors.border};
@@ -265,6 +265,18 @@ export const ActionMenu = styled.div`
   padding: 8px;
   z-index: 50;
 `;
+// export const ActionMenu = styled.div`
+//   position: absolute;
+//   right: 0;
+//   top: 42px;
+//   width: 180px;
+//   background: ${theme.colors.cardBackground};
+//   border: 1px solid ${theme.colors.border};
+//   border-radius: 14px;
+//   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+//   padding: 8px;
+//   z-index: 999;
+// `;
 
 export const ActionMenuItem = styled.button`
   width: 100%;

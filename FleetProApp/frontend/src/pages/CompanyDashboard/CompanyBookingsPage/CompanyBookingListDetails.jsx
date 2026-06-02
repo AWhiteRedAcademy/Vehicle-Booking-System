@@ -20,6 +20,7 @@ export default function CompanyBookingDetailsList({
   bookings = [],
   onViewVehicle,
   onBookVehicle,
+  onDeleteVehicle,
 }) {
   const [openMenuId, setOpenMenuId] = useState(null);
 
@@ -46,6 +47,8 @@ export default function CompanyBookingDetailsList({
       action(vehicle);
     }
   }
+
+
 
   return (
     <tbody>
@@ -122,6 +125,14 @@ export default function CompanyBookingDetailsList({
                       }
                     >
                       Book Vehicle
+                    </ActionMenuItem>
+
+                    <ActionMenuItem
+                      type="button"
+                      $danger
+                      onClick={() => handleAction(onDeleteVehicle, booking)}
+                    >
+                      Delete Vehicle
                     </ActionMenuItem>
                   </ActionMenu>
                 )}

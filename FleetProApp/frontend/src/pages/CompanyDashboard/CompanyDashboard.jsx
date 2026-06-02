@@ -37,6 +37,41 @@ import {
   FooterText,
   PaginationButtons,
   PaginationButton,
+  DetailsOverlay,
+  DetailsModal,
+  DetailsHeader,
+  DetailsTitle,
+  DetailsSubtitle,
+  DetailsCloseButton,
+  DetailsBody,
+  DetailsStatusRow,
+  DetailsStatusBadge,
+  DetailsGrid,
+  DetailsItem,
+  DetailsLabel,
+  DetailsValue,
+  DetailsActions,
+  DetailsSecondaryButton,
+  DetailsPrimaryButton,
+  BookingOverlay,
+  BookingModal,
+  BookingHeader,
+  BookingTitle,
+  BookingSubtitle,
+  BookingCloseButton,
+  BookingBody,
+  BookingDateGrid,
+  BookingField,
+  BookingLabel,
+  BookingInput,
+  BookingSummary,
+  BookingSummaryLabel,
+  BookingTotal,
+  BookingRateText,
+  BookingError,
+  BookingActions,
+  BookingCancelButton,
+  BookingSubmitButton,
 } from "./CompanyDashboard.style";
 
 import CompanyBookingList from "./CompanyBookingDetailsList.jsx";
@@ -79,6 +114,16 @@ function CompanyDashboard() {
   const [liveBookings, setLiveBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [vehicleToBook, setVehicleToBook] = useState(null);
+
+  const [bookingForm, setBookingForm] = useState({
+    startDate: "",
+    endDate: "",
+  });
+
+  const [bookingError, setBookingError] = useState("");
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 760);
 
@@ -191,17 +236,17 @@ function CompanyDashboard() {
     }, 0);
   }
 
-  function handleToggleFilters() {
-    setShowTableFilters((currentValue) => !currentValue);
-  }
+  // function handleToggleFilters() {
+  //   setShowTableFilters((currentValue) => !currentValue);
+  // }
 
-  function handleViewVehicle(vehicle) {
-    console.log("View vehicle:", vehicle);
-  }
+  // function handleViewVehicle(vehicle) {
+  //   console.log("View vehicle:", vehicle);
+  // }
 
-  function handleBookVehicle(vehicle) {
-    console.log("Book vehicle:", vehicle);
-  }
+  // function handleBookVehicle(vehicle) {
+  //   console.log("Book vehicle:", vehicle);
+  // }
 
   function handlePreviousPage() {
     setCurrentPage((page) => Math.max(1, page - 1));
@@ -236,6 +281,128 @@ function CompanyDashboard() {
       </DashboardLayout>
     );
   }
+
+  function handleViewVehicle(vehicle) {
+    setSelectedVehicle(vehicle);
+  }
+
+  function handleBookVehicle(vehicle) {
+    setVehicleToBook(vehicle);
+    setBookingForm({
+      startDate: "",
+      endDate: "",
+    });
+    setBookingError("");
+  }
+
+  function handleDeleteVehicle(vehicle) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const vehicleId = vehicle.vehicleId || vehicle.id;
+
+    setLiveBookings((currentVehicles) =>
+      currentVehicles.filter(
+        (currentVehicle) =>
+          (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId,
+      ),
+    );
+  }
+
+  // function handleDeleteVehicle(vehicle) {
+  //   const confirmed = window.confirm(
+  //     `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
+  //   );
+
+  //   if (!confirmed) {
+  //     return;
+  //   }
+
+  //   const vehicleId = vehicle.vehicleId || vehicle.id;
+
+  //   setLiveBookings((currentVehicles) =>
+  //     currentVehicles.filter(
+  //       (currentVehicle) =>
+  //         (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId,
+  //     ),
+  //   );
+  // }
+
+  function handleBookingFormChange(event) {
+    const { name, value } = event.target;
+
+    setBookingForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }));
+
+    setBookingError("");
+  }
+
+  function handleSubmitBooking(event) {
+    event.preventDefault();
+
+    if (!bookingForm.startDate || !bookingForm.endDate) {
+      setBookingError("Please select both start and end dates.");
+      return;
+    }
+
+    const startDate = new Date(bookingForm.startDate);
+    const endDate = new Date(bookingForm.endDate);
+
+    if (endDate < startDate) {
+      setBookingError("End date cannot be before start date.");
+      return;
+    }
+
+    const vehicleId = vehicleToBook.vehicleId || vehicleToBook.id;
+
+    setLiveBookings((currentVehicles) =>
+      currentVehicles.map((vehicle) => {
+        const currentVehicleId = vehicle.vehicleId || vehicle.id;
+
+        if (currentVehicleId !== vehicleId) {
+          return vehicle;
+        }
+
+        return {
+          ...vehicle,
+          isAvailable: "In Use",
+          currentBooking: "Pending",
+          bookingStartDate: bookingForm.startDate,
+          bookingEndDate: bookingForm.endDate,
+        };
+      }),
+    );
+
+    setVehicleToBook(null);
+    setBookingForm({
+      startDate: "",
+      endDate: "",
+    });
+    setBookingError("");
+  }
+
+  const selectedVehicleDailyRate = Number(selectedVehicle?.dailyRate || 0);
+  const bookingVehicleDailyRate = Number(vehicleToBook?.dailyRate || 0);
+
+  const bookingDays =
+    bookingForm.startDate && bookingForm.endDate
+      ? Math.max(
+          1,
+          Math.ceil(
+            (new Date(bookingForm.endDate) - new Date(bookingForm.startDate)) /
+              (1000 * 60 * 60 * 24),
+          ) + 1,
+        )
+      : 0;
+
+  const bookingTotal = bookingDays * bookingVehicleDailyRate;
 
   return (
     <DashboardLayout
@@ -356,6 +523,7 @@ function CompanyDashboard() {
             bookings={paginatedBookings}
             onViewVehicle={handleViewVehicle}
             onBookVehicle={handleBookVehicle}
+            onDeleteVehicle={handleDeleteVehicle}
           />
         </BookingTable>
 
@@ -392,6 +560,197 @@ function CompanyDashboard() {
           </PaginationButtons>
         </TableFooter>
       </DashboardPanel>
+
+      {selectedVehicle && (
+        <DetailsOverlay>
+          <DetailsModal>
+            <DetailsHeader>
+              <div>
+                <DetailsTitle>
+                  {selectedVehicle.make} {selectedVehicle.model}
+                </DetailsTitle>
+                <DetailsSubtitle>
+                  {selectedVehicle.licenseNumber || "No license number"}{" "}
+                  {selectedVehicle.modelYear > 0
+                    ? `• ${selectedVehicle.modelYear}`
+                    : ""}
+                </DetailsSubtitle>
+              </div>
+
+              <DetailsCloseButton
+                type="button"
+                onClick={() => setSelectedVehicle(null)}
+              >
+                ×
+              </DetailsCloseButton>
+            </DetailsHeader>
+
+            <DetailsBody>
+              <DetailsStatusRow>
+                <DetailsStatusBadge $status={selectedVehicle.isAvailable}>
+                  {selectedVehicle.isAvailable || "Available"}
+                </DetailsStatusBadge>
+
+                <strong>
+                  R{selectedVehicleDailyRate.toLocaleString()} / day
+                </strong>
+              </DetailsStatusRow>
+
+              <DetailsGrid>
+                <DetailsItem>
+                  <DetailsLabel>Make</DetailsLabel>
+                  <DetailsValue>
+                    {selectedVehicle.make || "Not provided"}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>Model</DetailsLabel>
+                  <DetailsValue>
+                    {selectedVehicle.model || "Not provided"}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>Category</DetailsLabel>
+                  <DetailsValue>
+                    {selectedVehicle.category || "Uncategorised"}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>Status</DetailsLabel>
+                  <DetailsValue>
+                    {selectedVehicle.isAvailable || "Available"}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>Current Booking</DetailsLabel>
+                  <DetailsValue>
+                    {selectedVehicle.currentBooking || "No booking"}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>Daily Rate</DetailsLabel>
+                  <DetailsValue>
+                    R{selectedVehicleDailyRate.toLocaleString()}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>VIN Number</DetailsLabel>
+                  <DetailsValue>
+                    {selectedVehicle.vinNumber || "Not provided"}
+                  </DetailsValue>
+                </DetailsItem>
+
+                <DetailsItem>
+                  <DetailsLabel>Vehicle ID</DetailsLabel>
+                  <DetailsValue>
+                    #{selectedVehicle.vehicleId || selectedVehicle.id || "N/A"}
+                  </DetailsValue>
+                </DetailsItem>
+              </DetailsGrid>
+            </DetailsBody>
+
+            <DetailsActions>
+              <DetailsSecondaryButton
+                type="button"
+                onClick={() => setSelectedVehicle(null)}
+              >
+                Close
+              </DetailsSecondaryButton>
+
+              <DetailsPrimaryButton
+                type="button"
+                disabled={selectedVehicle.isAvailable !== "Available"}
+                onClick={() => {
+                  setVehicleToBook(selectedVehicle);
+                  setSelectedVehicle(null);
+                }}
+              >
+                Book Vehicle
+              </DetailsPrimaryButton>
+            </DetailsActions>
+          </DetailsModal>
+        </DetailsOverlay>
+      )}
+
+      {vehicleToBook && (
+        <BookingOverlay>
+          <BookingModal onSubmit={handleSubmitBooking}>
+            <BookingHeader>
+              <div>
+                <BookingTitle>
+                  Book {vehicleToBook.make} {vehicleToBook.model}
+                </BookingTitle>
+                <BookingSubtitle>
+                  Select rental dates and confirm booking request.
+                </BookingSubtitle>
+              </div>
+
+              <BookingCloseButton
+                type="button"
+                onClick={() => setVehicleToBook(null)}
+              >
+                ×
+              </BookingCloseButton>
+            </BookingHeader>
+
+            <BookingBody>
+              <BookingDateGrid>
+                <BookingField>
+                  <BookingLabel>Start Date</BookingLabel>
+                  <BookingInput
+                    type="date"
+                    name="startDate"
+                    value={bookingForm.startDate}
+                    onChange={handleBookingFormChange}
+                  />
+                </BookingField>
+
+                <BookingField>
+                  <BookingLabel>End Date</BookingLabel>
+                  <BookingInput
+                    type="date"
+                    name="endDate"
+                    value={bookingForm.endDate}
+                    onChange={handleBookingFormChange}
+                  />
+                </BookingField>
+              </BookingDateGrid>
+
+              <BookingSummary>
+                <BookingSummaryLabel>Estimated Total</BookingSummaryLabel>
+
+                <BookingTotal>R{bookingTotal.toLocaleString()}</BookingTotal>
+
+                <BookingRateText>
+                  {bookingDays || 0} day(s) × R
+                  {bookingVehicleDailyRate.toLocaleString()} per day
+                </BookingRateText>
+              </BookingSummary>
+
+              {bookingError && <BookingError>{bookingError}</BookingError>}
+            </BookingBody>
+
+            <BookingActions>
+              <BookingCancelButton
+                type="button"
+                onClick={() => setVehicleToBook(null)}
+              >
+                Cancel
+              </BookingCancelButton>
+
+              <BookingSubmitButton type="submit">
+                Confirm Booking
+              </BookingSubmitButton>
+            </BookingActions>
+          </BookingModal>
+        </BookingOverlay>
+      )}
     </DashboardLayout>
   );
 }
