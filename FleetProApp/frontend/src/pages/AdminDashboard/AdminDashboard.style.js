@@ -147,23 +147,91 @@ export const UsersTable = styled.table`
     border-bottom: 1px solid ${theme.colors.border};
     color: ${theme.colors.textDark};
     font-size: 15px;
+    vertical-align: middle;
   }
 
   tbody tr:hover {
     background: ${theme.colors.inputBackground};
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 760px) {
     display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    width: 100%;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: grid;
+      gap: 14px;
+      padding: 12px;
+      width: 100%;
+    }
+
+    tr {
+      display: block;
+      width: 100%;
+      background: ${theme.colors.cardBackground};
+      border: 1px solid ${theme.colors.border};
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: ${theme.shadows.card};
+      overflow: hidden;
+    }
+
+    td {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid ${theme.colors.border};
+      padding: 13px 0;
+      white-space: normal;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    td::before {
+      content: attr(data-label);
+      color: ${theme.colors.textMuted};
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      text-align: left;
+      flex-shrink: 0;
+      max-width: 42%;
+    }
+
+    td:first-child {
+      display: block;
+      text-align: left;
+      padding-top: 0;
+    }
+
+    td:first-child::before {
+      display: block;
+      margin-bottom: 10px;
+      max-width: 100%;
+    }
+
+    td:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
   }
 `;
-
 export const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
+
+  @media (max-width: 760px) {
+    align-items: flex-start;
+  }
 `;
 
 export const AvatarCircle = styled.div`
@@ -189,6 +257,12 @@ export const UserEmail = styled.p`
   margin: 4px 0 0;
   color: ${theme.colors.textMuted};
   font-size: 14px;
+  word-break: break-word;
+
+  @media (max-width: 760px) {
+    font-size: 13px;
+    line-height: 1.35;
+  }
 `;
 
 export const RoleText = styled.span`
@@ -202,8 +276,7 @@ export const StatusBadge = styled.span`
   font-size: 12px;
   font-weight: 900;
 
-  color: ${({ $status }) =>
-    $status === "Active" ? "#15803d" : "#c2410c"};
+  color: ${({ $status }) => ($status === "Active" ? "#15803d" : "#c2410c")};
 
   background: ${({ $status }) =>
     $status === "Active" ? "#dcfce7" : "#fff7ed"};
@@ -213,6 +286,12 @@ export const ActionButtons = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+
+  @media (max-width: 760px) {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    max-width: 58%;
+  }
 `;
 
 export const ViewDetailsButton = styled.button`
@@ -232,6 +311,15 @@ export const ViewDetailsButton = styled.button`
     border-color: ${theme.colors.primary};
     color: ${theme.colors.primary};
   }
+
+  @media (max-width: 760px) {
+  padding: 7px 9px;
+  font-size: 12px;
+
+  svg {
+    font-size: 16px;
+  }
+}
 `;
 
 export const EditUserButton = styled.button`
@@ -251,6 +339,15 @@ export const EditUserButton = styled.button`
     border-color: ${theme.colors.primary};
     background: ${theme.colors.cardBackground};
   }
+
+  @media (max-width: 760px) {
+  padding: 7px 9px;
+  font-size: 12px;
+
+  svg {
+    font-size: 16px;
+  }
+}
 `;
 
 export const DeleteUserButton = styled.button`
@@ -269,6 +366,15 @@ export const DeleteUserButton = styled.button`
   &:hover {
     background: rgba(220, 38, 38, 0.14);
   }
+
+  @media (max-width: 760px) {
+  padding: 7px 9px;
+  font-size: 12px;
+
+  svg {
+    font-size: 16px;
+  }
+}
 `;
 
 export const TableFooter = styled.div`
