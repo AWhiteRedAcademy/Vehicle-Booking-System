@@ -6,8 +6,8 @@ namespace VehicleBook.Application.Interfaces
     {
         Task<IEnumerable<Booking>> GetAllBookingsAsync();
         Task<IEnumerable<Booking>> GetBookingsByOwnerIdAsync(int ownerId);
-        Task<IEnumerable<Booking>> GetCurrentBookingsByCompanyIdAsync(int companyId, DateOnly today);
-        Task<IEnumerable<Booking>> GetBookingHistoryByCompanyIdAsync(int companyId, DateOnly today);
+        Task<IEnumerable<Booking>> GetCurrentBookingsByCompanyIdAsync(DateOnly today);
+        Task<IEnumerable<Booking>> GetBookingHistoryByCompanyIdAsync(DateOnly today);
         Task<Booking?> GetByIdAsync(int id);
         Task<bool> HasOverlappingBookingAsync(int vehicleId, DateOnly startDate, DateOnly endDate, int? ignoreBookingId = null);
         Task AddAsync(Booking booking);

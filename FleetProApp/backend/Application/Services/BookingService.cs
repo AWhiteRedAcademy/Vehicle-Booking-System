@@ -39,17 +39,17 @@ namespace VehicleBook.Application.Services
             return bookings.Select(MapToDto);
         }
 
-        public async Task<IEnumerable<CompanyBookingDto>> GetCurrentCompanyBookingsAsync(int companyId)
+        public async Task<IEnumerable<CompanyBookingDto>> GetCurrentCompanyBookingsAsync()
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var bookings = await _bookingRepository.GetCurrentBookingsByCompanyIdAsync(companyId, today);
+            var bookings = await _bookingRepository.GetCurrentBookingsByCompanyIdAsync(today);
             return bookings.Select(booking => MapToCompanyBookingDto(booking, today));
         }
 
-        public async Task<IEnumerable<CompanyBookingDto>> GetCompanyBookingHistoryAsync(int companyId)
+        public async Task<IEnumerable<CompanyBookingDto>> GetCompanyBookingHistoryAsync()
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var bookings = await _bookingRepository.GetBookingHistoryByCompanyIdAsync(companyId, today);
+            var bookings = await _bookingRepository.GetBookingHistoryByCompanyIdAsync(today);
             return bookings.Select(booking => MapToCompanyBookingDto(booking, today));
         }
 
