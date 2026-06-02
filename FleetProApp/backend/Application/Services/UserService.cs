@@ -79,7 +79,7 @@ namespace VehicleBook.Application.Services
             return true;
         }
 
-        private static UserDto MapToDto(User user)
+       private static UserDto MapToDto(User user)
         {
             return new UserDto
             {
@@ -87,7 +87,8 @@ namespace VehicleBook.Application.Services
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Role = user.Role
+                Role = user.Role,
+                LastLogin = user.LastLogin
             };
         }
     }

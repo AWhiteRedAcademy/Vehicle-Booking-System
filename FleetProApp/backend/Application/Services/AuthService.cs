@@ -30,11 +30,17 @@ namespace VehicleBook.Application.Services
                 return null;
             }
 
-            var result = new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, request.Password);
+           var result = new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, request.Password);
             if (result == PasswordVerificationResult.Failed)
             {
                 return null;
             }
+            user.LastLogin = DateTime.UtcNow;
+
+            Console.WriteLine($"LAST LOGIN UPDATED: {user.Email} - {user.LastLogin}");
+
+            _userRepository.Update(user);
+            await _userRepository.SaveChangesAsync();
 
             return await CreateTokenResponseAsync(user);
         }

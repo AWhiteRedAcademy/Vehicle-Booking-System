@@ -3712,23 +3712,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Aidan\\.nuget\\packages\\": {},
+    "C:\\Users\\redPanda Software SD\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
+      "projectUniqueName": "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
       "projectName": "VehicleBook",
-      "projectPath": "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
-      "packagesPath": "C:\\Users\\Aidan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Api\\obj\\",
+      "projectPath": "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Api\\VehicleBook.csproj",
+      "packagesPath": "C:\\Users\\redPanda Software SD\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Aidan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\redPanda Software SD\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3744,11 +3744,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj": {
-              "projectPath": "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj"
+            "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj": {
+              "projectPath": "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Application\\VehicleBook.Application.csproj"
             },
-            "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Aidan\\Documents\\GitHub\\Vehicle-Booking-System\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj"
+            "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\redPanda Software SD\\Desktop\\FleetProApp\\backend\\Infrastructure\\VehicleBook.Infrastructure.csproj"
             }
           }
         }
@@ -3811,7 +3811,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

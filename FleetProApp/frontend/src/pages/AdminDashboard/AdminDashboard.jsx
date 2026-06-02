@@ -113,27 +113,26 @@ function AdminDashboard() {
   useEffect(() => {
     let ignore = false;
 
-    async function loadUsers() {
-      try {
-        setIsLoading(true);
-        setError("");
+   const loadUsers = async () => {
+   try {
+    setIsLoading(true);
+    setError("");
 
-        const data = await getUsers();
+    const data = await getUsers();
 
-        if (!ignore) {
-          setUsers(Array.isArray(data) ? data : []);
-        }
-      } catch (err) {
-        if (!ignore) {
-          setError(err.message || "Failed to load users.");
-          setUsers([]);
-        }
-      } finally {
-        if (!ignore) {
-          setIsLoading(false);
-        }
-      }
-    }
+    console.log("USERS FROM API:");
+    console.log(data);
+
+    setUsers(Array.isArray(data) ? data : []);
+  } catch (err) {
+    console.error("Error loading users:", err);
+
+    setError(err.message || "Failed to load users.");
+    setUsers([]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
     loadUsers();
 

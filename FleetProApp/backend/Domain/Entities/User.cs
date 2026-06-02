@@ -51,6 +51,9 @@ namespace VehicleBook.Domain.Entities
         [Column("refreshtokenexpirytime")]
         public DateOnly? RefreshTokenExpiryTime { get; set; }
 
+        [Column("lastlogin")]
+        public DateTime? LastLogin { get; set; }
+
         public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }

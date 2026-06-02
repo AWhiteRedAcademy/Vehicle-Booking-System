@@ -12,7 +12,9 @@ function normalizeUser(user) {
     email: user.email || "",
     phoneNumber: user.phoneNumber || user.phone || "",
     role: user.role || "Guest",
-    lastLogin: user.lastLogin || "Never",
+   lastLogin: user.lastLogin
+   ? new Date(user.lastLogin).toLocaleString()
+    : "Never",
   };
 }
 
