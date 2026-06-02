@@ -89,7 +89,7 @@ namespace VehicleBook.Infrastructure.Repositories
         {
             return await _context.Bookings
                 .Where(b => (b.StartDate == date && b.Status != "Cancelled")
-                         || (b.EndDate < date && b.Status == "Active"))
+                         || (b.EndDate < date && (b.Status == "Active" || b.Status == "Confirmed")))
                 .ToListAsync(cancellationToken);
         }
 

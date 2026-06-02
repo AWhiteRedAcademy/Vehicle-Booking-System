@@ -12,6 +12,7 @@ namespace VehicleBook.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,6 +76,27 @@ namespace VehicleBook.Infrastructure.Data
                     .HasForeignKey(b => b.VehicleId)
                     .HasConstraintName("bookings_vehicleid_fkey")
                     .OnDelete(DeleteBehavior.NoAction);
+            });
+
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasKey(e => e.NotificationId);
+                entity.Property(e => e.Title).HasMaxLength(150);
+                entity.Property(e => e.Type).HasMaxLength(50).HasDefaultValue("General");
+                entity.Property(e => e.EntityType).HasMaxLength(50);
+                entity.Property(e => e.IsRead).HasDefaultValue(false);
+                entity.Property(e => e.CreatedAtUtc)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("NOW()");
+                entity.Property(e => e.ReadAtUtc)
+                    .HasColumnType("timestamp with time zone");
+
+                entity.HasOne(n => n.User)
+                    .WithMany()
+                    .HasForeignKey(n => n.UserId)
+                    .HasConstraintName("notifications_userid_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

@@ -12,6 +12,12 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 
+import {
+  getNotifications,
+  getUnreadNotificationCount,
+  markAllNotificationsAsRead,
+  markNotificationAsRead,
+} from "../../HTTPS Services/NotificationServices.js";
 
 import {
   Shell,
@@ -48,6 +54,19 @@ DesktopOnly,
 UserLabelText,
 MobileBottomNav,
 MobileNavLink,
+NotificationWrapper,
+NotificationBadge,
+NotificationDropdown,
+NotificationHeader,
+NotificationTitle,
+NotificationActionButton,
+NotificationList,
+NotificationItem,
+NotificationItemTitle,
+NotificationItemText,
+NotificationDate,
+NotificationEmpty,
+NotificationError,
 } from "./DashboardLayout.styles";
 
 function DashboardLayout({
@@ -65,8 +84,14 @@ function DashboardLayout({
   const location = useLocation();
   const navigate = useNavigate();
   const menuRef = useRef(null);
+  const notificationRef = useRef(null);
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationLoading, setNotificationLoading] = useState(false);
+  const [notificationError, setNotificationError] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   function handleLogout() {
@@ -82,6 +107,10 @@ function DashboardLayout({
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsUserMenuOpen(false);
+      }
+
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsNotificationsOpen(false);
       }
     }
 
@@ -100,6 +129,104 @@ function DashboardLayout({
   function handleToggleTheme() {
     setThemeMode((currentMode) => (currentMode === "light" ? "dark" : "light"));
   }
+
+  async function loadNotificationCount() {
+    try {
+      const count = await getUnreadNotificationCount();
+      setUnreadCount(count);
+    } catch (err) {
+      console.error("Notification count error:", err);
+    }
+  }
+
+  async function loadNotifications() {
+    try {
+      setNotificationLoading(true);
+      setNotificationError("");
+      const data = await getNotifications(25);
+      setNotifications(data);
+      setUnreadCount(data.filter((notification) => !notification.isRead).length);
+    } catch (err) {
+      console.error("Notification fetch error:", err);
+      setNotificationError(err.message || "Unable to load notifications.");
+    } finally {
+      setNotificationLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadNotificationCount();
+
+    const intervalId = window.setInterval(() => {
+      loadNotificationCount();
+    }, 30000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  async function handleToggleNotifications() {
+    const shouldOpen = !isNotificationsOpen;
+    setIsNotificationsOpen(shouldOpen);
+    setIsUserMenuOpen(false);
+
+    if (shouldOpen) {
+      await loadNotifications();
+    }
+  }
+
+  async function handleMarkAsRead(notification) {
+    if (!notification || notification.isRead) {
+      return;
+    }
+
+    try {
+      await markNotificationAsRead(notification.notificationId);
+      setNotifications((currentNotifications) =>
+        currentNotifications.map((currentNotification) =>
+          currentNotification.notificationId === notification.notificationId
+            ? { ...currentNotification, isRead: true }
+            : currentNotification
+        )
+      );
+      setUnreadCount((currentCount) => Math.max(currentCount - 1, 0));
+    } catch (err) {
+      console.error("Mark notification as read error:", err);
+      setNotificationError(err.message || "Unable to update notification.");
+    }
+  }
+
+  async function handleMarkAllAsRead() {
+    try {
+      await markAllNotificationsAsRead();
+      setNotifications((currentNotifications) =>
+        currentNotifications.map((notification) => ({ ...notification, isRead: true }))
+      );
+      setUnreadCount(0);
+    } catch (err) {
+      console.error("Mark all notifications as read error:", err);
+      setNotificationError(err.message || "Unable to update notifications.");
+    }
+  }
+
+  function formatNotificationDate(value) {
+    if (!value) {
+      return "";
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+
+    return date.toLocaleString([], {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
 
   return (
     <Shell>
@@ -178,9 +305,61 @@ function DashboardLayout({
               )}
             </IconButton>
  
-            <IconButton type="button" aria-label="Notifications">
-              <NotificationsNoneIcon fontSize="small" />
-            </IconButton>
+            <NotificationWrapper ref={notificationRef}>
+              <IconButton
+                type="button"
+                aria-label="Notifications"
+                onClick={handleToggleNotifications}
+              >
+                <NotificationsNoneIcon fontSize="small" />
+                {unreadCount > 0 && (
+                  <NotificationBadge>{unreadCount > 99 ? "99+" : unreadCount}</NotificationBadge>
+                )}
+              </IconButton>
+
+              {isNotificationsOpen && (
+                <NotificationDropdown>
+                  <NotificationHeader>
+                    <NotificationTitle>Notifications</NotificationTitle>
+
+                    {unreadCount > 0 && (
+                      <NotificationActionButton type="button" onClick={handleMarkAllAsRead}>
+                        Mark all read
+                      </NotificationActionButton>
+                    )}
+                  </NotificationHeader>
+
+                  {notificationError && (
+                    <NotificationError>{notificationError}</NotificationError>
+                  )}
+
+                  {notificationLoading && (
+                    <NotificationEmpty>Loading notifications...</NotificationEmpty>
+                  )}
+
+                  {!notificationLoading && notifications.length === 0 && (
+                    <NotificationEmpty>No notifications yet.</NotificationEmpty>
+                  )}
+
+                  {!notificationLoading && notifications.length > 0 && (
+                    <NotificationList>
+                      {notifications.map((notification) => (
+                        <NotificationItem
+                          key={notification.notificationId}
+                          type="button"
+                          $isRead={notification.isRead}
+                          onClick={() => handleMarkAsRead(notification)}
+                        >
+                          <NotificationItemTitle>{notification.title}</NotificationItemTitle>
+                          <NotificationItemText>{notification.message}</NotificationItemText>
+                          <NotificationDate>{formatNotificationDate(notification.createdAtUtc)}</NotificationDate>
+                        </NotificationItem>
+                      ))}
+                    </NotificationList>
+                  )}
+                </NotificationDropdown>
+              )}
+            </NotificationWrapper>
  
             <UserMenuWrapper ref={menuRef}>
               <UserMenuButton
@@ -259,9 +438,61 @@ function DashboardLayout({
               )}
             </IconButton>
 
-            <IconButton type="button" aria-label="Notifications">
-              <NotificationsNoneIcon fontSize="small" />
-            </IconButton>
+            <NotificationWrapper ref={notificationRef}>
+              <IconButton
+                type="button"
+                aria-label="Notifications"
+                onClick={handleToggleNotifications}
+              >
+                <NotificationsNoneIcon fontSize="small" />
+                {unreadCount > 0 && (
+                  <NotificationBadge>{unreadCount > 99 ? "99+" : unreadCount}</NotificationBadge>
+                )}
+              </IconButton>
+
+              {isNotificationsOpen && (
+                <NotificationDropdown>
+                  <NotificationHeader>
+                    <NotificationTitle>Notifications</NotificationTitle>
+
+                    {unreadCount > 0 && (
+                      <NotificationActionButton type="button" onClick={handleMarkAllAsRead}>
+                        Mark all read
+                      </NotificationActionButton>
+                    )}
+                  </NotificationHeader>
+
+                  {notificationError && (
+                    <NotificationError>{notificationError}</NotificationError>
+                  )}
+
+                  {notificationLoading && (
+                    <NotificationEmpty>Loading notifications...</NotificationEmpty>
+                  )}
+
+                  {!notificationLoading && notifications.length === 0 && (
+                    <NotificationEmpty>No notifications yet.</NotificationEmpty>
+                  )}
+
+                  {!notificationLoading && notifications.length > 0 && (
+                    <NotificationList>
+                      {notifications.map((notification) => (
+                        <NotificationItem
+                          key={notification.notificationId}
+                          type="button"
+                          $isRead={notification.isRead}
+                          onClick={() => handleMarkAsRead(notification)}
+                        >
+                          <NotificationItemTitle>{notification.title}</NotificationItemTitle>
+                          <NotificationItemText>{notification.message}</NotificationItemText>
+                          <NotificationDate>{formatNotificationDate(notification.createdAtUtc)}</NotificationDate>
+                        </NotificationItem>
+                      ))}
+                    </NotificationList>
+                  )}
+                </NotificationDropdown>
+              )}
+            </NotificationWrapper>
 
             <UserMenuWrapper ref={menuRef}>
               <UserMenuButton
