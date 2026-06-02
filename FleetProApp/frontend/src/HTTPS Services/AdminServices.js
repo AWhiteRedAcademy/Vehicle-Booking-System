@@ -6,15 +6,17 @@ function normalizeArray(data) {
 }
 
 function normalizeUser(user) {
+  const rawLastLogin = user.lastLogin ?? user.LastLogin ?? user.lastlogin;
+
   return {
     userId: user.userId || user.userid || user.id || 0,
     name: user.name || "",
     email: user.email || "",
     phoneNumber: user.phoneNumber || user.phone || "",
     role: user.role || "Guest",
-   lastLogin: user.lastLogin
-   ? new Date(user.lastLogin).toLocaleString()
-    : "Never",
+    lastLogin: rawLastLogin
+      ? new Date(rawLastLogin).toLocaleString()
+      : "Never",
   };
 }
 

@@ -24,7 +24,9 @@ namespace VehicleBook.Application.Services
 
         public async Task<TokenResponseDto?> LoginAsync(LoginUserDto request)
         {
-            var user = await _userRepository.GetByEmailAsync(request.Email);
+            var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+
+            var user = await _userRepository.GetByEmailAsync(normalizedEmail);
             if (user == null)
             {
                 return null;

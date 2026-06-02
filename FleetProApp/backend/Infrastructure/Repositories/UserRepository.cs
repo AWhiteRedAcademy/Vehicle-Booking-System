@@ -42,8 +42,10 @@ namespace VehicleBook.Infrastructure.Repositories
         }
 
         public async Task<User?> GetByEmailAsync(string email)
-        {
-            return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
+        {   
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+            
+            return await _dbSet.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
         }
 
         public async Task AddAsync(User user)
