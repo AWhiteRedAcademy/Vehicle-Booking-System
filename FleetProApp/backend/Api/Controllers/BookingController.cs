@@ -47,14 +47,7 @@ namespace Vehicle_Booking_System.Controllers
         [Authorize(Roles = "Company")]
         public async Task<IActionResult> GetCurrentCompanyBookings()
         {
-            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!int.TryParse(loggedInUserId, out var companyId))
-            {
-                return Unauthorized();
-            }
-
-            var bookings = await _bookingService.GetCurrentCompanyBookingsAsync(companyId);
+            var bookings = await _bookingService.GetCurrentCompanyBookingsAsync();
             return Ok(bookings);
         }
 
@@ -62,14 +55,7 @@ namespace Vehicle_Booking_System.Controllers
         [Authorize(Roles = "Company")]
         public async Task<IActionResult> GetCompanyBookingHistory()
         {
-            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!int.TryParse(loggedInUserId, out var companyId))
-            {
-                return Unauthorized();
-            }
-
-            var bookings = await _bookingService.GetCompanyBookingHistoryAsync(companyId);
+            var bookings = await _bookingService.GetCompanyBookingHistoryAsync();
             return Ok(bookings);
         }
 

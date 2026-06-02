@@ -13,10 +13,9 @@ import { deleteVehicle } from "../../HTTPS Services/OwnerServices";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
 import VehicleCard from "../../components/cards/VehicleCard";
-import OwnerVehicleList from "./OwnerVehicleList"; 
+import OwnerVehicleList from "./OwnerVehicleList";
 import { authFetch } from "../../HTTPS Services/Auth.js";
 import { useNavigate } from "react-router-dom";
-
 
 import {
   HeaderRow,
@@ -33,10 +32,7 @@ import {
   ErrorCard,
 } from "../../components/dashboard/DashboardPage.styles.js";
 
-import {
-  AddVehicleCard,
-  PlusCircle,
-} from "./OwnerDashboard.style";
+import { AddVehicleCard, PlusCircle } from "./OwnerDashboard.style";
 
 const ownerNavItems = [
   {
@@ -61,46 +57,62 @@ const ownerNavItems = [
   },
 ];
 
-  async function handleDeleteVehicle(vehicle) {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`
-    );
+async function handleDeleteVehicle(vehicle) {
+  const confirmed = window.confirm(
+    `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
+  );
 
-    if (!confirmed) {
-      return;
-    }
-
-    const vehicleId = vehicle.vehicleId || vehicle.id;
-
-    try {
-      await deleteVehicle(vehicleId);
-      setVehicles((currentVehicles) =>
-        currentVehicles.filter(
-          (currentVehicle) =>
-            (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId
-        )
-      );
-    } catch (err) {
-      setError(err.message || "Unable to delete vehicle.");
-    }
+  if (!confirmed) {
+    return;
   }
+
+  const vehicleId = vehicle.vehicleId || vehicle.id;
+
+  try {
+    await deleteVehicle(vehicleId);
+    setVehicles((currentVehicles) =>
+      currentVehicles.filter(
+        (currentVehicle) =>
+          (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId,
+      ),
+    );
+  } catch (err) {
+    setError(err.message || "Unable to delete vehicle.");
+  }
+}
 
 function OwnerDashboard() {
   const navigate = useNavigate();
-  
+
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    authFetch('api/Vehicle/user/context')
-      .then(data => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 760);
+    }
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    authFetch("api/Vehicle/user/context")
+      .then((data) => {
         setVehicles(Array.isArray(data) ? data : []);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Fetch error:", err);
         setError(err.message || "Failed to load vehicle assets.");
         setLoading(false);
@@ -109,17 +121,23 @@ function OwnerDashboard() {
 
   // Calculates metrics from live array data
   const totalVehicles = vehicles.length;
-  const availableVehicles = vehicles.filter(v => v.isAvailable === "Available").length;
-  const unavailableVehicles = vehicles.filter(v => v.isAvailable !== "Available").length;
+  const availableVehicles = vehicles.filter(
+    (v) => v.isAvailable === "Available",
+  ).length;
+  const unavailableVehicles = vehicles.filter(
+    (v) => v.isAvailable !== "Available",
+  ).length;
   const estimatedMonthlyRevenue = vehicles.reduce(
     (total, v) => total + Number(v.dailyRate || 0) * 10,
-    0
+    0,
   );
 
   const [editingVehicle, setEditingVehicle] = useState(null);
 
   const handleSaveVehicle = (updatedVehicle) => {
-    setVehicles(vehicles.map(v => v.id === updatedVehicle.id ? updatedVehicle : v));
+    setVehicles(
+      vehicles.map((v) => (v.id === updatedVehicle.id ? updatedVehicle : v)),
+    );
     setEditingVehicle(null); // Close the edit view / form
   };
 
@@ -131,7 +149,6 @@ function OwnerDashboard() {
       userLabel="Owner"
       navItems={ownerNavItems}
     >
-      
       <HeaderRow>
         <div>
           <SectionEyebrow>Fleet Manager</SectionEyebrow>
@@ -141,7 +158,10 @@ function OwnerDashboard() {
           </SectionText>
         </div>
 
-        <AddButton type="button" onClick={() => navigate("/owner/vehicles/add")}>
+        <AddButton
+          type="button"
+          onClick={() => navigate("/owner/vehicles/add")}
+        >
           <AddIcon fontSize="small" />
           Add New Vehicle
         </AddButton>
@@ -185,7 +205,11 @@ function OwnerDashboard() {
         <SearchInput
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search by make, model, license, VIN, year, or category..."
+          placeholder={
+            isMobile
+              ? "Search all vehicles"
+              : "Search by make, model, license, VIN, year, or category..."
+          }
         />
 
         <FilterSelect

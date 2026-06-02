@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { theme } from "../../../styles/theme";
 
 export const FormCard = styled.section`
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   padding: 28px;
@@ -26,7 +26,7 @@ export const FieldGroup = styled.div`
 `;
 
 export const Label = styled.label`
-  color: #64748b;
+  color: ${theme.colors.textMuted};
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
@@ -43,9 +43,13 @@ export const Input = styled.input`
   font-size: 16px;
   outline: none;
 
+  &::placeholder {
+    color: ${theme.colors.textMuted};
+  }
+
   &:focus {
     border-color: ${theme.colors.primary};
-    background: white;
+    background: ${theme.colors.cardBackground};
   }
 `;
 
@@ -61,21 +65,22 @@ export const Select = styled.select`
 
   &:focus {
     border-color: ${theme.colors.primary};
-    background: white;
+    background: ${theme.colors.cardBackground};
   }
 `;
 
 export const HelperText = styled.p`
   margin: 0;
-  color: #64748b;
+  color: ${theme.colors.textMuted};
   font-size: 13px;
 `;
 
 export const PendingNotice = styled.div`
   margin-top: 24px;
   border-radius: ${theme.radius.medium};
-  background: #fff7ed;
-  color: #c2410c;
+  background: rgba(251, 146, 60, 0.12);
+  color: #fb923c;
+  border: 1px solid rgba(251, 146, 60, 0.28);
   padding: 14px 16px;
   font-weight: 800;
 `;
@@ -83,16 +88,17 @@ export const PendingNotice = styled.div`
 export const ErrorMessage = styled.div`
   margin-top: 18px;
   border-radius: ${theme.radius.medium};
-  background: #fef2f2;
-  color: #b91c1c;
+  background: rgba(127, 29, 29, 0.22);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.35);
   padding: 14px 16px;
   font-weight: 800;
 `;
 
 export const FooterBar = styled.div`
   margin-top: 28px;
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   padding: 22px 26px;
@@ -110,8 +116,9 @@ export const FooterBar = styled.div`
 
 export const FooterText = styled.p`
   margin: 0;
-  color: #334155;
+  color: ${theme.colors.textMuted};
   font-size: 14px;
+  font-weight: 700;
 `;
 
 export const FooterActions = styled.div`
@@ -127,7 +134,7 @@ export const FooterActions = styled.div`
 export const CancelButton = styled.button`
   border: none;
   background: transparent;
-  color: #334155;
+  color: ${theme.colors.textDark};
   font-weight: 900;
   cursor: pointer;
 
@@ -145,6 +152,7 @@ export const SaveButton = styled.button`
   height: 48px;
   font-weight: 900;
   cursor: pointer;
+  box-shadow: ${theme.shadows.button};
 
   display: flex;
   align-items: center;

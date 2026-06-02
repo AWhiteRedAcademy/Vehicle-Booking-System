@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { theme } from "../../styles/theme";
 
 export const Page = styled.main`
   min-height: 100vh;
-  background: #f5f7fb;
+  background: ${theme.colors.pageBackground};
 
   display: flex;
   justify-content: center;
@@ -23,6 +24,10 @@ export const Content = styled.section`
 
   position: relative;
   z-index: 2;
+
+  @media (max-width: 760px) {
+    padding: 36px 20px;
+  }
 `;
 
 export const LogoArea = styled.div`
@@ -36,7 +41,7 @@ export const LogoBox = styled.div`
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  background: #0066d9;
+  background: ${theme.colors.primary};
   color: white;
 
   display: flex;
@@ -46,20 +51,28 @@ export const LogoBox = styled.div`
 
 export const LogoText = styled.span`
   font-size: 18px;
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: 900;
+  color: ${theme.colors.textDark};
 `;
 
 export const Header = styled.header`
   text-align: center;
-  margin-bottom: 52px;
+  margin-bottom: 42px;
+
+  @media (max-width: 760px) {
+    margin-bottom: 30px;
+  }
 `;
 
 export const Title = styled.h1`
   margin: 0 0 14px;
   font-size: 42px;
   font-weight: 900;
-  color: #0f172a;
+  color: ${theme.colors.textDark};
+
+  @media (max-width: 760px) {
+    font-size: 36px;
+  }
 `;
 
 export const Subtitle = styled.p`
@@ -67,7 +80,11 @@ export const Subtitle = styled.p`
   max-width: 520px;
   font-size: 17px;
   line-height: 1.5;
-  color: #475569;
+  color: ${theme.colors.textMuted};
+
+  @media (max-width: 760px) {
+    font-size: 15px;
+  }
 `;
 
 export const RoleGrid = styled.div`
@@ -76,29 +93,51 @@ export const RoleGrid = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 26px;
   margin-bottom: 48px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const LoginCard = styled.form`
   width: 100%;
-  max-width: 380px;
-  background: white;
-  border: 1px solid #d7dce5;
-  border-radius: 12px;
+  max-width: 400px;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
+  border-radius: 18px;
   padding: 32px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  box-shadow: ${theme.shadows.card};
 
   display: flex;
   flex-direction: column;
   gap: 22px;
+
+  @media (max-width: 480px) {
+    padding: 26px 20px;
+    border-radius: 16px;
+  }
+`;
+
+export const ErrorText = styled.p`
+  margin: -4px 0 0;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
 `;
 
 export const ForgotPassword = styled.a`
-  margin-top: 6px;
+  margin-top: 2px;
   text-align: center;
-  color: #0066d9;
+  color: ${theme.colors.primary};
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const Footer = styled.footer`
@@ -110,15 +149,22 @@ export const Footer = styled.footer`
   gap: 22px;
 
   font-size: 13px;
-  color: #475569;
+  color: ${theme.colors.textMuted};
+
+  @media (max-width: 480px) {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `;
 
 export const FooterLink = styled.a`
-  color: #475569;
+  color: ${theme.colors.textMuted};
   cursor: pointer;
+  text-decoration: none;
 
   &:hover {
-    color: #0066d9;
+    color: ${theme.colors.primary};
   }
 `;
 
@@ -128,7 +174,8 @@ export const SideImage = styled.div`
   top: 0;
   width: 33%;
   height: 100%;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       rgba(245, 247, 251, 0.78),
       rgba(245, 247, 251, 0.86)
     ),
@@ -136,6 +183,10 @@ export const SideImage = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 0.75;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 export const LeftGlow = styled.div`
@@ -150,35 +201,18 @@ export const LeftGlow = styled.div`
 `;
 
 export const BottomGlow = styled.div`
-    position: absolute;
-    right: 80px;
-    bottom: -160px;
-    width: 420px;
-    height: 420px;
-    border-radius: 50%;
-    background: rgba(0, 102, 217, 0.08);
-    filter: blur(75px);
+  position: absolute;
+  right: 80px;
+  bottom: -160px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: rgba(0, 102, 217, 0.08);
+  filter: blur(75px);
 `;
 
 export const Divider = styled.span`
   width: 1px;
   height: 14px;
-  background: #cbd5e1;
+  background: ${theme.colors.border};
 `;
-
-/*
-@media (max-width: 900px) {
-  ${RoleGrid} {
-    grid-template-columns: 1fr;
-  }
-
-  ${SideImage} {
-    display: none;
-  }
-
-  ${Title} {
-    font-size: 34px;
-  }
-`;
-
-*/

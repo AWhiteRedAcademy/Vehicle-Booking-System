@@ -4,6 +4,7 @@ using System.Text;
 using Application.Helpers;
 using VehicleBook.Application.DTOs;
 using VehicleBook.Application.Interfaces;
+using VehicleBook.Application.Messaging;
 using VehicleBook.Domain.Entities;
 
 namespace VehicleBook.Application.Services
@@ -11,10 +12,12 @@ namespace VehicleBook.Application.Services
     public class VehicleService : IVehicleService
     {
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public VehicleService(IVehicleRepository vehicleRepository)
+        public VehicleService(IVehicleRepository vehicleRepository, IMessagePublisher messagePublisher)
         {
             _vehicleRepository = vehicleRepository;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync()
@@ -53,6 +56,17 @@ namespace VehicleBook.Application.Services
             await _vehicleRepository.AddAsync(vehicle);
             await _vehicleRepository.SaveChangesAsync();
 
+            await PublishAuditAsync(
+                "VehicleCreated",
+                $"Vehicle {vehicle.VehicleId} was created.",
+                new Dictionary<string, string>
+                {
+                    ["vehicleId"] = vehicle.VehicleId.ToString(),
+                    ["ownerId"] = vehicle.OwnerId.ToString(),
+                    ["status"] = vehicle.IsAvailable,
+                    ["licenseNumber"] = vehicle.LicenseNumber
+                });
+
             return MapToDto(vehicle);
         }
 
@@ -64,6 +78,8 @@ namespace VehicleBook.Application.Services
             {
                 return false;
             }
+
+            var oldStatus = vehicle.IsAvailable;
 
             vehicle.OwnerId = vehicleDto.OwnerId;
             vehicle.Make = vehicleDto.Make;
@@ -78,6 +94,37 @@ namespace VehicleBook.Application.Services
             _vehicleRepository.Update(vehicle);
             await _vehicleRepository.SaveChangesAsync();
 
+            if (!string.Equals(oldStatus, vehicle.IsAvailable, StringComparison.OrdinalIgnoreCase))
+            {
+                await _messagePublisher.PublishAsync(new SystemEventMessage
+                {
+                    RoutingKey = "vehicle.status.changed",
+                    EventType = "VehicleStatusChanged",
+                    Category = "VehicleStatusUpdate",
+                    Description = $"Vehicle {vehicle.VehicleId} status changed from {oldStatus} to {vehicle.IsAvailable}.",
+                    Data = new Dictionary<string, string>
+                    {
+                        ["vehicleId"] = vehicle.VehicleId.ToString(),
+                        ["ownerId"] = vehicle.OwnerId.ToString(),
+                        ["oldStatus"] = oldStatus,
+                        ["newStatus"] = vehicle.IsAvailable,
+                        ["licenseNumber"] = vehicle.LicenseNumber
+                    }
+                });
+            }
+
+            await PublishAuditAsync(
+                "VehicleUpdated",
+                $"Vehicle {vehicle.VehicleId} was updated.",
+                new Dictionary<string, string>
+                {
+                    ["vehicleId"] = vehicle.VehicleId.ToString(),
+                    ["ownerId"] = vehicle.OwnerId.ToString(),
+                    ["oldStatus"] = oldStatus,
+                    ["newStatus"] = vehicle.IsAvailable,
+                    ["licenseNumber"] = vehicle.LicenseNumber
+                });
+
             return true;
         }
 
@@ -90,11 +137,40 @@ namespace VehicleBook.Application.Services
                 return false;
             }
 
+            var deletedVehicleId = vehicle.VehicleId;
+            var deletedOwnerId = vehicle.OwnerId;
+            var deletedStatus = vehicle.IsAvailable;
+            var deletedLicenseNumber = vehicle.LicenseNumber;
+
             _vehicleRepository.Delete(vehicle);
             await _vehicleRepository.SaveChangesAsync();
 
+            await PublishAuditAsync(
+                "VehicleDeleted",
+                $"Vehicle {deletedVehicleId} was deleted.",
+                new Dictionary<string, string>
+                {
+                    ["vehicleId"] = deletedVehicleId.ToString(),
+                    ["ownerId"] = deletedOwnerId.ToString(),
+                    ["status"] = deletedStatus,
+                    ["licenseNumber"] = deletedLicenseNumber
+                });
+
             return true;
         }
+
+        private async Task PublishAuditAsync(string eventType, string description, Dictionary<string, string> data)
+        {
+            await _messagePublisher.PublishAsync(new SystemEventMessage
+            {
+                RoutingKey = "audit.vehicle",
+                EventType = eventType,
+                Category = "AuditLog",
+                Description = description,
+                Data = data
+            });
+        }
+
 
         private static VehicleDto MapToDto(Vehicle vehicle)
         {

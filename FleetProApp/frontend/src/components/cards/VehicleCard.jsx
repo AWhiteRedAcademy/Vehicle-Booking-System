@@ -30,9 +30,9 @@ function VehicleCard({ vehicle, onDelete }) {
           <DirectionsCarIcon />
         </VehicleIcon>
 
-        <StatusBadge $status={vehicle.isAvailable}>
-          {vehicle.isAvailable || "Available"}
-        </StatusBadge>
+ <StatusBadge $status={vehicle.isAvailable ? "Available" : "Unavailable"}>
+  {vehicle.isAvailable ? "Available" : "Unavailable"}
+</StatusBadge>
       </ImageArea>
 
       <Body>

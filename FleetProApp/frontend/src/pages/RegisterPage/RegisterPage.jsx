@@ -30,7 +30,7 @@ import {
   BottomGlow,
 } from "../LoginPage/LoginPage.style.js";
 
-import { SuccessBox } from "./RegisterPage.style.js";
+import { SuccessBox, ErrorBox } from "./RegisterPage.style.js";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -105,9 +105,8 @@ function RegisterPage() {
 
       handleRegisterSubmit(dataToSend)
         .then(() => {
-          setSuccessMessage("Registration successful! Redirecting..."); 
-          window.location.href = '/login'; 
-          
+          setSuccessMessage("Registration successful! Redirecting to login...");
+
           setFormData({
             fullName: "",
             email: "",
@@ -115,13 +114,17 @@ function RegisterPage() {
             password: "",
             confirmPassword: "",
           });
+
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 1200);
         })
         .catch((err) => {
           setSuccessMessage("");
           setErrors({ form: err.message || "Registration failed" });
         });
     }
-  } 
+  }
 
   return (
     <Page>
@@ -139,9 +142,7 @@ function RegisterPage() {
 
         <Header>
           <Title>Join the Fleet</Title>
-          <Subtitle>
-            Create your professional logistics account today.
-          </Subtitle>
+          <Subtitle>Create your professional logistics account today.</Subtitle>
         </Header>
 
         <LoginCard onSubmit={handleSubmit}>
@@ -155,19 +156,15 @@ function RegisterPage() {
             </SuccessBox>
           )}
 
-          {errors.form && (
-            <div style={{ color: "#d32f2f", fontSize: "14px", marginBottom: "15px", textAlign: "center" }}>
-              {errors.form}
-            </div>
-          )}
+          {errors.form && <ErrorBox>{errors.form}</ErrorBox>}
 
           <TextInput
             label="Full Name"
             name="fullName"
-            placeholder="John Doe"
+            placeholder=""
             value={formData.fullName}
             onChange={handleChange}
-            icon={<PersonIcon fontSize="small" />}
+            leftIcon={<PersonIcon fontSize="small" />}
             error={errors.fullName}
           />
 
@@ -185,7 +182,7 @@ function RegisterPage() {
           <TextInput
             label="Phone Number"
             name="phone"
-            placeholder="0712345678"
+            placeholder=""
             value={formData.phone}
             onChange={handleChange}
             icon={<PhoneIcon fontSize="small" />}
@@ -199,18 +196,15 @@ function RegisterPage() {
             placeholder="••••••••"
             value={formData.password}
             onChange={handleChange}
-            icon={
-              <div
-                onClick={() => setShowPassword(!showPassword)}
-                style={{ cursor: "pointer" }}
-              >
-                {showPassword ? (
-                  <VisibilityOffIcon fontSize="small" />
-                ) : (
-                  <VisibilityIcon fontSize="small" />
-                )}
-              </div>
+            leftIcon={<ShieldIcon fontSize="small" />}
+            rightIcon={
+              showPassword ? (
+                <VisibilityOffIcon fontSize="small" />
+              ) : (
+                <VisibilityIcon fontSize="small" />
+              )
             }
+            onRightIconClick={() => setShowPassword(!showPassword)}
             error={errors.password}
           />
 
@@ -221,24 +215,21 @@ function RegisterPage() {
             placeholder="••••••••"
             value={formData.confirmPassword}
             onChange={handleChange}
-            icon={
-              <div
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{ cursor: "pointer" }}
-              >
-                {showConfirmPassword ? (
-                  <VisibilityOffIcon fontSize="small" />
-                ) : (
-                  <VisibilityIcon fontSize="small" />
-                )}
-              </div>
+            leftIcon={<ShieldIcon fontSize="small" />}
+            rightIcon={
+              showConfirmPassword ? (
+                <VisibilityOffIcon fontSize="small" />
+              ) : (
+                <VisibilityIcon fontSize="small" />
+              )
+            }
+            onRightIconClick={() =>
+              setShowConfirmPassword(!showConfirmPassword)
             }
             error={errors.confirmPassword}
           />
 
-          <PrimaryButton type="submit">
-            Create Account
-          </PrimaryButton>
+          <PrimaryButton type="submit">Create Account</PrimaryButton>
 
           <FooterLink as={Link} to="/login">
             Already have an account? Sign In

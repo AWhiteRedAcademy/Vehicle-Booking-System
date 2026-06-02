@@ -241,14 +241,14 @@ export const PageHeading = styled.div`
  
 export const PageTitle = styled.h1`
   margin: 0;
-  color: #102a43;
+   color: ${theme.colors.textDark};
   font-size: 24px;
   font-weight: 900;
 `;
  
 export const PageSubtitle = styled.p`
   margin: 4px 0 0;
-  color: #64748b;
+color: ${theme.colors.textMuted};
   font-size: 14px;
 `;
  
@@ -452,4 +452,135 @@ export const UserLabelText = styled.span`
   @media (max-width: 760px) {
     display: none;
   }
+`;
+export const NotificationWrapper = styled.div`
+  position: relative;
+`;
+
+export const NotificationBadge = styled.span`
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 20px;
+  border: 2px solid ${theme.colors.cardBackground};
+`;
+
+export const NotificationDropdown = styled.div`
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 360px;
+  max-height: 460px;
+  overflow: hidden;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.14);
+  padding: 12px;
+  z-index: 70;
+
+  @media (max-width: 760px) {
+    position: fixed;
+    top: 76px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+    max-height: calc(100vh - 170px);
+  }
+`;
+
+export const NotificationHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 4px 10px;
+`;
+
+export const NotificationTitle = styled.p`
+  margin: 0;
+  color: ${theme.colors.textDark};
+  font-weight: 900;
+`;
+
+export const NotificationActionButton = styled.button`
+  border: none;
+  background: transparent;
+  color: ${theme.colors.primary};
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const NotificationList = styled.div`
+  max-height: 360px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const NotificationItem = styled.button`
+  width: 100%;
+  border: 1px solid ${({ $isRead }) => ($isRead ? theme.colors.border : "#bfdbfe")};
+  border-radius: 14px;
+  background: ${({ $isRead }) => ($isRead ? theme.colors.inputBackground : "#eff6ff")};
+  color: ${theme.colors.textDark};
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    border-color: ${theme.colors.primary};
+  }
+`;
+
+export const NotificationItemTitle = styled.p`
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+`;
+
+export const NotificationItemText = styled.p`
+  margin: 5px 0 0;
+  color: ${theme.colors.textMuted};
+  font-size: 13px;
+  line-height: 1.35;
+`;
+
+export const NotificationDate = styled.p`
+  margin: 8px 0 0;
+  color: ${theme.colors.textMuted};
+  font-size: 11px;
+  font-weight: 800;
+`;
+
+export const NotificationEmpty = styled.div`
+  padding: 18px 10px;
+  color: ${theme.colors.textMuted};
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+`;
+
+export const NotificationError = styled.div`
+  margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #be123c;
+  font-size: 13px;
+  font-weight: 800;
 `;

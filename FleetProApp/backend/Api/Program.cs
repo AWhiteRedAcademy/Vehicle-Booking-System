@@ -5,11 +5,14 @@ using Microsoft.OpenApi;
 using System.Text;
 using VehicleBook.Application.Authentication;
 using VehicleBook.Application.Interfaces;
+using VehicleBook.Application.Messaging;
 using VehicleBook.Application.Services;
 using VehicleBook.Infrastructure.Services;
 using VehicleBook.Infrastructure.Authentication;
 using VehicleBook.Infrastructure.Data;
 using VehicleBook.Infrastructure.Repositories;
+using VehicleBook.Infrastructure.Messaging;
+using VehicleBook.Infrastructure.Notifications;
 
 namespace Vehicle_Booking_System
 {
@@ -53,6 +56,10 @@ namespace Vehicle_Booking_System
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+            builder.Services.Configure<SmtpEmailOptions>(builder.Configuration.GetSection(SmtpEmailOptions.SectionName));
+            builder.Services.AddSingleton<IMessagePublisher, RabbitMqEventPublisher>();
 
             var jwtSettings = new JwtSettings
             {
@@ -98,8 +105,11 @@ namespace Vehicle_Booking_System
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IVehicleStatusService, VehicleStatusService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 
             builder.Services.AddHostedService<VehicleStatusWorker>();
+            builder.Services.AddHostedService<RabbitMqEventConsumer>();
 
             var app = builder.Build();
 

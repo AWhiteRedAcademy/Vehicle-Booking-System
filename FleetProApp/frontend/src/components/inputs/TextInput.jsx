@@ -1,24 +1,51 @@
-import { InputGroup, Label, Input } from "./TextInput.style";
+import {
+  InputGroup,
+  Label,
+  InputWrapper,
+  LeftIcon,
+  RightIconButton,
+  Input,
+  ErrorText,
+} from "./TextInput.style";
 
-function TextInput({ label, type, placeholder, value, onChange, name, icon, error }) {
+function TextInput({
+  label,
+  name,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  leftIcon,
+  rightIcon,
+  onRightIconClick,
+  error,
+}) {
   return (
     <InputGroup>
-      <Label>{label}</Label>
-      
+      {label && <Label htmlFor={name}>{label}</Label>}
 
-      <Input 
-        name={name}
-        type={type || "text"} // Fallback to 'text' if type isn't provided
-        placeholder={placeholder} 
-        value={value} 
-        onChange={onChange} 
-      />
+      <InputWrapper>
+        {leftIcon && <LeftIcon>{leftIcon}</LeftIcon>}
 
+        <Input
+          id={name}
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          $hasLeftIcon={!!leftIcon}
+          $hasRightIcon={!!rightIcon}
+        />
 
-      {icon && <div className="input-icon-container">{icon}</div>}
+        {rightIcon && (
+          <RightIconButton type="button" onClick={onRightIconClick}>
+            {rightIcon}
+          </RightIconButton>
+        )}
+      </InputWrapper>
 
-
-      {error && <span style={{ color: "red", fontSize: "12px" }}>{error}</span>}
+      {error && <ErrorText>{error}</ErrorText>}
     </InputGroup>
   );
 }

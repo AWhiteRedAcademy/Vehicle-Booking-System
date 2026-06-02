@@ -35,27 +35,25 @@ namespace VehicleBook.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<Booking>> GetCurrentBookingsByCompanyIdAsync(int companyId, DateOnly today)
+        public async Task<IEnumerable<Booking>> GetCurrentBookingsByCompanyIdAsync(DateOnly today)
         {
             return await _dbSet
                 .Include(b => b.Vehicle)
                     .ThenInclude(v => v!.Owner)
                 .AsNoTracking()
-                .Where(b => b.CompanyId == companyId
-                    && b.EndDate >= today
+                .Where(b => b.EndDate >= today
                     && b.Status != "Cancelled")
                 .OrderBy(b => b.StartDate)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Booking>> GetBookingHistoryByCompanyIdAsync(int companyId, DateOnly today)
+        public async Task<IEnumerable<Booking>> GetBookingHistoryByCompanyIdAsync(DateOnly today)
         {
             return await _dbSet
                 .Include(b => b.Vehicle)
                     .ThenInclude(v => v!.Owner)
                 .AsNoTracking()
-                .Where(b => b.CompanyId == companyId
-                    && (b.EndDate < today || b.Status == "Cancelled"))
+                .Where(b => b.EndDate < today || b.Status == "Cancelled")
                 .OrderByDescending(b => b.EndDate)
                 .ToListAsync();
         }
@@ -89,7 +87,7 @@ namespace VehicleBook.Infrastructure.Repositories
         {
             return await _context.Bookings
                 .Where(b => (b.StartDate == date && b.Status != "Cancelled")
-                         || (b.EndDate < date && b.Status == "Active"))
+                         || (b.EndDate < date && (b.Status == "Active" || b.Status == "Confirmed")))
                 .ToListAsync(cancellationToken);
         }
 

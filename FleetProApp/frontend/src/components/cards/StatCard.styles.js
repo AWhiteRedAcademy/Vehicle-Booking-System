@@ -28,7 +28,7 @@ function getToneStyles(tone) {
 
 export const Card = styled.article`
   background: ${theme.colors.cardBackground};
-  border: 1px solid #e3e8f0;
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   padding: 20px;
   box-shadow: ${theme.shadows.card};

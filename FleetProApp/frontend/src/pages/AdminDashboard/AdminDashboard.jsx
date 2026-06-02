@@ -182,19 +182,19 @@ function AdminDashboard() {
   const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   const pendingUsers = users.filter(
-    (user) => getUserStatus(user) === "Pending"
+    (user) => getUserStatus(user) === "Pending",
   ).length;
 
   const companyUsers = users.filter(
-    (user) => getUserRole(user) === "Company"
+    (user) => getUserRole(user) === "Company",
   ).length;
 
   const ownerUsers = users.filter(
-    (user) => getUserRole(user) === "Owner"
+    (user) => getUserRole(user) === "Owner",
   ).length;
 
   const activeUsers = users.filter(
-    (user) => getUserStatus(user) === "Active"
+    (user) => getUserStatus(user) === "Active",
   ).length;
 
   function handleEditUser(user) {
@@ -216,8 +216,8 @@ function AdminDashboard() {
                 ...updatedUser,
                 role: updatedUser.role || "Guest",
               }
-            : user
-        )
+            : user,
+        ),
       );
 
       setEditingUser(null);
@@ -230,7 +230,7 @@ function AdminDashboard() {
 
   async function handleDeleteUser(user) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${user.name}?`
+      `Are you sure you want to delete ${user.name}?`,
     );
 
     if (!confirmed) {
@@ -243,7 +243,9 @@ function AdminDashboard() {
       await deleteUser(user.userId);
 
       setUsers((currentUsers) =>
-        currentUsers.filter((currentUser) => currentUser.userId !== user.userId)
+        currentUsers.filter(
+          (currentUser) => currentUser.userId !== user.userId,
+        ),
       );
     } catch (err) {
       setError(err.message || "Unable to delete user.");
@@ -301,7 +303,8 @@ function AdminDashboard() {
           </AdminMetaRow>
 
           <SectionText>
-            Search, filter, and manage platform users across companies and owners.
+            Search, filter, and manage platform users across companies and
+            owners.
           </SectionText>
         </div>
 
@@ -412,32 +415,30 @@ function AdminDashboard() {
 
                     return (
                       <tr key={user.userId}>
-                        <td>
+                        <td data-label="User Information">
                           <UserInfo>
-                            <AvatarCircle>
-                              {(user.name || "?").charAt(0)}
-                            </AvatarCircle>
+                            <AvatarCircle>{user.name.charAt(0)}</AvatarCircle>
 
                             <div>
-                              <UserName>{user.name || "Unnamed User"}</UserName>
-                              <UserEmail>{user.email || "No email"}</UserEmail>
+                              <UserName>{user.name}</UserName>
+                              <UserEmail>{user.email}</UserEmail>
                             </div>
                           </UserInfo>
                         </td>
 
-                        <td>
-                          <RoleText>{displayRole}</RoleText>
+                        <td data-label="Role">
+                          <RoleText>{getUserRole(user)}</RoleText>
                         </td>
 
-                        <td>
-                          <StatusBadge $status={displayStatus}>
-                            {displayStatus}
+                        <td data-label="Status">
+                          <StatusBadge $status={getUserStatus(user)}>
+                            {getUserStatus(user)}
                           </StatusBadge>
                         </td>
 
-                        <td>{user.lastLogin || "Never"}</td>
+                        <td data-label="Last Login">{user.lastLogin}</td>
 
-                        <td>
+                        <td data-label="Actions">
                           <ActionButtons>
                             <ViewDetailsButton
                               type="button"

@@ -1,5 +1,6 @@
 using VehicleBook.Application.DTOs;
 using VehicleBook.Application.Interfaces;
+using VehicleBook.Application.Messaging;
 using VehicleBook.Domain.Entities;
 
 namespace VehicleBook.Application.Services
@@ -8,11 +9,16 @@ namespace VehicleBook.Application.Services
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public BookingService(IBookingRepository bookingRepository, IVehicleRepository vehicleRepository)
+        public BookingService(
+            IBookingRepository bookingRepository,
+            IVehicleRepository vehicleRepository,
+            IMessagePublisher messagePublisher)
         {
             _bookingRepository = bookingRepository;
             _vehicleRepository = vehicleRepository;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
@@ -33,17 +39,17 @@ namespace VehicleBook.Application.Services
             return bookings.Select(MapToDto);
         }
 
-        public async Task<IEnumerable<CompanyBookingDto>> GetCurrentCompanyBookingsAsync(int companyId)
+        public async Task<IEnumerable<CompanyBookingDto>> GetCurrentCompanyBookingsAsync()
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var bookings = await _bookingRepository.GetCurrentBookingsByCompanyIdAsync(companyId, today);
+            var bookings = await _bookingRepository.GetCurrentBookingsByCompanyIdAsync(today);
             return bookings.Select(booking => MapToCompanyBookingDto(booking, today));
         }
 
-        public async Task<IEnumerable<CompanyBookingDto>> GetCompanyBookingHistoryAsync(int companyId)
+        public async Task<IEnumerable<CompanyBookingDto>> GetCompanyBookingHistoryAsync()
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var bookings = await _bookingRepository.GetBookingHistoryByCompanyIdAsync(companyId, today);
+            var bookings = await _bookingRepository.GetBookingHistoryByCompanyIdAsync(today);
             return bookings.Select(booking => MapToCompanyBookingDto(booking, today));
         }
 
@@ -90,6 +96,19 @@ namespace VehicleBook.Application.Services
 
             await _bookingRepository.AddAsync(booking);
             await _bookingRepository.SaveChangesAsync();
+
+            await PublishBookingCreatedAsync(booking, vehicle);
+            await PublishAuditAsync(
+                "BookingCreated",
+                $"Booking {booking.BookingId} was created for vehicle {booking.VehicleId}.",
+                new Dictionary<string, string>
+                {
+                    ["bookingId"] = booking.BookingId.ToString(),
+                    ["companyId"] = booking.CompanyId.ToString(),
+                    ["vehicleId"] = booking.VehicleId.ToString(),
+                    ["status"] = booking.Status
+                });
+
             return MapToDto(booking);
         }
 
@@ -129,6 +148,7 @@ namespace VehicleBook.Application.Services
             }
 
             var days = bookingDto.EndDate.DayNumber - bookingDto.StartDate.DayNumber;
+            var oldStatus = booking.Status;
 
             booking.CompanyId = bookingDto.CompanyId;
             booking.VehicleId = bookingDto.VehicleId;
@@ -140,6 +160,24 @@ namespace VehicleBook.Application.Services
 
             _bookingRepository.Update(booking);
             await _bookingRepository.SaveChangesAsync();
+
+            if (!string.Equals(oldStatus, booking.Status, StringComparison.OrdinalIgnoreCase))
+            {
+                await PublishBookingStatusChangedAsync(booking, oldStatus, booking.Status);
+            }
+
+            await PublishAuditAsync(
+                "BookingUpdated",
+                $"Booking {booking.BookingId} was updated.",
+                new Dictionary<string, string>
+                {
+                    ["bookingId"] = booking.BookingId.ToString(),
+                    ["companyId"] = booking.CompanyId.ToString(),
+                    ["vehicleId"] = booking.VehicleId.ToString(),
+                    ["oldStatus"] = oldStatus,
+                    ["newStatus"] = booking.Status
+                });
+
             return true;
         }
 
@@ -151,11 +189,95 @@ namespace VehicleBook.Application.Services
                 return false;
             }
 
+            var deletedBookingId = booking.BookingId;
+            var deletedCompanyId = booking.CompanyId;
+            var deletedVehicleId = booking.VehicleId;
+            var deletedStatus = booking.Status;
+
             _bookingRepository.Delete(booking);
             await _bookingRepository.SaveChangesAsync();
+
+            await _messagePublisher.PublishAsync(new SystemEventMessage
+            {
+                RoutingKey = "booking.deleted",
+                EventType = "BookingDeleted",
+                Category = "BookingNotification",
+                Description = $"Booking {deletedBookingId} was deleted.",
+                Data = new Dictionary<string, string>
+                {
+                    ["bookingId"] = deletedBookingId.ToString(),
+                    ["companyId"] = deletedCompanyId.ToString(),
+                    ["vehicleId"] = deletedVehicleId.ToString(),
+                    ["status"] = deletedStatus
+                }
+            });
+
+            await PublishAuditAsync(
+                "BookingDeleted",
+                $"Booking {deletedBookingId} was deleted.",
+                new Dictionary<string, string>
+                {
+                    ["bookingId"] = deletedBookingId.ToString(),
+                    ["companyId"] = deletedCompanyId.ToString(),
+                    ["vehicleId"] = deletedVehicleId.ToString()
+                });
+
             return true;
         }
 
+
+        private async Task PublishBookingCreatedAsync(Booking booking, Vehicle vehicle)
+        {
+            await _messagePublisher.PublishAsync(new SystemEventMessage
+            {
+                RoutingKey = "booking.created",
+                EventType = "BookingCreated",
+                Category = "BookingNotification",
+                Description = $"Booking {booking.BookingId} was created for {vehicle.Make} {vehicle.Model}.",
+                Data = new Dictionary<string, string>
+                {
+                    ["bookingId"] = booking.BookingId.ToString(),
+                    ["companyId"] = booking.CompanyId.ToString(),
+                    ["vehicleId"] = booking.VehicleId.ToString(),
+                    ["licenseNumber"] = booking.LicenseNumber,
+                    ["startDate"] = booking.StartDate.ToString("yyyy-MM-dd"),
+                    ["endDate"] = booking.EndDate.ToString("yyyy-MM-dd"),
+                    ["status"] = booking.Status,
+                    ["totalCost"] = booking.TotalCost.ToString()
+                }
+            });
+        }
+
+        private async Task PublishBookingStatusChangedAsync(Booking booking, string oldStatus, string newStatus)
+        {
+            await _messagePublisher.PublishAsync(new SystemEventMessage
+            {
+                RoutingKey = "booking.status.changed",
+                EventType = "BookingStatusChanged",
+                Category = "BookingStatusUpdate",
+                Description = $"Booking {booking.BookingId} status changed from {oldStatus} to {newStatus}.",
+                Data = new Dictionary<string, string>
+                {
+                    ["bookingId"] = booking.BookingId.ToString(),
+                    ["companyId"] = booking.CompanyId.ToString(),
+                    ["vehicleId"] = booking.VehicleId.ToString(),
+                    ["oldStatus"] = oldStatus,
+                    ["newStatus"] = newStatus
+                }
+            });
+        }
+
+        private async Task PublishAuditAsync(string eventType, string description, Dictionary<string, string> data)
+        {
+            await _messagePublisher.PublishAsync(new SystemEventMessage
+            {
+                RoutingKey = "audit.booking",
+                EventType = eventType,
+                Category = "AuditLog",
+                Description = description,
+                Data = data
+            });
+        }
 
 
         private static CompanyBookingDto MapToCompanyBookingDto(Booking booking, DateOnly today)

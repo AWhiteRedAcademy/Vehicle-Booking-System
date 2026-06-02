@@ -14,7 +14,7 @@ import {
   ActionMenuWrapper,
   ActionMenu,
   ActionMenuItem,
-} from "./CompanyBookings.style.js";
+} from "./CompanyBookings.style";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -36,15 +36,23 @@ function canModifyBooking(booking) {
   if (!booking.startDate) return false;
 
   const today = new Date();
-  const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const todayOnly = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
 
   const start = new Date(booking.startDate);
-  const startOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const startOnly = new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    start.getDate()
+  );
 
   return startOnly > todayOnly;
 }
 
-export default function CompanyBookingList({
+export default function CompanyBookingListDetails({
   bookings = [],
   onViewBooking,
   onEditBooking,
@@ -65,12 +73,19 @@ export default function CompanyBookingList({
   }
 
   function handleToggleMenu(bookingId) {
-    setOpenMenuId((currentId) => (currentId === bookingId ? null : bookingId));
+    setOpenMenuId((currentId) =>
+      currentId === bookingId ? null : bookingId
+    );
   }
 
   function handleAction(action, booking) {
     setOpenMenuId(null);
-    action(booking);
+
+    if (typeof action === "function") {
+      action(booking);
+    } else {
+      console.warn("No booking action function was passed.");
+    }
   }
 
   return (
@@ -80,7 +95,7 @@ export default function CompanyBookingList({
 
         return (
           <tr key={booking.bookingId}>
-            <td>
+            <td data-label="Booking Details">
               <BookingInfo>
                 <VehicleImage>
                   <DirectionsCarIcon fontSize="small" />
@@ -93,29 +108,35 @@ export default function CompanyBookingList({
 
                   <VehicleMeta>
                     {booking.licenseNumber || "No license"} ·{" "}
-                    {formatDate(booking.startDate)} - {formatDate(booking.endDate)}
+                    {formatDate(booking.startDate)} -{" "}
+                    {formatDate(booking.endDate)}
                   </VehicleMeta>
                 </div>
               </BookingInfo>
             </td>
 
-            <td>
+            <td data-label="Type">
               <Badge>{booking.category || "Booking"}</Badge>
             </td>
 
-            <td>
+            <td data-label="Status">
               <StatusText $available={booking.status === "Confirmed"}>
                 {booking.status || "Pending"}
               </StatusText>
             </td>
 
-            <td>{booking.currentBooking || booking.status || "Pending"}</td>
-
-            <td>
-              R{Number(booking.totalCost || booking.dailyRate || 0).toLocaleString()}
+            <td data-label="Current Booking">
+              {booking.currentBooking || booking.status || "Pending"}
             </td>
 
-            <td>
+            <td data-label="Total">
+              R
+              {Number(
+                booking.totalCost || booking.dailyRate || 0
+              ).toLocaleString()}
+            </td>
+
+            <td data-label="Actions">
               <ActionMenuWrapper>
                 <ActionButton
                   type="button"
