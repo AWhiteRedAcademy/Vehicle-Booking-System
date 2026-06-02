@@ -227,19 +227,33 @@ export const DetailsOverlay = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.46);
+  backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
   z-index: 1000;
   padding: 24px;
+  overflow-y: auto;
+
+  @media (max-width: 760px) {
+    place-items: start center;
+    padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  }
 `;
 
 export const DetailsModal = styled.div`
   width: min(620px, 100%);
-  background: ${theme.colors.inputBackground};
+  max-height: 92vh;
+  overflow-y: auto;
+  background: ${theme.colors.cardBackground};
   border-radius: 22px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
-  overflow: hidden;
   border: 1px solid ${theme.colors.border};
+
+  @media (max-width: 760px) {
+    width: 100%;
+    max-height: none;
+    border-radius: 18px;
+  }
 `;
 
 export const DetailsHeader = styled.div`
@@ -350,6 +364,15 @@ export const DetailsActions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+
+  @media (max-width: 760px) {
+    padding: 0 20px 20px;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 export const DetailsSecondaryButton = styled.button`
@@ -387,19 +410,33 @@ export const BookingOverlay = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.46);
+  backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
   z-index: 1000;
   padding: 24px;
+  overflow-y: auto;
+
+  @media (max-width: 760px) {
+    place-items: start center;
+    padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  }
 `;
 
 export const BookingModal = styled.form`
   width: min(560px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
   background: ${theme.colors.cardBackground};
   border-radius: 22px;
-  overflow: hidden;
   border: 1px solid ${theme.colors.border};
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+
+  @media (max-width: 760px) {
+    width: 100%;
+    max-height: none;
+    border-radius: 18px;
+  }
 `;
 
 export const BookingHeader = styled.div`
@@ -448,7 +485,7 @@ export const BookingDateGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     grid-template-columns: 1fr;
   }
 `;

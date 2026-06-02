@@ -240,8 +240,6 @@ function CompanyDashboard() {
     setShowTableFilters((currentValue) => !currentValue);
   }
 
-
-
   function handlePreviousPage() {
     setCurrentPage((page) => Math.max(1, page - 1));
   }
@@ -518,7 +516,6 @@ function CompanyDashboard() {
             bookings={paginatedBookings}
             onViewVehicle={handleViewVehicle}
             onBookVehicle={handleBookVehicle}
-
           />
         </BookingTable>
 
@@ -557,8 +554,8 @@ function CompanyDashboard() {
       </DashboardPanel>
 
       {selectedVehicle && (
-        <DetailsOverlay>
-          <DetailsModal>
+        <DetailsOverlay onClick={() => setSelectedVehicle(null)}>
+          <DetailsModal onClick={(event) => event.stopPropagation()}>
             <DetailsHeader>
               <div>
                 <DetailsTitle>
@@ -674,8 +671,11 @@ function CompanyDashboard() {
       )}
 
       {vehicleToBook && (
-        <BookingOverlay>
-          <BookingModal onSubmit={handleSubmitBooking}>
+        <BookingOverlay onClick={() => setVehicleToBook(null)}>
+          <BookingModal
+            onClick={(event) => event.stopPropagation()}
+            onSubmit={handleSubmitBooking}
+          >
             <BookingHeader>
               <div>
                 <BookingTitle>

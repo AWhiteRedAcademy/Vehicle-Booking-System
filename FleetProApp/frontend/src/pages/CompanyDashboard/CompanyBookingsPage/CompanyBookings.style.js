@@ -332,20 +332,34 @@ export const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.46);
+  backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
   z-index: 1000;
   padding: 24px;
+  overflow-y: auto;
+
+  @media (max-width: 760px) {
+    place-items: start center;
+    padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  }
 `;
 
 
 export const ModalCard = styled.div`
   width: min(620px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
   background: ${theme.colors.cardBackground};
   border-radius: 22px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
   border: 1px solid ${theme.colors.border};
-  overflow: hidden;
+
+  @media (max-width: 760px) {
+    width: 100%;
+    max-height: none;
+    border-radius: 18px;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -355,19 +369,36 @@ export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 18px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+    align-items: flex-start;
+  }
 `;
+
+
 
 export const ModalTitle = styled.h2`
   margin: 0;
   font-size: 26px;
   font-weight: 900;
-`;
 
+  @media (max-width: 760px) {
+    font-size: 22px;
+    line-height: 1.15;
+  }
+`;
 export const ModalSubtitle = styled.p`
   margin: 8px 0 0;
   color: #dbeafe;
   font-weight: 700;
+  line-height: 1.4;
+
+  @media (max-width: 760px) {
+    font-size: 14px;
+  }
 `;
+
 
 export const ModalCloseButton = styled.button`
   width: 38px;
@@ -387,6 +418,10 @@ export const ModalCloseButton = styled.button`
 
 export const ModalBody = styled.div`
   padding: 26px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+  }
 `;
 
 export const DetailGrid = styled.div`
@@ -394,8 +429,9 @@ export const DetailGrid = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 `;
 
@@ -428,6 +464,15 @@ export const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+
+  @media (max-width: 760px) {
+    padding: 0 20px 20px;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 export const ModalSecondaryButton = styled.button`
@@ -484,6 +529,12 @@ export const ModalInput = styled.input`
   font-weight: 700;
   background: ${theme.colors.inputBackground};
   color: ${theme.colors.textDark};
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary};
+    box-shadow: 0 0 0 3px rgba(11, 110, 220, 0.14);
+  }
 `;
 
 export const PanelMessage = styled.div`

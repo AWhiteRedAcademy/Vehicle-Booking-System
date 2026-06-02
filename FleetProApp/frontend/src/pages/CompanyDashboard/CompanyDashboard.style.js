@@ -310,17 +310,29 @@ export const DetailsOverlay = styled.div`
   place-items: center;
   z-index: 1000;
   padding: 24px;
+  overflow-y: auto;
+
+  @media (max-width: 760px) {
+    place-items: start center;
+    padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  }
 `;
 
 export const DetailsModal = styled.div`
   width: min(620px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
   background: ${theme.colors.cardBackground};
   border-radius: 22px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
-  overflow: hidden;
   border: 1px solid ${theme.colors.border};
-`;
 
+  @media (max-width: 760px) {
+    width: 100%;
+    max-height: none;
+    border-radius: 18px;
+  }
+`;
 export const DetailsHeader = styled.div`
   padding: 26px;
   background: linear-gradient(135deg, #061827, #12345a);
@@ -328,12 +340,22 @@ export const DetailsHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 18px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+    align-items: flex-start;
+  }
 `;
 
 export const DetailsTitle = styled.h2`
   margin: 0;
   font-size: 28px;
   font-weight: 900;
+
+  @media (max-width: 760px) {
+    font-size: 22px;
+    line-height: 1.15;
+  }
 `;
 
 export const DetailsSubtitle = styled.p`
@@ -360,6 +382,10 @@ export const DetailsCloseButton = styled.button`
 
 export const DetailsBody = styled.div`
   padding: 26px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+  }
 `;
 
 export const DetailsStatusRow = styled.div`
@@ -402,8 +428,9 @@ export const DetailsGrid = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 `;
 
@@ -436,8 +463,13 @@ export const DetailsActions = styled.div`
   justify-content: flex-end;
   gap: 12px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
+    padding: 0 20px 20px;
     flex-direction: column;
+
+    button {
+      width: 100%;
+    }
   }
 `;
 
@@ -481,15 +513,28 @@ export const BookingOverlay = styled.div`
   place-items: center;
   z-index: 1000;
   padding: 24px;
+  overflow-y: auto;
+
+  @media (max-width: 760px) {
+    place-items: start center;
+    padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  }
 `;
 
 export const BookingModal = styled.form`
   width: min(560px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
   background: ${theme.colors.cardBackground};
   border-radius: 22px;
-  overflow: hidden;
   border: 1px solid ${theme.colors.border};
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+
+  @media (max-width: 760px) {
+    width: 100%;
+    max-height: none;
+    border-radius: 18px;
+  }
 `;
 
 export const BookingHeader = styled.div`
@@ -499,12 +544,22 @@ export const BookingHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 18px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+    align-items: flex-start;
+  }
 `;
 
 export const BookingTitle = styled.h2`
   margin: 0;
   font-size: 26px;
   font-weight: 900;
+
+  @media (max-width: 760px) {
+    font-size: 22px;
+    line-height: 1.15;
+  }
 `;
 
 export const BookingSubtitle = styled.p`
@@ -531,6 +586,10 @@ export const BookingCloseButton = styled.button`
 
 export const BookingBody = styled.div`
   padding: 26px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+  }
 `;
 
 export const BookingDateGrid = styled.div`
@@ -538,8 +597,9 @@ export const BookingDateGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 `;
 
@@ -614,11 +674,15 @@ export const BookingActions = styled.div`
   justify-content: flex-end;
   gap: 12px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
+    padding: 0 20px 20px;
     flex-direction: column;
+
+    button {
+      width: 100%;
+    }
   }
 `;
-
 export const BookingCancelButton = styled.button`
   border: 1px solid ${theme.colors.border};
   background: ${theme.colors.cardBackground};
