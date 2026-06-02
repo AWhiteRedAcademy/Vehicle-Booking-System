@@ -20,8 +20,11 @@ export default function CompanyBookingDetailsList({
   bookings = [],
   onViewVehicle,
   onBookVehicle,
-  onDeleteVehicle,
+
 }) {
+
+  console.log("Company dashboard list file is rendering");
+
   const [openMenuId, setOpenMenuId] = useState(null);
 
   if (bookings.length === 0) {
@@ -40,13 +43,17 @@ export default function CompanyBookingDetailsList({
     setOpenMenuId((currentId) => (currentId === rowId ? null : rowId));
   }
 
-function handleAction(action, vehicle) {
+  function handleAction(action, vehicle) {
   setOpenMenuId(null);
 
   if (typeof action === "function") {
     action(vehicle);
+  } else {
+    console.warn("No action function was passed.");
   }
 }
+
+
 
   return (
     <tbody>
@@ -125,13 +132,6 @@ function handleAction(action, vehicle) {
                       Book Vehicle
                     </ActionMenuItem>
 
-                    <ActionMenuItem
-                      type="button"
-                      $danger
-                      onClick={() => handleAction(onDeleteVehicle, booking)}
-                    >
-                      Delete Vehicle
-                    </ActionMenuItem>
                   </ActionMenu>
                 )}
               </ActionMenuWrapper>

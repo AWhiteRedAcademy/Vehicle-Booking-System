@@ -486,3 +486,26 @@ export const ModalInput = styled.input`
   color: ${theme.colors.textDark};
 `;
 
+export const PanelMessage = styled.div`
+  padding: 24px 26px;
+  color: ${theme.colors.textMuted};
+  font-weight: 700;
+`;
+
+export const PanelError = styled.div`
+  padding: 0 26px 24px;
+  color: #dc2626;
+  font-weight: 800;
+`;
+
+export const ModalErrorText = styled.p`
+  margin: 0 0 16px;
+  color: #dc2626;
+  font-weight: 800;
+`;
+
+export const ModalWarningText = styled.p`
+  margin-top: 0;
+  color: ${theme.colors.textDark};
+  font-weight: 800;
+`;

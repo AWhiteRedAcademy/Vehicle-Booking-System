@@ -52,6 +52,10 @@ import {
   ModalPrimaryButton,
   ModalDangerButton,
   ModalInput,
+  PanelMessage,
+  PanelError,
+  ModalErrorText,
+  ModalWarningText,
 } from "./CompanyBookings.style.js";
 
 import CompanyBookingList from "./CompanyBookingListDetails.jsx";
@@ -175,6 +179,23 @@ function paginate(items, currentPage) {
 }
 
 function CompanyBookings() {
+  function formatDate(value) {
+    if (!value) {
+      return "N/A";
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return date.toLocaleDateString("en-ZA", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    });
+  }
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -207,12 +228,14 @@ function CompanyBookings() {
   const [currentHistoryPage, setCurrentHistoryPage] = useState(1);
 
   //mobile
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 760);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth <= 760);
     }
+
+    handleResize();
 
     window.addEventListener("resize", handleResize);
 
@@ -315,21 +338,6 @@ function CompanyBookings() {
 
   function handleToggleFilters() {
     setShowFilters((currentValue) => !currentValue);
-  }
-
-  function handleViewBooking(booking) {
-    const details = [
-      `Booking #${booking.bookingId}`,
-      `Vehicle: ${booking.make} ${booking.model}`,
-      `License: ${booking.licenseNumber || "N/A"}`,
-      `Owner: ${booking.ownerName || "N/A"}`,
-      `Status: ${booking.status}`,
-      `Start Date: ${booking.startDate || "N/A"}`,
-      `End Date: ${booking.endDate || "N/A"}`,
-      `Total: R${Number(booking.totalCost || 0).toLocaleString()}`,
-    ];
-
-    alert(details.join("\n"));
   }
 
   function getTodayDateString() {
@@ -749,11 +757,11 @@ function CompanyBookings() {
             </PanelActionButton>
           </PanelHeader>
 
-          <div
-            style={{ padding: "24px 26px", color: "#64748b", fontWeight: 700 }}
-          >
+          <PanelMessage>
             Older booking records are not loaded until you press the button.
-          </div>
+          </PanelMessage>
+
+          {historyError && <PanelError>{historyError}</PanelError>}
 
           {historyError && (
             <div
@@ -858,11 +866,7 @@ function CompanyBookings() {
             </ModalHeader>
 
             <ModalBody>
-              {modalError && (
-                <p style={{ color: "#dc2626", fontWeight: 800 }}>
-                  {modalError}
-                </p>
-              )}
+              {modalError && <ModalErrorText>{modalError}</ModalErrorText>}
 
               <DetailGrid>
                 <DetailItem>
@@ -884,13 +888,15 @@ function CompanyBookings() {
                 <DetailItem>
                   <DetailLabel>Start Date</DetailLabel>
                   <DetailValue>
-                    {selectedBooking.startDate || "N/A"}
+                    {formatDate(selectedBooking.startDate)}
                   </DetailValue>
                 </DetailItem>
 
                 <DetailItem>
                   <DetailLabel>End Date</DetailLabel>
-                  <DetailValue>{selectedBooking.endDate || "N/A"}</DetailValue>
+                  <DetailValue>
+                    {formatDate(selectedBooking.endDate)}
+                  </DetailValue>
                 </DetailItem>
 
                 <DetailItem>
@@ -1052,11 +1058,10 @@ function CompanyBookings() {
             </ModalHeader>
 
             <ModalBody>
-              <p style={{ marginTop: 0, color: "#334155", fontWeight: 800 }}>
+              <ModalWarningText>
                 Are you sure you want to delete this booking? This cannot be
                 undone.
-              </p>
-
+              </ModalWarningText>
               {modalError && (
                 <p style={{ color: "#dc2626", fontWeight: 800 }}>
                   {modalError}

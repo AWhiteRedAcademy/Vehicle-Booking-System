@@ -72,7 +72,7 @@ import {
   BookingActions,
   BookingCancelButton,
   BookingSubmitButton,
-} from "./CompanyDashboard.style";
+} from "./CompanyDashboard.style.js";
 
 import CompanyBookingList from "./CompanyBookingDetailsList.jsx";
 
@@ -236,17 +236,11 @@ function CompanyDashboard() {
     }, 0);
   }
 
-  // function handleToggleFilters() {
-  //   setShowTableFilters((currentValue) => !currentValue);
-  // }
+  function handleToggleFilters() {
+    setShowTableFilters((currentValue) => !currentValue);
+  }
 
-  // function handleViewVehicle(vehicle) {
-  //   console.log("View vehicle:", vehicle);
-  // }
 
-  // function handleBookVehicle(vehicle) {
-  //   console.log("Book vehicle:", vehicle);
-  // }
 
   function handlePreviousPage() {
     setCurrentPage((page) => Math.max(1, page - 1));
@@ -283,6 +277,7 @@ function CompanyDashboard() {
   }
 
   function handleViewVehicle(vehicle) {
+    console.log("Parent received vehicle:", vehicle);
     setSelectedVehicle(vehicle);
   }
 
@@ -523,7 +518,7 @@ function CompanyDashboard() {
             bookings={paginatedBookings}
             onViewVehicle={handleViewVehicle}
             onBookVehicle={handleBookVehicle}
-            onDeleteVehicle={handleDeleteVehicle}
+
           />
         </BookingTable>
 
