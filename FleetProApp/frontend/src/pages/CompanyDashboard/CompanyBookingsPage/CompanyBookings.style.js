@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { theme } from "../../../styles/theme";
 
 export const DashboardPanel = styled.section`
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.large};
   box-shadow: ${theme.shadows.card};
   overflow: hidden;
@@ -15,14 +15,15 @@ export const AddVehicleCard = styled.div`
   align-items: center;
   justify-content: center;
   padding: 24px;
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed ${theme.colors.border};
   border-radius: 12px;
   cursor: pointer;
-  background: #f8fafc;
-  
+  background: ${theme.colors.inputBackground};
+  color: ${theme.colors.textDark};
+
   &:hover {
-    background: #f1f5f9;
-    border-color: #94a3b8;
+    background: ${theme.colors.cardBackground};
+    border-color: ${theme.colors.primary};
   }
 `;
 
@@ -33,15 +34,15 @@ export const PlusCircle = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #e2e8f0;
-  color: #64748b;
+  background: ${theme.colors.cardBackground};
+  color: ${theme.colors.primary};
   margin-bottom: 8px;
 `;
 
 
 export const PanelHeader = styled.div`
   padding: 24px 26px;
-  border-bottom: 1px solid #e3e8f0;
+  border-bottom: 1px solid ${theme.colors.border};
 
   display: flex;
   align-items: center;
@@ -57,16 +58,17 @@ export const PanelTitle = styled.h2`
 `;
 
 export const PanelActionButton = styled.button`
-  border: none;
+  border: 1px solid ${theme.colors.border};
   border-radius: ${theme.radius.medium};
-  background: #eef5ff;
+  background: ${theme.colors.inputBackground};
   color: ${theme.colors.textDark};
   padding: 10px 16px;
   font-weight: 800;
   cursor: pointer;
 
   &:hover {
-    background: #dbeafe;
+    border-color: ${theme.colors.primary};
+    color: ${theme.colors.primary};
   }
 `;
 
@@ -75,8 +77,8 @@ export const BookingTable = styled.table`
   border-collapse: collapse;
 
   th {
-    background: #eef4ff;
-    color: #334155;
+    background: ${theme.colors.inputBackground};
+    color: ${theme.colors.textMuted};
     text-align: left;
     font-size: 14px;
     font-weight: 900;
@@ -85,17 +87,77 @@ export const BookingTable = styled.table`
 
   td {
     padding: 18px 24px;
-    border-bottom: 1px solid #edf2f7;
-    color: #334155;
+    border-bottom: 1px solid ${theme.colors.border};
+    color: ${theme.colors.textDark};
     font-size: 14px;
     vertical-align: middle;
   }
 
   tbody tr:hover {
-    background: #f8fbff;
+    background: ${theme.colors.inputBackground};
+  }
+
+  @media (max-width: 760px) {
+    display: block;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: grid;
+      gap: 14px;
+      padding: 14px;
+    }
+
+    tr {
+      display: block;
+      background: ${theme.colors.cardBackground};
+      border: 1px solid ${theme.colors.border};
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: ${theme.shadows.card};
+    }
+
+    td {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid ${theme.colors.border};
+      padding: 13px 0;
+      white-space: normal;
+      text-align: right;
+    }
+
+    td::before {
+      content: attr(data-label);
+      color: ${theme.colors.textMuted};
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      text-align: left;
+      flex-shrink: 0;
+    }
+
+    td:first-child {
+      display: block;
+      text-align: left;
+      padding-top: 0;
+    }
+
+    td:first-child::before {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    td:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
   }
 `;
-
 export const BookingInfo = styled.div`
   display: flex;
   align-items: center;
@@ -106,7 +168,7 @@ export const VehicleImage = styled.div`
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: #eaf2ff;
+  background: ${theme.colors.inputBackground};
   color: ${theme.colors.primary};
   display: grid;
   place-items: center;
@@ -125,12 +187,14 @@ export const VehicleMeta = styled.p`
   font-size: 13px;
 `;
 
+
 export const Badge = styled.span`
   display: inline-flex;
   align-items: center;
   border-radius: 7px;
-  background: #e8eef8;
-  color: #334155;
+  background: ${theme.colors.inputBackground};
+  color: ${theme.colors.textDark};
+  border: 1px solid ${theme.colors.border};
   padding: 5px 8px;
   font-size: 11px;
   font-weight: 900;
@@ -151,7 +215,7 @@ export const StatusText = styled.span`
 export const ActionButton = styled.button`
   border: none;
   background: transparent;
-  color: #334155;
+  color: ${theme.colors.textMuted};
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -159,14 +223,15 @@ export const ActionButton = styled.button`
   padding: 8px;
 
   &:hover {
-    background: #eef5ff;
+    background: ${theme.colors.inputBackground};
     color: ${theme.colors.primary};
   }
 `;
 
 export const TableFooter = styled.div`
   padding: 18px 24px;
-  background: #f8fbff;
+  background: ${theme.colors.inputBackground};
+  border-top: 1px solid ${theme.colors.border};
 
   display: flex;
   align-items: center;
@@ -177,6 +242,7 @@ export const FooterText = styled.p`
   margin: 0;
   color: ${theme.colors.textMuted};
   font-size: 14px;
+  font-weight: 700;
 `;
 
 export const PaginationButtons = styled.div`
@@ -188,18 +254,39 @@ export const PaginationButtons = styled.div`
 export const PaginationButton = styled.button`
   width: 34px;
   height: 34px;
-  border: none;
+  border: 1px solid ${theme.colors.border};
   border-radius: 10px;
-  background: white;
+  background: ${theme.colors.cardBackground};
   color: ${theme.colors.textDark};
   font-size: 22px;
   cursor: pointer;
 
-  &:hover {
-    background: #eef5ff;
+  &:hover:not(:disabled) {
+    background: ${theme.colors.inputBackground};
     color: ${theme.colors.primary};
   }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
 `;
+
+// export const PaginationButton = styled.button`
+//   width: 34px;
+//   height: 34px;
+//   border: none;
+//   border-radius: 10px;
+//   background: white;
+//   color: ${theme.colors.textDark};
+//   font-size: 22px;
+//   cursor: pointer;
+
+//   &:hover {
+//     background: #eef5ff;
+//     color: ${theme.colors.primary};
+//   }
+// `;
 
 export const ActionMenuWrapper = styled.div`
   position: relative;
@@ -209,20 +296,20 @@ export const ActionMenuWrapper = styled.div`
 export const ActionMenu = styled.div`
   position: absolute;
   right: 0;
-  top: 38px;
+  top: 20px;
   width: 170px;
-  background: white;
-  border: 1px solid #e3e8f0;
+  background: ${theme.colors.cardBackground};
+  border: 1px solid ${theme.colors.border};
   border-radius: 14px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
   padding: 8px;
-  z-index: 20;
+  z-index: 30;
 `;
 
 export const ActionMenuItem = styled.button`
   width: 100%;
   border: none;
-  background: white;
+  background: ${theme.colors.cardBackground};
   color: ${({ $danger }) => ($danger ? "#dc2626" : theme.colors.textDark)};
   text-align: left;
   padding: 10px 12px;
@@ -245,19 +332,34 @@ export const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.46);
+  backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
   z-index: 1000;
   padding: 24px;
+  overflow-y: auto;
+
+  @media (max-width: 760px) {
+    place-items: start center;
+    padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+  }
 `;
+
 
 export const ModalCard = styled.div`
   width: min(620px, 100%);
-  background: white;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: ${theme.colors.cardBackground};
   border-radius: 22px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
-  border: 1px solid #e3e8f0;
-  overflow: hidden;
+  border: 1px solid ${theme.colors.border};
+
+  @media (max-width: 760px) {
+    width: 100%;
+    max-height: none;
+    border-radius: 18px;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -267,19 +369,36 @@ export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 18px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+    align-items: flex-start;
+  }
 `;
+
+
 
 export const ModalTitle = styled.h2`
   margin: 0;
   font-size: 26px;
   font-weight: 900;
-`;
 
+  @media (max-width: 760px) {
+    font-size: 22px;
+    line-height: 1.15;
+  }
+`;
 export const ModalSubtitle = styled.p`
   margin: 8px 0 0;
   color: #dbeafe;
   font-weight: 700;
+  line-height: 1.4;
+
+  @media (max-width: 760px) {
+    font-size: 14px;
+  }
 `;
+
 
 export const ModalCloseButton = styled.button`
   width: 38px;
@@ -299,6 +418,10 @@ export const ModalCloseButton = styled.button`
 
 export const ModalBody = styled.div`
   padding: 26px;
+
+  @media (max-width: 760px) {
+    padding: 20px;
+  }
 `;
 
 export const DetailGrid = styled.div`
@@ -306,21 +429,23 @@ export const DetailGrid = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 `;
 
 export const DetailItem = styled.div`
-  border: 1px solid #e3e8f0;
+  border: 1px solid ${theme.colors.border};
   border-radius: 16px;
   padding: 16px;
-  background: #f8fbff;
+  background: ${theme.colors.inputBackground};
 `;
+
 
 export const DetailLabel = styled.p`
   margin: 0 0 6px;
-  color: #64748b;
+  color: ${theme.colors.textMuted};
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
@@ -339,12 +464,21 @@ export const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+
+  @media (max-width: 760px) {
+    padding: 0 20px 20px;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 export const ModalSecondaryButton = styled.button`
-  border: 1px solid #cbd5e1;
-  background: white;
-  color: #334155;
+  border: 1px solid ${theme.colors.border};
+  background: ${theme.colors.cardBackground};
+  color: ${theme.colors.textDark};
   border-radius: 12px;
   padding: 11px 18px;
   font-weight: 900;
@@ -388,9 +522,41 @@ export const ModalDangerButton = styled.button`
 export const ModalInput = styled.input`
   width: 100%;
   height: 46px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid ${theme.colors.border};
   border-radius: 12px;
   padding: 0 12px;
   margin-top: 6px;
   font-weight: 700;
+  background: ${theme.colors.inputBackground};
+  color: ${theme.colors.textDark};
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary};
+    box-shadow: 0 0 0 3px rgba(11, 110, 220, 0.14);
+  }
+`;
+
+export const PanelMessage = styled.div`
+  padding: 24px 26px;
+  color: ${theme.colors.textMuted};
+  font-weight: 700;
+`;
+
+export const PanelError = styled.div`
+  padding: 0 26px 24px;
+  color: #dc2626;
+  font-weight: 800;
+`;
+
+export const ModalErrorText = styled.p`
+  margin: 0 0 16px;
+  color: #dc2626;
+  font-weight: 800;
+`;
+
+export const ModalWarningText = styled.p`
+  margin-top: 0;
+  color: ${theme.colors.textDark};
+  font-weight: 800;
 `;

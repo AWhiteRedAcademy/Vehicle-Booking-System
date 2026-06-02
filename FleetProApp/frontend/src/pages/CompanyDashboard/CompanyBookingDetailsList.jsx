@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
@@ -9,9 +11,22 @@ import {
   Badge,
   StatusText,
   ActionButton,
+  ActionMenuWrapper,
+  ActionMenu,
+  ActionMenuItem,
 } from "./CompanyDashboard.style.js";
 
-export default function CompanyBookingList({ bookings = [] }) {
+export default function CompanyBookingDetailsList({
+  bookings = [],
+  onViewVehicle,
+  onBookVehicle,
+
+}) {
+
+  console.log("Company dashboard list file is rendering");
+
+  const [openMenuId, setOpenMenuId] = useState(null);
+
   if (bookings.length === 0) {
     return (
       <tbody>
@@ -24,49 +39,106 @@ export default function CompanyBookingList({ bookings = [] }) {
     );
   }
 
+  function handleToggleMenu(rowId) {
+    setOpenMenuId((currentId) => (currentId === rowId ? null : rowId));
+  }
+
+  function handleAction(action, vehicle) {
+  setOpenMenuId(null);
+
+  if (typeof action === "function") {
+    action(vehicle);
+  } else {
+    console.warn("No action function was passed.");
+  }
+}
+
+
+
   return (
     <tbody>
-      {bookings.map((booking) => (
-        <tr key={booking.vehicleId || booking.bookingId}>
-          <td>
-            <BookingInfo>
-              <VehicleImage>
-                <DirectionsCarIcon fontSize="small" />
-              </VehicleImage>
+      {bookings.map((booking) => {
+        const rowId = booking.vehicleId || booking.bookingId;
+        const isAvailable = booking.isAvailable === "Available";
 
-              <div>
-                <VehicleName>
-                  {booking.make} {booking.model}
-                </VehicleName>
-                <VehicleMeta>
-                  {booking.licenseNumber || "No license"}{" "}
-                  {booking.modelYear > 0 ? `• ${booking.modelYear}` : ""}
-                </VehicleMeta>
-              </div>
-            </BookingInfo>
-          </td>
+        return (
+          <tr key={rowId}>
+            <td data-label="Vehicle Details">
+              <BookingInfo>
+                <VehicleImage>
+                  <DirectionsCarIcon fontSize="small" />
+                </VehicleImage>
 
-          <td>
-            <Badge>{booking.category || "Uncategorised"}</Badge>
-          </td>
+                <div>
+                  <VehicleName>
+                    {booking.make} {booking.model}
+                  </VehicleName>
 
-          <td>
-            <StatusText $available={booking.isAvailable === "Available"}>
-              {booking.isAvailable || "Available"}
-            </StatusText>
-          </td>
+                  <VehicleMeta>
+                    {booking.licenseNumber || "No license"}{" "}
+                    {booking.modelYear > 0 ? `• ${booking.modelYear}` : ""}
+                  </VehicleMeta>
+                </div>
+              </BookingInfo>
+            </td>
 
-          <td>{booking.currentBooking || "No booking"}</td>
+            <td data-label="Type">
+              <Badge>{booking.category || "Uncategorised"}</Badge>
+            </td>
 
-          <td>R{Number(booking.dailyRate || 0).toLocaleString()}</td>
+            <td data-label="Status">
+              <StatusText $available={isAvailable}>
+                {booking.isAvailable || "Available"}
+              </StatusText>
+            </td>
 
-          <td>
-            <ActionButton type="button">
-              <MoreVertIcon fontSize="small" />
-            </ActionButton>
-          </td>
-        </tr>
-      ))}
+            <td data-label="Current Booking">
+              {booking.currentBooking || "No booking"}
+            </td>
+
+            <td data-label="Daily Rate">
+              R{Number(booking.dailyRate || 0).toLocaleString()}
+            </td>
+
+            <td data-label="Actions">
+              <ActionMenuWrapper>
+                <ActionButton
+                  type="button"
+                  onClick={() => handleToggleMenu(rowId)}
+                  title="Vehicle actions"
+                >
+                  <MoreVertIcon fontSize="small" />
+                </ActionButton>
+
+                {openMenuId === rowId && (
+                  <ActionMenu>
+                    <ActionMenuItem
+                      type="button"
+                      onClick={() => handleAction(onViewVehicle, booking)}
+                    >
+                      View Details
+                    </ActionMenuItem>
+
+                    <ActionMenuItem
+                      type="button"
+                      disabled={!isAvailable}
+                      onClick={() => handleAction(onBookVehicle, booking)}
+                      title={
+                        isAvailable
+                          ? "Book this vehicle"
+                          : "Only available vehicles can be booked"
+                      }
+                    >
+                      Book Vehicle
+                    </ActionMenuItem>
+
+                  </ActionMenu>
+                )}
+              </ActionMenuWrapper>
+            </td>
+          </tr>
+        );
+      })}
     </tbody>
   );
 }

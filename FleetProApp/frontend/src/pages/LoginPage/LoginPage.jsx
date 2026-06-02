@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import GroupsIcon from "@mui/icons-material/Groups";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-import RoleCard from "../../components/cards/RoleCard";
 import TextInput from "../../components/inputs/TextInput";
 import PrimaryButton from "../../components/buttons/PrimaryButton";
 
@@ -21,7 +21,6 @@ import {
   Header,
   Title,
   Subtitle,
-  RoleGrid,
   LoginCard,
   ForgotPassword,
   Footer,
@@ -30,20 +29,21 @@ import {
   LeftGlow,
   BottomGlow,
   Divider,
+  ErrorText,
 } from "./LoginPage.style";
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
+  function onSubmitHandler(event) {
+    event.preventDefault();
+    setError("");
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    setError(''); // Clear previous execution warnings
-    
     handleSignInSubmit(email, password, setError);
-  };
+  }
 
   return (
     <Page>
@@ -61,33 +61,41 @@ function LoginPage() {
 
         <Header>
           <Title>Welcome back</Title>
-          <Subtitle>
-            Access your executive dashboard
-          </Subtitle>
+          <Subtitle>Access your executive dashboard</Subtitle>
         </Header>
 
         <LoginCard onSubmit={onSubmitHandler}>
           <TextInput
             label="Email Address"
+            name="email"
             type="email"
             placeholder="name@company.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
+            leftIcon={<EmailIcon fontSize="small" />}
           />
 
           <TextInput
             label="Password"
-            type="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
             placeholder="••••••••"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
+            leftIcon={<LockIcon fontSize="small" />}
+            rightIcon={
+              showPassword ? (
+                <VisibilityOffIcon fontSize="small" />
+              ) : (
+                <VisibilityIcon fontSize="small" />
+              )
+            }
+            onRightIconClick={() => setShowPassword((currentValue) => !currentValue)}
           />
 
-          {error && <p style={{ color: "#ef4444", fontSize: "14px", margin: "10px 0" }}>{error}</p>}
+          {error && <ErrorText>{error}</ErrorText>}
 
-          <PrimaryButton type="submit">
-          Sign In
-          </PrimaryButton>
+          <PrimaryButton type="submit">Sign In</PrimaryButton>
 
           <ForgotPassword href="/register">No Account? Register Here</ForgotPassword>
           <ForgotPassword href="#">Forgot password?</ForgotPassword>

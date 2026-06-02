@@ -67,7 +67,7 @@ async function handleDeleteVehicle(vehicle) {
   }
 
   const confirmed = window.confirm(
-    `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`
+    `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
   );
 
   if (!confirmed) {
@@ -80,8 +80,8 @@ async function handleDeleteVehicle(vehicle) {
     setVehicles((currentVehicles) =>
       currentVehicles.filter(
         (currentVehicle) =>
-          (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId
-      )
+          (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId,
+      ),
     );
   } catch (err) {
     setError(err.message || "Unable to delete vehicle.");
@@ -98,6 +98,22 @@ function OwnerVehicles() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 760);
+    }
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -134,7 +150,8 @@ function OwnerVehicles() {
     return vehicles.filter((vehicle) => {
       const searchValue = searchTerm.toLowerCase().trim();
 
-      const vehicleId = vehicle.vehicleId?.toString() || vehicle.id?.toString() || "";
+      const vehicleId =
+        vehicle.vehicleId?.toString() || vehicle.id?.toString() || "";
       const make = vehicle.make?.toLowerCase() || "";
       const model = vehicle.model?.toLowerCase() || "";
       const category = vehicle.category?.toLowerCase() || "";
@@ -153,7 +170,8 @@ function OwnerVehicles() {
         modelYear.includes(searchValue);
 
       const matchesAvailability =
-        availabilityFilter === "all" || vehicle.isAvailable === availabilityFilter;
+        availabilityFilter === "all" ||
+        vehicle.isAvailable === availabilityFilter;
 
       const matchesCategory =
         categoryFilter === "all" || vehicle.category === categoryFilter;
@@ -163,15 +181,15 @@ function OwnerVehicles() {
   }, [vehicles, searchTerm, availabilityFilter, categoryFilter]);
 
   const availableCount = vehicles.filter(
-    (vehicle) => vehicle.isAvailable === "Available"
+    (vehicle) => vehicle.isAvailable === "Available",
   ).length;
 
   const inUseCount = vehicles.filter(
-    (vehicle) => vehicle.isAvailable === "In Use"
+    (vehicle) => vehicle.isAvailable === "In Use",
   ).length;
 
   const maintenanceCount = vehicles.filter(
-    (vehicle) => vehicle.isAvailable === "Maintenance"
+    (vehicle) => vehicle.isAvailable === "Maintenance",
   ).length;
 
   function handleEditVehicle(vehicle) {
@@ -181,7 +199,7 @@ function OwnerVehicles() {
 
   async function handleDeleteVehicle(vehicle) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
     );
 
     if (!confirmed) {
@@ -195,8 +213,8 @@ function OwnerVehicles() {
       setVehicles((currentVehicles) =>
         currentVehicles.filter(
           (currentVehicle) =>
-            (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId
-        )
+            (currentVehicle.vehicleId || currentVehicle.id) !== vehicleId,
+        ),
       );
     } catch (err) {
       setError(err.message || "Unable to delete vehicle.");
@@ -239,11 +257,15 @@ function OwnerVehicles() {
           </PageSummary>
 
           <SectionText>
-            Manage your vehicles, update availability, edit pricing, or remove vehicles from your fleet.
+            Manage your vehicles, update availability, edit pricing, or remove
+            vehicles from your fleet.
           </SectionText>
         </div>
 
-        <AddButton type="button" onClick={() => navigate("/owner/vehicles/add")}>
+        <AddButton
+          type="button"
+          onClick={() => navigate("/owner/vehicles/add")}
+        >
           <AddIcon fontSize="small" />
           Add New Vehicle
         </AddButton>
@@ -253,7 +275,11 @@ function OwnerVehicles() {
         <SearchInput
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search by make, model, license, VIN, year, category, or vehicle ID..."
+          placeholder={
+            isMobile
+              ? "Search my vehicles"
+              : "Search by make, model, license, VIN, year, category, or vehicle ID..."
+          }
         />
 
         <FilterSelect

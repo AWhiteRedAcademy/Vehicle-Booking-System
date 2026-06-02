@@ -120,6 +120,22 @@ function CompanyVehicles() {
 
   const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 760);
+    }
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     let ignore = false;
 
@@ -168,7 +184,8 @@ function CompanyVehicles() {
     return liveVehicles.filter((vehicle) => {
       const searchValue = searchTerm.toLowerCase().trim();
 
-      const vehicleName = `${vehicle.make || ""} ${vehicle.model || ""}`.toLowerCase();
+      const vehicleName =
+        `${vehicle.make || ""} ${vehicle.model || ""}`.toLowerCase();
       const licenseNumber = vehicle.licenseNumber?.toLowerCase() || "";
       const vinNumber = vehicle.vinNumber?.toLowerCase() || "";
       const category = vehicle.category?.toLowerCase() || "";
@@ -195,15 +212,15 @@ function CompanyVehicles() {
   const visibleVehicles = filteredVehicles.slice(0, visibleCount);
 
   const availableVehicles = liveVehicles.filter(
-    (vehicle) => vehicle.isAvailable === "Available"
+    (vehicle) => vehicle.isAvailable === "Available",
   ).length;
 
   const inUseVehicles = liveVehicles.filter(
-    (vehicle) => vehicle.isAvailable === "In Use"
+    (vehicle) => vehicle.isAvailable === "In Use",
   ).length;
 
   const maintenanceVehicles = liveVehicles.filter(
-    (vehicle) => vehicle.isAvailable === "Maintenance"
+    (vehicle) => vehicle.isAvailable === "Maintenance",
   ).length;
 
   const hasMoreVehicles = visibleCount < filteredVehicles.length;
@@ -216,9 +233,9 @@ function CompanyVehicles() {
     setSelectedVehicle(vehicle);
   }
 
-function handleCloseDetails() {
-  setSelectedVehicle(null);
-}
+  function handleCloseDetails() {
+    setSelectedVehicle(null);
+  }
 
   function handleBookVehicle(vehicle) {
     if (vehicle.isAvailable !== "Available") {
@@ -281,7 +298,10 @@ function handleCloseDetails() {
       return;
     }
 
-    const days = calculateBookingDays(bookingForm.startDate, bookingForm.endDate);
+    const days = calculateBookingDays(
+      bookingForm.startDate,
+      bookingForm.endDate,
+    );
 
     if (days <= 0) {
       setBookingError("End date must be after the start date.");
@@ -311,8 +331,8 @@ function handleCloseDetails() {
         currentVehicles.map((vehicle) =>
           (vehicle.vehicleId || vehicle.id) === vehicleId
             ? { ...vehicle, isAvailable: "In Use" }
-            : vehicle
-        )
+            : vehicle,
+        ),
       );
 
       setBookingVehicle(null);
@@ -368,7 +388,8 @@ function handleCloseDetails() {
           <SectionEyebrow>Dashboard &gt; Vehicles</SectionEyebrow>
           <SectionTitle>Fleet Inventory</SectionTitle>
           <SectionText>
-            Browse <strong>{liveVehicles.length} active vehicles</strong> across the logistics network.
+            Browse <strong>{liveVehicles.length} active vehicles</strong> across
+            the logistics network.
           </SectionText>
         </div>
       </HeaderRow>
@@ -408,11 +429,15 @@ function handleCloseDetails() {
       </StatsGrid>
 
       <Toolbar>
-        <SearchInput
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search vehicles by license, VIN, year, make, model, or category..."
-        />
+  <SearchInput
+  value={searchTerm}
+  onChange={(event) => setSearchTerm(event.target.value)}
+  placeholder={
+    isMobile
+      ? "Search make, model..."
+    : "Search vehicles by make, model, license, VIN, year, or category..."
+  }
+/>
 
         <FilterSelect
           value={statusFilter}
@@ -452,7 +477,8 @@ function handleCloseDetails() {
         )}
 
         <ShowingText>
-          Showing {Math.min(visibleCount, filteredVehicles.length)} of {filteredVehicles.length} vehicles
+          Showing {Math.min(visibleCount, filteredVehicles.length)} of{" "}
+          {filteredVehicles.length} vehicles
         </ShowingText>
       </LoadMoreWrapper>
       {selectedVehicle && (
@@ -481,7 +507,8 @@ function handleCloseDetails() {
                 </DetailsStatusBadge>
 
                 <strong>
-                  R{Number(selectedVehicle.dailyRate || 0).toLocaleString()} / day
+                  R{Number(selectedVehicle.dailyRate || 0).toLocaleString()} /
+                  day
                 </strong>
               </DetailsStatusRow>
 
@@ -502,17 +529,23 @@ function handleCloseDetails() {
 
                 <DetailsItem>
                   <DetailsLabel>Owner Name</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.ownerName || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.ownerName || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
 
                 <DetailsItem>
                   <DetailsLabel>Owner Email</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.ownerEmail || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.ownerEmail || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
 
                 <DetailsItem>
                   <DetailsLabel>Owner Phone</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.ownerPhone || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.ownerPhone || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
 
                 <DetailsItem>
@@ -527,28 +560,39 @@ function handleCloseDetails() {
 
                 <DetailsItem>
                   <DetailsLabel>Model Year</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.modelYear || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.modelYear || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
 
                 <DetailsItem>
                   <DetailsLabel>Category</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.category || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.category || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
 
                 <DetailsItem>
                   <DetailsLabel>License Number</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.licenseNumber || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.licenseNumber || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
 
                 <DetailsItem>
                   <DetailsLabel>VIN Number</DetailsLabel>
-                  <DetailsValue>{selectedVehicle.vinNumber || "N/A"}</DetailsValue>
+                  <DetailsValue>
+                    {selectedVehicle.vinNumber || "N/A"}
+                  </DetailsValue>
                 </DetailsItem>
               </DetailsGrid>
             </DetailsBody>
 
             <DetailsActions>
-              <DetailsSecondaryButton type="button" onClick={handleCloseDetails}>
+              <DetailsSecondaryButton
+                type="button"
+                onClick={handleCloseDetails}
+              >
                 Close
               </DetailsSecondaryButton>
 
@@ -578,7 +622,10 @@ function handleCloseDetails() {
                 </BookingSubtitle>
               </div>
 
-              <BookingCloseButton type="button" onClick={handleCloseBookingModal}>
+              <BookingCloseButton
+                type="button"
+                onClick={handleCloseBookingModal}
+              >
                 ×
               </BookingCloseButton>
             </BookingHeader>
@@ -614,13 +661,16 @@ function handleCloseDetails() {
                 <BookingTotal>
                   R
                   {(
-                    calculateBookingDays(bookingForm.startDate, bookingForm.endDate) *
-                    Number(bookingVehicle.dailyRate || 0)
+                    calculateBookingDays(
+                      bookingForm.startDate,
+                      bookingForm.endDate,
+                    ) * Number(bookingVehicle.dailyRate || 0)
                   ).toLocaleString()}
                 </BookingTotal>
 
                 <BookingRateText>
-                  R{Number(bookingVehicle.dailyRate || 0).toLocaleString()} per day
+                  R{Number(bookingVehicle.dailyRate || 0).toLocaleString()} per
+                  day
                 </BookingRateText>
               </BookingSummary>
 
@@ -628,7 +678,10 @@ function handleCloseDetails() {
             </BookingBody>
 
             <BookingActions>
-              <BookingCancelButton type="button" onClick={handleCloseBookingModal}>
+              <BookingCancelButton
+                type="button"
+                onClick={handleCloseBookingModal}
+              >
                 Cancel
               </BookingCancelButton>
 
