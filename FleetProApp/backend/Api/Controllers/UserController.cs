@@ -81,25 +81,37 @@ namespace Vehicle_Booking_System.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto userDto)
         {
-            var createUserDto = new CreateUserDto
+
+            try
             {
+                var createUserDto = new CreateUserDto
+                {
 
-                //   // User does NOT send role
-                // System decides the role
-                Name = userDto.Name,
-                Email = userDto.Email,
-                PhoneNumber = userDto.PhoneNumber,
-                Password = userDto.Password,
-                Role = UserRole.Guest.ToString()
-            };
+                    //   // User does NOT send role
+                    // System decides the role
+                    Name = userDto.Name,
+                    Email = userDto.Email,
+                    PhoneNumber = userDto.PhoneNumber,
+                    Password = userDto.Password,
+                    Role = UserRole.Guest.ToString()
+                };
 
-            var user = await _userService.CreateUserAsync(createUserDto);
+                var user = await _userService.CreateUserAsync(createUserDto);
 
-            return CreatedAtAction(
-                nameof(GetUserById),
-                new { id = user.UserId },
-                user
-            );
+                return CreatedAtAction(
+                    nameof(GetUserById),
+                    new { id = user.UserId },
+                    user
+                );
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "Registration failed. Please try again." });
+            }
         }
 
         [HttpPost("create")]

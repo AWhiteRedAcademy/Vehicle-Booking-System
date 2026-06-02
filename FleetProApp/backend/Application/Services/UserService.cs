@@ -33,6 +33,14 @@ namespace VehicleBook.Application.Services
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto userDto)
         {
+            var normalizedEmail = userDto.Email.Trim().ToLowerInvariant();
+
+            var existingUser = await _userRepository.GetByEmailAsync(normalizedEmail);
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException("Email address is already in use.");
+            }
+
             var hasher = new PasswordHasher<User>();
 
 
