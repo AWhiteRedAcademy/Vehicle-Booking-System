@@ -8,6 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import BuildIcon from "@mui/icons-material/Build";
 import PaidIcon from "@mui/icons-material/Paid";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { deleteVehicle } from "../../HTTPS Services/OwnerServices";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
@@ -125,7 +126,10 @@ function OwnerDashboard() {
     (v) => v.isAvailable === "Available",
   ).length;
   const unavailableVehicles = vehicles.filter(
-    (v) => v.isAvailable !== "Available",
+    (v) => v.isAvailable === "Maintenance",
+  ).length;
+  const inProgressVehicles = vehicles.filter(
+    (v) => v.isAvailable === "In Use",
   ).length;
   const estimatedMonthlyRevenue = vehicles.reduce(
     (total, v) => total + Number(v.dailyRate || 0) * 10,
@@ -182,6 +186,14 @@ function OwnerDashboard() {
           helperText="Available for bookings"
           tone="green"
           icon={<CheckCircleIcon fontSize="small" />}
+        />
+
+        <StatCard
+          label="In Progress"
+          value={inProgressVehicles}
+          helperText="Currently booked"
+          tone="blue"
+          icon={<LocalShippingIcon fontSize="small" />}
         />
 
         <StatCard
