@@ -4,7 +4,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import VehicleImageUpload from "../inputs/ImageUpload"; 
+import VehicleImageUpload from "../inputs/ImageUpload";
 
 import {
   Card,
@@ -22,13 +22,13 @@ import {
   DeleteButton,
 } from "./VehicleCard.style";
 
-const SUPABASE_PROJECT_ID = "bbmsyfvdiodnfvrlpbfb"; 
-const BUCKET_NAME = "Vehicle%20Images"; 
+const SUPABASE_PROJECT_ID = "bbmsyfvdiodnfvrlpbfb";
+const BUCKET_NAME = "Vehicle%20Images";
 
 function VehicleCard({ vehicle, onDelete }) {
   const navigate = useNavigate();
   const vehicleId = vehicle.id || vehicle.vehicleId;
-  
+
   const [imageError, setImageError] = useState(false);
   const [cacheBuster, setCacheBuster] = useState(Date.now());
 
@@ -36,56 +36,80 @@ function VehicleCard({ vehicle, onDelete }) {
 
   let statusKey = "";
   let statusLabel = "";
-  if (vehicle.isAvailable === "Available") { statusKey = "Available"; statusLabel = "Available"; }
-  else if (vehicle.isAvailable === "In Use") { statusKey = "InUse"; statusLabel = "In Use"; }
-  else if (vehicle.isAvailable === "Maintenance") { statusKey = "Maintenance"; statusLabel = "Maintenance"; }
+
+  if (vehicle.isAvailable === "Available") {
+    statusKey = "Available";
+    statusLabel = "Available";
+  } else if (vehicle.isAvailable === "In Use") {
+    statusKey = "InUse";
+    statusLabel = "In Use";
+  } else if (vehicle.isAvailable === "Maintenance") {
+    statusKey = "Maintenance";
+    statusLabel = "Maintenance";
+  }
+
+  function handleImageUploadSuccess() {
+    setImageError(false);
+    setCacheBuster(Date.now());
+  }
 
   return (
     <Card>
-
-      <ImageArea style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        
-        <img 
-          src={supabaseImageUrl} 
-          alt={`${vehicle.make} ${vehicle.model}`}
-          onLoad={() => setImageError(false)}
-          onError={() => setImageError(true)} 
-          style={{ 
-            width: "100%", 
-            height: "100%", 
-            objectFit: "cover",
-            display: imageError ? "none" : "block" 
-          }}
-        />
-
-        {imageError && (
-          <VehicleIcon>
-            <DirectionsCarIcon style={{ fontSize: "40px", color: "#ccc" }} />
-          </VehicleIcon>
+      <ImageArea
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {!imageError && (
+          <img
+            src={supabaseImageUrl}
+            alt={`${vehicle.make} ${vehicle.model}`}
+            onError={() => setImageError(true)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
         )}
 
+        {imageError && (
+          <>
+            <VehicleIcon>
+              <DirectionsCarIcon style={{ fontSize: "40px", color: "#ccc" }} />
+            </VehicleIcon>
 
-        <VehicleImageUpload 
-          vehicleId={vehicleId} 
-          onUploadSuccess={() => {
-            setImageError(false);         
-            setCacheBuster(Date.now());   
-          }} 
-        />
+            <VehicleImageUpload
+              vehicleId={vehicleId}
+              onUploadSuccess={handleImageUploadSuccess}
+            />
+          </>
+        )}
 
-        <StatusBadge $status={statusKey}>
-          {statusLabel}
-        </StatusBadge>
+        <StatusBadge $status={statusKey}>{statusLabel}</StatusBadge>
       </ImageArea>
 
       <Body>
-        <VehicleTitle>{vehicle.make} {vehicle.model}</VehicleTitle>
+        <VehicleTitle>
+          {vehicle.make} {vehicle.model}
+        </VehicleTitle>
 
         <DetailRow>
           <DetailTag>{vehicle.category}</DetailTag>
+
           {vehicle.modelYear > 0 && <DetailTag>{vehicle.modelYear}</DetailTag>}
-          {vehicle.licenseNumber && <DetailTag>{vehicle.licenseNumber}</DetailTag>}
+
+          {vehicle.licenseNumber && (
+            <DetailTag>{vehicle.licenseNumber}</DetailTag>
+          )}
+
           {vehicle.vinNumber && <DetailTag>VIN: {vehicle.vinNumber}</DetailTag>}
+
           <DetailTag>Owner #{vehicle.ownerId}</DetailTag>
         </DetailRow>
 
@@ -93,7 +117,10 @@ function VehicleCard({ vehicle, onDelete }) {
           <Rate>R{Number(vehicle.dailyRate).toLocaleString()} / day</Rate>
 
           <ActionButtons>
-            <EditButton type="button" onClick={() => navigate(`/owner/vehicles/edit/${vehicleId}`)}>
+            <EditButton
+              type="button"
+              onClick={() => navigate(`/owner/vehicles/edit/${vehicleId}`)}
+            >
               <EditIcon fontSize="inherit" />
               Edit
             </EditButton>

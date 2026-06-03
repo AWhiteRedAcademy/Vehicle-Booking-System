@@ -156,12 +156,15 @@ export const Card = styled.article`
   box-shadow: ${theme.shadows.card};
 `;
 
+
+
 export const ImageArea = styled.div`
-  min-height: 164px;
   position: relative;
-  background:
-    radial-gradient(circle at top left, rgba(0, 102, 217, 0.28), transparent 34%),
-    linear-gradient(135deg, ${theme.colors.inputBackground}, ${theme.colors.cardBackground});
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  background: #111827;
 
   display: flex;
   align-items: center;

@@ -11,6 +11,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import DashboardLayout from "../../../components/dashboard/DashboardLayout";
 import { getVehicleById, updateVehicle } from "../../../HTTPS Services/OwnerServices";
+import VehicleImageUpload from "../../../components/inputs/ImageUpload";
 
 import {
   HeaderRow,
@@ -42,6 +43,9 @@ import {
   ErrorMessage,
 } from "../OwnerAddVehiclePage/OwnerAddVehicle.style";
 
+const SUPABASE_PROJECT_ID = "bbmsyfvdiodnfvrlpbfb";
+const BUCKET_NAME = "Vehicle%20Images";
+
 const ownerNavItems = [
   {
     label: "Dashboard",
@@ -69,11 +73,7 @@ const categoryOptions = [
   "Minivan/MPV",
 ];
 
-const statusOptions = [
-  "Available",
-  "In Use",
-  "Maintenance",
-];
+const statusOptions = ["Available", "In Use", "Maintenance"];
 
 const emptyVehicleForm = {
   vehicleId: "",
@@ -126,6 +126,12 @@ function OwnerEditVehicle() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
+  const [imageMessage, setImageMessage] = useState("");
+  const [imageError, setImageError] = useState(false);
+  const [imageCacheBuster, setImageCacheBuster] = useState(Date.now());
+
+  const vehicleImageUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${BUCKET_NAME}/cars/${formData.vehicleId}.jpg?width=800&quality=80&t=${imageCacheBuster}`;
+
   useEffect(() => {
     let ignore = false;
 
@@ -133,6 +139,7 @@ function OwnerEditVehicle() {
       try {
         setIsLoading(true);
         setError("");
+        setImageError(false);
 
         const vehicle = await getVehicleById(id);
 
@@ -192,7 +199,6 @@ function OwnerEditVehicle() {
       return "Owner ID is missing from this vehicle record.";
     }
 
-    // --- VIN Validation ---
     if (formData.vinNumber) {
       const cleanVin = formData.vinNumber.trim().toUpperCase();
       const vinRegex = /^[A-HJ-NPR-Z0-9]{17}$/;
@@ -202,23 +208,23 @@ function OwnerEditVehicle() {
       }
     }
 
-    // --- License Plate Validation ---
     if (!formData.licenseNumber || !formData.licenseNumber.trim()) {
       return "License plate cannot be empty.";
     }
 
     const cleanPlate = formData.licenseNumber.trim().toUpperCase();
 
-    // 1. New Alphanumeric Standard (GP, ZN, FS, MP, L, NW, NC)
-    const nationalRegex = /^[A-Z]{2}\s?\d{2}\s?[A-Z]{2}\s?(GP|ZN|FS|MP|L|NW|NC)$/;
+    const nationalRegex =
+      /^[A-Z]{2}\s?\d{2}\s?[A-Z]{2}\s?(GP|ZN|FS|MP|L|NW|NC)$/;
 
-    // 2. Western Cape & Older Province Formats (Allows CA123-456)
-    const provincialRegex = /^[A-Z]{2,3}\s?\d{1,3}([- ]?\d{1,3})?(\s?(WP|EC))?$/;
+    const provincialRegex =
+      /^[A-Z]{2,3}\s?\d{1,3}([- ]?\d{1,3})?(\s?(WP|EC))?$/;
 
-    // 3. Personalized Plates
-    const personalizedRegex = /^[A-Z0-9\s-]{1,7}\s?(GP|ZN|FS|MP|L|NW|NC|WP|EC)$/;
+    const personalizedRegex =
+      /^[A-Z0-9\s-]{1,7}\s?(GP|ZN|FS|MP|L|NW|NC|WP|EC)$/;
 
-    const isValid = nationalRegex.test(cleanPlate) ||
+    const isValid =
+      nationalRegex.test(cleanPlate) ||
       provincialRegex.test(cleanPlate) ||
       personalizedRegex.test(cleanPlate);
 
@@ -248,7 +254,9 @@ function OwnerEditVehicle() {
         make: formData.make.trim(),
         model: formData.model.trim(),
         licenseNumber: formData.licenseNumber.trim().toUpperCase(),
-        vinNumber: formData.vinNumber ? formData.vinNumber.trim().toUpperCase() : ""
+        vinNumber: formData.vinNumber
+          ? formData.vinNumber.trim().toUpperCase()
+          : "",
       };
 
       await updateVehicle(id, buildUpdateRequest(sanitizedData));
@@ -260,7 +268,6 @@ function OwnerEditVehicle() {
       setIsSaving(false);
     }
   }
-
 
   return (
     <DashboardLayout
@@ -275,7 +282,7 @@ function OwnerEditVehicle() {
           <SectionEyebrow>Owner Fleet &gt; Edit Vehicle</SectionEyebrow>
           <SectionTitle>Edit Vehicle</SectionTitle>
           <SectionText>
-            Update the vehicle details, daily rate, and availability status.
+            Update the vehicle details, daily rate, availability status, and image.
           </SectionText>
         </div>
 
@@ -375,6 +382,29 @@ function OwnerEditVehicle() {
                   </FieldGroup>
                 </FormRow>
               </FormCard>
+
+                        {error && <ErrorMessage>{error}</ErrorMessage>}
+
+                <FooterBar>
+                  <FooterText>
+                    These changes will update the vehicle record in your owner dashboard.
+                  </FooterText>
+
+                  <FooterActions>
+                    <DiscardButton
+                      type="button"
+                      onClick={() => navigate("/owner/dashboard")}
+                    >
+                      Cancel
+                    </DiscardButton>
+
+                    <SaveButton type="submit" disabled={isSaving}>
+                      <SaveIcon fontSize="small" />
+                      {isSaving ? "Saving..." : "Update Vehicle"}
+                    </SaveButton>
+                  </FooterActions>
+                </FooterBar>
+
             </MainColumn>
 
             <SideColumn>
@@ -411,30 +441,80 @@ function OwnerEditVehicle() {
                   </StatusOptions>
                 </FieldGroup>
               </FormCard>
+
+              <FormCard>
+                <CardTitle>
+                  <DirectionsCarIcon fontSize="small" />
+                  Vehicle Image
+                </CardTitle>
+
+                <FieldGroup>
+                  <Label>Current Vehicle Image</Label>
+
+                  <div
+                    style={{
+                      width: "100%",
+                      aspectRatio: "16 / 9",
+                      borderRadius: "14px",
+                      overflow: "hidden",
+                      backgroundColor: "#111827",
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "14px",
+                    }}
+                  >
+                    {formData.vehicleId && !imageError ? (
+                      <img
+                        src={vehicleImageUrl}
+                        alt={`${formData.make} ${formData.model}`}
+                        onError={() => setImageError(true)}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                          display: "block",
+                        }}
+                      />
+                    ) : (
+                      <DirectionsCarIcon
+                        style={{
+                          fontSize: "54px",
+                          color: "#9ca3af",
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  <Label>Upload New Vehicle Image</Label>
+
+                  <VehicleImageUpload
+                    vehicleId={formData.vehicleId}
+                    onUploadSuccess={() => {
+                      setImageMessage("Vehicle image uploaded successfully.");
+                      setError("");
+                      setImageError(false);
+                      setImageCacheBuster(Date.now());
+                    }}
+                  />
+
+                  {imageMessage && (
+                    <p
+                      style={{
+                        marginTop: "8px",
+                        fontSize: "14px",
+                        color: "#2e7d32",
+                      }}
+                    >
+                      {imageMessage}
+                    </p>
+                  )}
+                </FieldGroup>
+              </FormCard>
             </SideColumn>
           </FormGrid>
-
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-
-          <FooterBar>
-            <FooterText>
-              These changes will update the vehicle record in your owner dashboard.
-            </FooterText>
-
-            <FooterActions>
-              <DiscardButton
-                type="button"
-                onClick={() => navigate("/owner/dashboard")}
-              >
-                Cancel
-              </DiscardButton>
-
-              <SaveButton type="submit" disabled={isSaving}>
-                <SaveIcon fontSize="small" />
-                {isSaving ? "Saving..." : "Update Vehicle"}
-              </SaveButton>
-            </FooterActions>
-          </FooterBar>
         </form>
       )}
     </DashboardLayout>
