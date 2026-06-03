@@ -91,10 +91,6 @@ function RegisterPage() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (formData.phone[0] !== "0") {
-      newErrors.phone = "Phone number must start with 0";
-    }
-
     return newErrors;
   }
 
