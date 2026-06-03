@@ -4,7 +4,6 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// Your relative import here is 100% correct!
 import VehicleImageUpload from "../inputs/ImageUpload"; 
 
 import {
@@ -43,7 +42,7 @@ function VehicleCard({ vehicle, onDelete }) {
 
   return (
     <Card>
-      {/* Position relative allows the camera icon inside VehicleImageUpload to snap to the corner */}
+
       <ImageArea style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
         
         <img 
@@ -65,7 +64,7 @@ function VehicleCard({ vehicle, onDelete }) {
           </VehicleIcon>
         )}
 
-        {/* Placing it inside ImageArea overlays the camera button neatly onto the picture box */}
+
         <VehicleImageUpload 
           vehicleId={vehicleId} 
           onUploadSuccess={() => {

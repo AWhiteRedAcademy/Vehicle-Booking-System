@@ -75,7 +75,7 @@ function VehicleImageUpload({ vehicleId, onUploadSuccess }) {
         accept="image/jpeg, image/jpg, image/png"
         onChange={handleFileChange}
         disabled={uploading}
-        style={{ display: 'none' }} // Hidden to use custom stylized label above
+        style={{ display: 'none' }}
       />
 
       {message && (
