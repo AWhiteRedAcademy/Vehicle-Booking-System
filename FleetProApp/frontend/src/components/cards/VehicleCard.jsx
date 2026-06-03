@@ -23,6 +23,21 @@ function VehicleCard({ vehicle, onDelete }) {
   const navigate = useNavigate();
   const vehicleId = vehicle.id || vehicle.vehicleId;
 
+  let statusKey = "";
+  let statusLabel = "";
+
+  if (vehicle.isAvailable === "Available") {
+    statusKey = "Available";
+    statusLabel = "Available";
+  } else if (vehicle.isAvailable === "In Use") {
+    statusKey = "InUse";
+    statusLabel = "In Use";
+  } else if (vehicle.isAvailable === "Maintenance") { 
+    // Note: Change 'vehicle.isUnderMaintenance' to match your exact backend key if different
+    statusKey = "Maintenance";
+    statusLabel = "Maintenance";
+  }
+
   return (
     <Card>
       <ImageArea>
@@ -30,9 +45,9 @@ function VehicleCard({ vehicle, onDelete }) {
           <DirectionsCarIcon />
         </VehicleIcon>
 
- <StatusBadge $status={vehicle.isAvailable ? "Available" : "Unavailable"}>
-  {vehicle.isAvailable ? "Available" : "Unavailable"}
-</StatusBadge>
+        <StatusBadge $status={statusKey}>
+          {statusLabel}
+        </StatusBadge>
       </ImageArea>
 
       <Body>

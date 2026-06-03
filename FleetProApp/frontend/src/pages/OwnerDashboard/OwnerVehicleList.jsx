@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import VehicleCard from "../../components/cards/VehicleCard.jsx";
-import { authFetch } from "../../HTTPS Services/Auth.js"; 
-import { VehicleGrid, EmptyCard, ErrorCard } from "../../components/dashboard/DashboardPage.styles.js";
-import { AddVehicleCard, PlusCircle } from "./OwnerDashboard.style";
+import { VehicleGrid } from "../../components/dashboard/DashboardPage.styles.js";
 
 export default function OwnerVehicleList({
   vehicles = [],
@@ -10,7 +8,7 @@ export default function OwnerVehicleList({
   availabilityFilter = "all",
   onDelete,
 }) {
-  // Filter the vehicles 
+  // Filter the vehicles list based on combined parameters
   const filteredVehicles = useMemo(() => {
     return vehicles.filter((vehicle) => {
       const searchValue = searchTerm.toLowerCase();
@@ -46,7 +44,7 @@ export default function OwnerVehicleList({
           onDelete={onDelete}
         />
       ))}
-
     </VehicleGrid>
   );
 }
+
