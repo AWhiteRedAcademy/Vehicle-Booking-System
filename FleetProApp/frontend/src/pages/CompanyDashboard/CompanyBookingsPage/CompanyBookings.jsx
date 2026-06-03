@@ -92,14 +92,29 @@ const companyNavItems = [
 
 const itemsPerPage = 5;
 
+const bookingStatusOptions = [
+  "Pending",
+  "Confirmed",
+  "Cancelled",
+  "Completed",
+];
+
 function dateMatchesFilter(booking, dateFilter) {
-  if (dateFilter === "all") return true;
+  if (dateFilter === "all") {
+    return true;
+  }
 
   const rawDate = booking.startDate || booking.endDate;
-  if (!rawDate) return false;
+
+  if (!rawDate) {
+    return false;
+  }
 
   const bookingDate = new Date(rawDate);
-  if (Number.isNaN(bookingDate.getTime())) return false;
+
+  if (Number.isNaN(bookingDate.getTime())) {
+    return false;
+  }
 
   const today = new Date();
 
@@ -145,6 +160,7 @@ function filterBookings(bookings, searchTerm, dateFilter) {
   return bookings.filter((booking) => {
     const vehicleName =
       `${booking.make || ""} ${booking.model || ""}`.toLowerCase();
+
     const licenseNumber = booking.licenseNumber?.toLowerCase() || "";
     const category = booking.category?.toLowerCase() || "";
     const ownerName = booking.ownerName?.toLowerCase() || "";
@@ -179,6 +195,40 @@ function paginate(items, currentPage) {
 }
 
 function CompanyBookings() {
+  const navigate = useNavigate();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [showFilters, setShowFilters] = useState(true);
+
+  const [currentBookings, setCurrentBookings] = useState([]);
+  const [historyBookings, setHistoryBookings] = useState([]);
+
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [editingBooking, setEditingBooking] = useState(null);
+  const [deletingBooking, setDeletingBooking] = useState(null);
+
+  const [editForm, setEditForm] = useState({
+    startDate: "",
+    endDate: "",
+    status: "Pending",
+  });
+
+  const [modalError, setModalError] = useState("");
+  const [isModalSaving, setIsModalSaving] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+
+  const [error, setError] = useState("");
+  const [historyError, setHistoryError] = useState("");
+
+  const [currentActivePage, setCurrentActivePage] = useState(1);
+  const [currentHistoryPage, setCurrentHistoryPage] = useState(1);
+
+  const [isMobile, setIsMobile] = useState(false);
+
   function formatDate(value) {
     if (!value) {
       return "N/A";
@@ -196,39 +246,6 @@ function CompanyBookings() {
       day: "2-digit",
     });
   }
-  const navigate = useNavigate();
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dateFilter, setDateFilter] = useState("all");
-  const [showFilters, setShowFilters] = useState(true);
-
-  const [currentBookings, setCurrentBookings] = useState([]);
-  const [historyBookings, setHistoryBookings] = useState([]);
-
-  const [selectedBooking, setSelectedBooking] = useState(null);
-  const [editingBooking, setEditingBooking] = useState(null);
-  const [deletingBooking, setDeletingBooking] = useState(null);
-
-  const [editForm, setEditForm] = useState({
-    startDate: "",
-    endDate: "",
-  });
-
-  const [modalError, setModalError] = useState("");
-  const [isModalSaving, setIsModalSaving] = useState(false);
-
-  const [loading, setLoading] = useState(true);
-  const [historyLoading, setHistoryLoading] = useState(false);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
-
-  const [error, setError] = useState("");
-  const [historyError, setHistoryError] = useState("");
-
-  const [currentActivePage, setCurrentActivePage] = useState(1);
-  const [currentHistoryPage, setCurrentHistoryPage] = useState(1);
-
-  //mobile
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -293,6 +310,7 @@ function CompanyBookings() {
     filteredCurrentBookings,
     currentActivePage,
   );
+
   const historyPagination = paginate(
     filteredHistoryBookings,
     currentHistoryPage,
@@ -304,7 +322,8 @@ function CompanyBookings() {
 
   const inProgressCount = currentBookings.filter(
     (booking) =>
-      booking.status === "Confirmed" || booking.currentBooking === "Confirmed",
+      booking.status === "Confirmed" ||
+      booking.currentBooking === "Confirmed",
   ).length;
 
   const pendingCount = currentBookings.filter(
@@ -367,7 +386,9 @@ function CompanyBookings() {
   }
 
   function canModifyBooking(booking) {
-    if (!booking.startDate) return false;
+    if (!booking.startDate) {
+      return false;
+    }
 
     const today = getTodayDateString();
 
@@ -389,10 +410,13 @@ function CompanyBookings() {
     }
 
     setEditingBooking(booking);
+
     setEditForm({
       startDate: booking.startDate || "",
       endDate: booking.endDate || "",
+      status: booking.status || "Pending",
     });
+
     setModalError("");
   }
 
@@ -426,7 +450,7 @@ function CompanyBookings() {
     }));
   }
 
-  function buildUpdatedBookingRequest(booking, startDate, endDate) {
+  function buildUpdatedBookingRequest(booking, startDate, endDate, status) {
     const days = calculateBookingDays(startDate, endDate);
     const dailyRate = Number(booking.dailyRate || 0);
     const totalCost = days * dailyRate;
@@ -437,7 +461,7 @@ function CompanyBookings() {
       startDate,
       endDate,
       totalCost,
-      status: booking.status || "Pending",
+      status: status || booking.status || "Pending",
       licenseNumber: booking.licenseNumber || "",
     };
   }
@@ -505,6 +529,7 @@ function CompanyBookings() {
         editingBooking,
         editForm.startDate,
         editForm.endDate,
+        editForm.status,
       );
 
       await updateBooking(editingBooking.bookingId, requestBody);
@@ -513,6 +538,8 @@ function CompanyBookings() {
         ...editingBooking,
         startDate: editForm.startDate,
         endDate: editForm.endDate,
+        status: requestBody.status,
+        currentBooking: requestBody.status,
         totalCost: requestBody.totalCost,
       };
 
@@ -679,6 +706,7 @@ function CompanyBookings() {
       <DashboardPanel>
         <PanelHeader>
           <PanelTitle>Active Booking Queue</PanelTitle>
+
           <PanelActionButton type="button" onClick={handleToggleFilters}>
             {showFilters ? "Hide Filters" : "Filter"}
           </PanelActionButton>
@@ -748,6 +776,7 @@ function CompanyBookings() {
         <DashboardPanel>
           <PanelHeader>
             <PanelTitle>Booking History</PanelTitle>
+
             <PanelActionButton
               type="button"
               onClick={handleLoadHistory}
@@ -762,23 +791,12 @@ function CompanyBookings() {
           </PanelMessage>
 
           {historyError && <PanelError>{historyError}</PanelError>}
-
-          {historyError && (
-            <div
-              style={{
-                padding: "0 26px 24px",
-                color: "#dc2626",
-                fontWeight: 800,
-              }}
-            >
-              {historyError}
-            </div>
-          )}
         </DashboardPanel>
       ) : (
         <DashboardPanel>
           <PanelHeader>
             <PanelTitle>Booking History</PanelTitle>
+
             <PanelActionButton
               type="button"
               onClick={() => setHistoryLoaded(false)}
@@ -848,6 +866,7 @@ function CompanyBookings() {
           </TableFooter>
         </DashboardPanel>
       )}
+
       {selectedBooking && (
         <ModalOverlay onClick={handleCloseModals}>
           <ModalCard onClick={(event) => event.stopPropagation()}>
@@ -941,7 +960,7 @@ function CompanyBookings() {
                 disabled={!canModifyBooking(selectedBooking)}
                 onClick={() => handleEditBooking(selectedBooking)}
               >
-                Edit Dates
+                Edit Booking
               </ModalPrimaryButton>
 
               <ModalDangerButton
@@ -961,7 +980,7 @@ function CompanyBookings() {
           <ModalCard onClick={(event) => event.stopPropagation()}>
             <ModalHeader>
               <div>
-                <ModalTitle>Edit Booking Dates</ModalTitle>
+                <ModalTitle>Edit Booking</ModalTitle>
                 <ModalSubtitle>
                   Booking #{editingBooking.bookingId} · {editingBooking.make}{" "}
                   {editingBooking.model}
@@ -999,6 +1018,22 @@ function CompanyBookings() {
                   </DetailItem>
 
                   <DetailItem>
+                    <DetailLabel>Status</DetailLabel>
+                    <ModalInput
+                      as="select"
+                      name="status"
+                      value={editForm.status}
+                      onChange={handleEditFormChange}
+                    >
+                      {bookingStatusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </ModalInput>
+                  </DetailItem>
+
+                  <DetailItem>
                     <DetailLabel>Daily Rate</DetailLabel>
                     <DetailValue>
                       R{Number(editingBooking.dailyRate || 0).toLocaleString()}
@@ -1019,11 +1054,7 @@ function CompanyBookings() {
                   </DetailItem>
                 </DetailGrid>
 
-                {modalError && (
-                  <p style={{ color: "#dc2626", fontWeight: 800 }}>
-                    {modalError}
-                  </p>
-                )}
+                {modalError && <ModalErrorText>{modalError}</ModalErrorText>}
               </ModalBody>
 
               <ModalActions>
@@ -1062,11 +1093,8 @@ function CompanyBookings() {
                 Are you sure you want to delete this booking? This cannot be
                 undone.
               </ModalWarningText>
-              {modalError && (
-                <p style={{ color: "#dc2626", fontWeight: 800 }}>
-                  {modalError}
-                </p>
-              )}
+
+              {modalError && <ModalErrorText>{modalError}</ModalErrorText>}
             </ModalBody>
 
             <ModalActions>
