@@ -33,11 +33,23 @@ export const getCurrentUserId = () => {
 export const authFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('accessToken');
     
-    // Normalize endpoint string so path comparisons look identical
-    const normalizedEndpoint = endpoint.replace(/^\//, '');
+    const normalizedEndpoint = endpoint.replace(/^\//, '').toLowerCase();
 
-    if (normalizedEndpoint === 'api/User/register') {
-        const response = await fetch(`${API_URL}/${normalizedEndpoint}`, {
+    // 1. ANONYMOUS BYPASS LIST: Check if the endpoint allows unauthenticated requests
+    const anonymousEndpoints = [
+        'api/user/register',
+        'api/auth/forgot-password',
+        'api/auth/verify-reset-otp',
+        'api/auth/reset-password'
+    ];
+
+    if (anonymousEndpoints.includes(normalizedEndpoint)) {
+        const cleanBaseUrl = API_URL ? API_URL.replace(/\/$/, "") : "";
+
+        const cleanEndpoint = endpoint.replace(/^\//, '');
+        const requestUrl = cleanBaseUrl ? `${cleanBaseUrl}/${normalizedEndpoint}` : `/${normalizedEndpoint}`;
+
+        const response = await fetch(requestUrl, {
             ...options,
             headers: {
                 ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
@@ -47,7 +59,7 @@ export const authFetch = async (endpoint, options = {}) => {
 
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.message || errData.Message || 'Registration endpoint rejected data.');
+            throw new Error(errData.message || errData.Message || 'Endpoint rejected submission.');
         }
 
         const contentType = response.headers.get("content-type");
@@ -120,4 +132,3 @@ export const authFetch = async (endpoint, options = {}) => {
     
     return response.text(); 
 };
-

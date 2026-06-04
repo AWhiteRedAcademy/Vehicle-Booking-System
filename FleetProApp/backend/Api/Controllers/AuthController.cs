@@ -56,5 +56,39 @@ namespace Vehicle_Booking_System.Controllers
         {
             return Ok("You are authenticated as an admin.");
         }
+
+        [AllowAnonymous]
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
+        {
+            await _authService.InitiateForgotPasswordAsync(request);
+            return Ok(new { message = "If the email matches an account, an OTP code has been sent." });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("verify-reset-otp")]
+        public async Task<IActionResult> VerifyResetOtp([FromBody] VerifyResetOtpDto request)
+        {
+            var isValid = await _authService.VerifyResetOtpAsync(request);
+            if (!isValid)
+            {
+                return BadRequest(new { message = "Invalid or expired OTP code." });
+            }
+
+            return Ok(new { message = "OTP verified successfully. You can now change your password." });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+        {
+            var isSuccess = await _authService.CompletePasswordResetAsync(request);
+            if (!isSuccess)
+            {
+                return BadRequest(new { message = "Session expired or unauthorized password change attempt." });
+            }
+
+            return Ok(new { message = "Password updated successfully. Please log in with your new credentials." });
+        }
     }
 }

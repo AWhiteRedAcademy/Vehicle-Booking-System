@@ -23,6 +23,7 @@ namespace Vehicle_Booking_System
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+            builder.Services.AddMemoryCache();
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen(options =>
@@ -66,8 +67,8 @@ namespace Vehicle_Booking_System
                 Token = builder.Configuration["AppSettings:Token"] ?? string.Empty,
                 Issuer = builder.Configuration["AppSettings:Issuer"] ?? string.Empty,
                 Audience = builder.Configuration["AppSettings:Audience"] ?? string.Empty,
-                AccessTokenExpiryHours = int.TryParse(builder.Configuration["AppSettings:AccessTokenExpiryDays"], out var accessHours) ? accessHours : 1,
-                RefreshTokenExpiryHours = int.TryParse(builder.Configuration["AppSettings:RefreshTokenExpiryDays"], out var refreshHours) ? refreshHours : 2
+                AccessTokenExpiryHours = int.TryParse(builder.Configuration["AppSettings:AccessTokenExpiryHours"], out var accessHours) ? accessHours : 1,
+                RefreshTokenExpiryHours = int.TryParse(builder.Configuration["AppSettings:RefreshTokenExpiryHours"], out var refreshHours) ? refreshHours : 2
             };
 
             if (string.IsNullOrWhiteSpace(jwtSettings.Token))

@@ -54,8 +54,6 @@ public class VehicleStatusService : IVehicleStatusService
                 messages.Add(CreateAuditMessage("ScheduledVehicleStatusUpdated", $"Vehicle {vehicle.VehicleId} and booking {booking.BookingId} were automatically updated."));
             }
 
-            // SCENARIO 2: Booking ended yesterday or earlier -> Automatically revert to "Available"
-            // Change "Completed" to match whatever close status your PostgreSQL constraint accepts
             else if (booking.EndDate < today && booking.Status == "Confirmed")
             {
                 vehicle.IsAvailable = "Available";
@@ -70,7 +68,7 @@ public class VehicleStatusService : IVehicleStatusService
             }
         }
 
-        // 3. Batch commit all adjustments safely to the PostgreSQL schema
+
         await _vehicleRepository.SaveChangesAsync();
         await _bookingRepository.SaveChangesAsync();
 
