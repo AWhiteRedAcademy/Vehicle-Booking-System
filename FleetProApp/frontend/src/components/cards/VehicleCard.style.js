@@ -156,12 +156,15 @@ export const Card = styled.article`
   box-shadow: ${theme.shadows.card};
 `;
 
+
+
 export const ImageArea = styled.div`
-  min-height: 164px;
   position: relative;
-  background:
-    radial-gradient(circle at top left, rgba(0, 102, 217, 0.28), transparent 34%),
-    linear-gradient(135deg, ${theme.colors.inputBackground}, ${theme.colors.cardBackground});
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  background: #111827;
 
   display: flex;
   align-items: center;
@@ -194,20 +197,22 @@ export const StatusBadge = styled.span`
   font-size: 11px;
   font-weight: 900;
 
+  /* Fixed: Changed "In Use" to "InUse" to match your component prop strings */
   color: ${({ $status }) => {
     if ($status === "Available") return "#15803d";
-    if ($status === "In Use") return "#0b5ed7";
+    if ($status === "InUse") return "#0b5ed7"; 
     if ($status === "Maintenance") return "#92400e";
     return "#334155";
   }};
 
   background: ${({ $status }) => {
     if ($status === "Available") return "#dcfce7";
-    if ($status === "In Use") return "#dbeafe";
+    if ($status === "InUse") return "#dbeafe";
     if ($status === "Maintenance") return "#fef3c7";
     return "#e2e8f0";
   }};
 `;
+
 
 export const Body = styled.div`
   padding: 18px;

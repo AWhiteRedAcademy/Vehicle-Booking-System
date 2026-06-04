@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+import VehicleImageUpload from "../inputs/ImageUpload";
 
 import {
   Card,
@@ -19,20 +22,76 @@ import {
   DeleteButton,
 } from "./VehicleCard.style";
 
+const SUPABASE_PROJECT_ID = "bbmsyfvdiodnfvrlpbfb";
+const BUCKET_NAME = "Vehicle%20Images";
+
 function VehicleCard({ vehicle, onDelete }) {
   const navigate = useNavigate();
   const vehicleId = vehicle.id || vehicle.vehicleId;
 
+  const [imageError, setImageError] = useState(false);
+  const [cacheBuster, setCacheBuster] = useState(Date.now());
+
+  const supabaseImageUrl = `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${BUCKET_NAME}/cars/${vehicleId}.jpg?width=400&quality=70&t=${cacheBuster}`;
+
+  let statusKey = "";
+  let statusLabel = "";
+
+  if (vehicle.isAvailable === "Available") {
+    statusKey = "Available";
+    statusLabel = "Available";
+  } else if (vehicle.isAvailable === "In Use") {
+    statusKey = "InUse";
+    statusLabel = "In Use";
+  } else if (vehicle.isAvailable === "Maintenance") {
+    statusKey = "Maintenance";
+    statusLabel = "Maintenance";
+  }
+
+  function handleImageUploadSuccess() {
+    setImageError(false);
+    setCacheBuster(Date.now());
+  }
+
   return (
     <Card>
-      <ImageArea>
-        <VehicleIcon>
-          <DirectionsCarIcon />
-        </VehicleIcon>
+      <ImageArea
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {!imageError && (
+          <img
+            src={supabaseImageUrl}
+            alt={`${vehicle.make} ${vehicle.model}`}
+            onError={() => setImageError(true)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        )}
 
- <StatusBadge $status={vehicle.isAvailable ? "Available" : "Unavailable"}>
-  {vehicle.isAvailable ? "Available" : "Unavailable"}
-</StatusBadge>
+        {imageError && (
+          <>
+            <VehicleIcon>
+              <DirectionsCarIcon style={{ fontSize: "40px", color: "#ccc" }} />
+            </VehicleIcon>
+
+            <VehicleImageUpload
+              vehicleId={vehicleId}
+              onUploadSuccess={handleImageUploadSuccess}
+            />
+          </>
+        )}
+
+        <StatusBadge $status={statusKey}>{statusLabel}</StatusBadge>
       </ImageArea>
 
       <Body>
@@ -42,9 +101,15 @@ function VehicleCard({ vehicle, onDelete }) {
 
         <DetailRow>
           <DetailTag>{vehicle.category}</DetailTag>
+
           {vehicle.modelYear > 0 && <DetailTag>{vehicle.modelYear}</DetailTag>}
-          {vehicle.licenseNumber && <DetailTag>{vehicle.licenseNumber}</DetailTag>}
+
+          {vehicle.licenseNumber && (
+            <DetailTag>{vehicle.licenseNumber}</DetailTag>
+          )}
+
           {vehicle.vinNumber && <DetailTag>VIN: {vehicle.vinNumber}</DetailTag>}
+
           <DetailTag>Owner #{vehicle.ownerId}</DetailTag>
         </DetailRow>
 
@@ -60,10 +125,7 @@ function VehicleCard({ vehicle, onDelete }) {
               Edit
             </EditButton>
 
-            <DeleteButton
-              type="button"
-              onClick={() => onDelete(vehicle)}
-            >
+            <DeleteButton type="button" onClick={() => onDelete(vehicle)}>
               <DeleteIcon fontSize="inherit" />
               Delete
             </DeleteButton>
@@ -75,3 +137,6 @@ function VehicleCard({ vehicle, onDelete }) {
 }
 
 export default VehicleCard;
+
+
+

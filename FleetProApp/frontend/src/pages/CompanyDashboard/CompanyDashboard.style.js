@@ -402,6 +402,7 @@ export const DetailsStatusRow = styled.div`
   }
 `;
 
+
 export const DetailsStatusBadge = styled.span`
   border-radius: 999px;
   padding: 8px 13px;

@@ -24,12 +24,15 @@ export const VehicleInventoryCard = styled.article`
 `;
 
 export const VehicleImageArea = styled.div`
-  height: 190px;
   position: relative;
-  background: #dbeafe;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #111827;
 `;
 
 export const VehicleImagePlaceholder = styled.div`
+  width: 100%;
   height: 100%;
   display: grid;
   place-items: center;

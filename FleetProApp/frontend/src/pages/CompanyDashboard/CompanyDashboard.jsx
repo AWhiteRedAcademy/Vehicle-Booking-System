@@ -696,6 +696,7 @@ function CompanyDashboard() {
 
             <BookingBody>
               <BookingDateGrid>
+
                 <BookingField>
                   <BookingLabel>Start Date</BookingLabel>
                   <BookingInput

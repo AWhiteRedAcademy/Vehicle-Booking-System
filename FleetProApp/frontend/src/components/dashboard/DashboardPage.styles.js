@@ -135,19 +135,26 @@ export const AddButton = styled.button`
 // forces all stats to show in a clean 2x2 layout.
 export const StatsGrid = styled.section`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* 1. Change from 4 columns to 5 columns */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* 2. Keeps them perfectly tall and flush across the single line */
+  grid-auto-rows: 1fr; 
   gap: 18px;
   margin-bottom: 22px;
 
-  @media (max-width: 1100px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  @media (max-width: 1200px) {
+    /* Wraps down beautifully on medium desktop monitors */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   @media (max-width: 760px) {
+    /* Drops cleanly onto mobile screens */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
 `;
+
+
  
 // export const Toolbar = styled.section`
 //   margin-bottom: 22px;
