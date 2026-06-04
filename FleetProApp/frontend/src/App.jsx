@@ -5,6 +5,9 @@ import ProtectedRoute from "./components/routing/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 
+// Forgot Password
+import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPassword";
+
 //Dashboards
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import CompanyDashboard from "./pages/CompanyDashboard/CompanyDashboard";
@@ -32,31 +35,33 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        {/* ADMIN ONLY ROUTES */}
+        // {/* ADMIN ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminDashboard />} />
           <Route path="/admin/users/add" element={<AdminAddUser />} />
           <Route path="/admin/users/:id" element={<AdminUserDetails />} />
         </Route>
-
+        
         {/* OWNER ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Owner"]} />}>
           <Route path="/owner/dashboard" element={<OwnerDashboard />} />
           <Route path="/owner/vehicles/add" element={<OwnerAddVehicle />} />
-          <Route path="/owner/vehicles/edit/:id" element={<OwnerEditVehicle />} />
+          <Route
+            path="/owner/vehicles/edit/:id"
+            element={<OwnerEditVehicle />}
+          />
           <Route path="/owner/vehicles" element={<OwnerVehicles />} />
           <Route path="/owner/bookings" element={<OwnerBookings />} />
         </Route>
-
         {/* COMPANY ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={["Company"]} />}>
           <Route path="/company/dashboard" element={<CompanyDashboard />} />
           <Route path="/company/vehicles" element={<CompanyVehicle />} />
           <Route path="/company/bookings" element={<CompanyBooking />} />
         </Route>
-
         {/* General Fallback Route */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

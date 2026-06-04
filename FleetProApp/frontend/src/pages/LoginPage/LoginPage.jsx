@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -90,15 +91,21 @@ function LoginPage() {
                 <VisibilityIcon fontSize="small" />
               )
             }
-            onRightIconClick={() => setShowPassword((currentValue) => !currentValue)}
+            onRightIconClick={() =>
+              setShowPassword((currentValue) => !currentValue)
+            }
           />
 
           {error && <ErrorText>{error}</ErrorText>}
 
           <PrimaryButton type="submit">Sign In</PrimaryButton>
 
-          <ForgotPassword href="/register">No Account? Register Here</ForgotPassword>
-          <ForgotPassword href="#">Forgot password?</ForgotPassword>
+          <ForgotPassword href="/register">
+            No Account? Register Here
+          </ForgotPassword>
+          <ForgotPassword as={Link} to="/forgot-password">
+            Forgot password?
+          </ForgotPassword>
         </LoginCard>
 
         <Footer>
