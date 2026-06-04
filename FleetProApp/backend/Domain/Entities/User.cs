@@ -54,6 +54,20 @@ namespace VehicleBook.Domain.Entities
         [Column("lastlogin")]
         public DateTime? LastLogin { get; set; }
 
+        [Column("passwordresetotphash")]
+        [StringLength(255)]
+        public string? PasswordResetOtpHash { get; set; }
+
+        [Column("passwordresetotpexpiryutc")]
+        public DateTime? PasswordResetOtpExpiryUtc { get; set; }
+
+        [Column("passwordresettokenhash")]
+        [StringLength(255)]
+        public string? PasswordResetTokenHash { get; set; }
+
+        [Column("passwordresettokenexpiryutc")]
+        public DateTime? PasswordResetTokenExpiryUtc { get; set; }
+
         public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
