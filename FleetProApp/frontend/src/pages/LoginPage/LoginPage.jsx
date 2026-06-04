@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -39,11 +39,24 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const [FailedAttempts, setFailedAttempts] = useState(0);
+  const navigate = useNavigate();
+
   function onSubmitHandler(event) {
     event.preventDefault();
     setError("");
 
     handleSignInSubmit(email, password, setError);
+
+    if (error) {
+      setFailedAttempts((prev) => prev + 1);
+    }
+
+  }
+
+  if (FailedAttempts >= 3) {
+    setError("Too many failed attempts. If your password is forgotten, please reset it.");
+    navigate("/forgot-password");
   }
 
   return (

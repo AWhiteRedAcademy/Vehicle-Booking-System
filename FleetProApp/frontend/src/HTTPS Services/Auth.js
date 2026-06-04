@@ -33,7 +33,7 @@ export const getCurrentUserId = () => {
 export const authFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('accessToken');
     
-    const normalizedEndpoint = endpoint.replace(/^\//, '').toLowerCase();
+    const normalizedEndpoint = endpoint.replace(/^\//, '');
 
     // 1. ANONYMOUS BYPASS LIST: Check if the endpoint allows unauthenticated requests
     const anonymousEndpoints = [
@@ -89,6 +89,7 @@ export const authFetch = async (endpoint, options = {}) => {
     }
 
     let finalEndpoint = normalizedEndpoint;
+
     if (normalizedEndpoint === 'api/Vehicle/user/context') {
         finalEndpoint = `api/Vehicle/user/${userId}?role=${role}`;
     }
@@ -122,7 +123,7 @@ export const authFetch = async (endpoint, options = {}) => {
 
     if (!response.ok) {
         const errorMsg = await response.json().catch(() => ({}));
-        throw new Error(errorMsg.message || `API Error: ${response.status} ${response.statusText}`);
+        throw new Error(errorMsg.message || `API Error: ${response.status} ${response.statusText} ${userId ? `(User ID: ${userId})` : ""}`);
     }
 
     const contentType = response.headers.get("content-type");

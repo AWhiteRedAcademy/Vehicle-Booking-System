@@ -15,7 +15,7 @@ import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/cards/StatCard";
 import VehicleCard from "../../components/cards/VehicleCard";
 import OwnerVehicleList from "./OwnerVehicleList";
-import { authFetch } from "../../HTTPS Services/Auth.js";
+import { getVehicles } from "../../HTTPS Services/OwnerServices";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -107,17 +107,49 @@ function OwnerDashboard() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   getVehicles()
+  //     .then((data) => {
+  //       setVehicles(Array.isArray(data) ? data : []);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Fetch error:", err);
+  //       setError(err.message || "Failed to load vehicle assets.");
+  //       setLoading(false);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    authFetch("api/Vehicle/user/context")
-      .then((data) => {
-        setVehicles(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setError(err.message || "Failed to load vehicle assets.");
-        setLoading(false);
-      });
+    let ignore = false;
+
+    async function fetchDashboardData() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await getVehicles();
+
+        if (!ignore) {
+          setVehicles(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(err.message || "Failed to load fleet dashboard metrics.");
+          setVehicles([]);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchDashboardData();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   // Calculates metrics from live array data
