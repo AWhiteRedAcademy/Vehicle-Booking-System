@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleBook.Application.Interfaces;
 using VehicleBook.Application.Messaging;
+using VehicleBook.Domain.Entities;
 
 namespace VehicleBook.Application.Services;
 
@@ -11,36 +12,39 @@ public class VehicleStatusService : IVehicleStatusService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IVehicleRepository _vehicleRepository;
+    private readonly IBookingAuditRepository _bookingAuditRepository;
     private readonly IMessagePublisher _messagePublisher;
 
     public VehicleStatusService(
         IBookingRepository bookingRepository,
         IVehicleRepository vehicleRepository,
+        IBookingAuditRepository bookingAuditRepository,
         IMessagePublisher messagePublisher)
     {
         _bookingRepository = bookingRepository;
         _vehicleRepository = vehicleRepository;
+        _bookingAuditRepository = bookingAuditRepository;
         _messagePublisher = messagePublisher;
     }
 
     public async Task UpdateScheduledVehiclesAsync(CancellationToken cancellationToken)
     {
-        // 1. Get today's system date context 
         var today = DateOnly.FromDateTime(DateTime.Today);
         var messages = new List<SystemEventMessage>();
 
-        // 2. Fetch all upcoming, active, and pending rows from your repository method
         var relevantBookings = await _bookingRepository.GetActiveAndPendingBookingsAsync(today, cancellationToken);
 
         foreach (var booking in relevantBookings)
         {
             var vehicle = await _vehicleRepository.GetByIdAsync(booking.VehicleId);
-            if (vehicle == null) continue;
+            if (vehicle == null)
+            {
+                continue;
+            }
 
             var oldVehicleStatus = vehicle.IsAvailable;
             var oldBookingStatus = booking.Status;
 
-            // SCENARIO 1: Booking starts today -> Automatically set to "In Use"
             if (booking.StartDate == today && booking.Status == "Pending")
             {
                 vehicle.IsAvailable = "In Use";
@@ -51,9 +55,9 @@ public class VehicleStatusService : IVehicleStatusService
 
                 messages.Add(CreateVehicleStatusChangedMessage(vehicle.VehicleId, vehicle.OwnerId, oldVehicleStatus, vehicle.IsAvailable, booking.BookingId));
                 messages.Add(CreateBookingStatusChangedMessage(booking.BookingId, booking.CompanyId, booking.VehicleId, oldBookingStatus, booking.Status));
-                messages.Add(CreateAuditMessage("ScheduledVehicleStatusUpdated", $"Vehicle {vehicle.VehicleId} and booking {booking.BookingId} were automatically updated."));
-            }
 
+                await AddBookingAuditAsync(booking, oldBookingStatus, booking.Status, cancellationToken);
+            }
             else if (booking.EndDate < today && booking.Status == "Confirmed")
             {
                 vehicle.IsAvailable = "Available";
@@ -64,13 +68,14 @@ public class VehicleStatusService : IVehicleStatusService
 
                 messages.Add(CreateVehicleStatusChangedMessage(vehicle.VehicleId, vehicle.OwnerId, oldVehicleStatus, vehicle.IsAvailable, booking.BookingId));
                 messages.Add(CreateBookingStatusChangedMessage(booking.BookingId, booking.CompanyId, booking.VehicleId, oldBookingStatus, booking.Status));
-                messages.Add(CreateAuditMessage("ScheduledVehicleStatusUpdated", $"Vehicle {vehicle.VehicleId} and booking {booking.BookingId} were automatically updated."));
+
+                await AddBookingAuditAsync(booking, oldBookingStatus, booking.Status, cancellationToken);
             }
         }
 
-
         await _vehicleRepository.SaveChangesAsync();
         await _bookingRepository.SaveChangesAsync();
+        await _bookingAuditRepository.SaveChangesAsync(cancellationToken);
 
         foreach (var message in messages)
         {
@@ -116,15 +121,19 @@ public class VehicleStatusService : IVehicleStatusService
         };
     }
 
-    private static SystemEventMessage CreateAuditMessage(string eventType, string description)
+    private async Task AddBookingAuditAsync(Booking booking, string oldStatus, string newStatus, CancellationToken cancellationToken)
     {
-        return new SystemEventMessage
+        await _bookingAuditRepository.AddAsync(new BookingAudit
         {
-            RoutingKey = "audit.vehicle-status",
-            EventType = eventType,
-            Category = "AuditLog",
-            Description = description
-        };
+            BookingId = booking.BookingId,
+            CompanyId = booking.CompanyId,
+            VehicleId = booking.VehicleId,
+            OldStatus = oldStatus,
+            NewStatus = newStatus,
+            EventType = "BookingStatusChanged",
+            Message = $"Booking {booking.BookingId} status changed from {oldStatus} to {newStatus} automatically.",
+            IsPublished = false,
+            CreatedAt = DateTime.UtcNow
+        }, cancellationToken);
     }
-
 }

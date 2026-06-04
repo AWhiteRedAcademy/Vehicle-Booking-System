@@ -14,6 +14,8 @@ namespace VehicleBook.Infrastructure.Data
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<BookingAudit> BookingAudits { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
@@ -76,6 +78,25 @@ namespace VehicleBook.Infrastructure.Data
                     .HasForeignKey(b => b.VehicleId)
                     .HasConstraintName("bookings_vehicleid_fkey")
                     .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<BookingAudit>(entity =>
+            {
+                entity.HasKey(e => e.AuditId);
+                entity.Property(e => e.EventType).HasMaxLength(100).HasDefaultValue("BookingStatusChanged");
+                entity.Property(e => e.OldStatus).HasMaxLength(20);
+                entity.Property(e => e.NewStatus).HasMaxLength(20);
+                entity.Property(e => e.IsPublished).HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("NOW()");
+                entity.Property(e => e.PublishedAt)
+                    .HasColumnType("timestamp with time zone");
+
+                entity.ToTable("bookingaudit", t => t.HasCheckConstraint(
+                    "bookingaudit_status_check",
+                    "(oldstatus IS NULL OR oldstatus = ANY (ARRAY['Pending', 'Confirmed', 'Approved', 'Rejected', 'Cancelled', 'Completed']::text[])) AND newstatus = ANY (ARRAY['Pending', 'Confirmed', 'Approved', 'Rejected', 'Cancelled', 'Completed']::text[])"
+                ));
             });
 
 

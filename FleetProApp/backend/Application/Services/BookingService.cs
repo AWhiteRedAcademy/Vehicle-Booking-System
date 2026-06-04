@@ -9,15 +9,18 @@ namespace VehicleBook.Application.Services
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IBookingAuditRepository _bookingAuditRepository;
         private readonly IMessagePublisher _messagePublisher;
 
         public BookingService(
             IBookingRepository bookingRepository,
             IVehicleRepository vehicleRepository,
+            IBookingAuditRepository bookingAuditRepository,
             IMessagePublisher messagePublisher)
         {
             _bookingRepository = bookingRepository;
             _vehicleRepository = vehicleRepository;
+            _bookingAuditRepository = bookingAuditRepository;
             _messagePublisher = messagePublisher;
         }
 
@@ -219,7 +222,8 @@ namespace VehicleBook.Application.Services
                 {
                     ["bookingId"] = deletedBookingId.ToString(),
                     ["companyId"] = deletedCompanyId.ToString(),
-                    ["vehicleId"] = deletedVehicleId.ToString()
+                    ["vehicleId"] = deletedVehicleId.ToString(),
+                    ["status"] = deletedStatus
                 });
 
             return true;
@@ -269,14 +273,35 @@ namespace VehicleBook.Application.Services
 
         private async Task PublishAuditAsync(string eventType, string description, Dictionary<string, string> data)
         {
-            await _messagePublisher.PublishAsync(new SystemEventMessage
+            var audit = new BookingAudit
             {
-                RoutingKey = "audit.booking",
+                BookingId = TryGetInt(data, "bookingId") ?? 0,
+                CompanyId = TryGetInt(data, "companyId"),
+                VehicleId = TryGetInt(data, "vehicleId"),
+                OldStatus = GetValue(data, "oldStatus"),
+                NewStatus = GetValue(data, "newStatus") ?? GetValue(data, "status") ?? "Pending",
                 EventType = eventType,
-                Category = "AuditLog",
-                Description = description,
-                Data = data
-            });
+                Message = description,
+                IsPublished = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _bookingAuditRepository.AddAsync(audit);
+            await _bookingAuditRepository.SaveChangesAsync();
+        }
+
+        private static int? TryGetInt(Dictionary<string, string> data, string key)
+        {
+            return data.TryGetValue(key, out var value) && int.TryParse(value, out var number)
+                ? number
+                : null;
+        }
+
+        private static string? GetValue(Dictionary<string, string> data, string key)
+        {
+            return data.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)
+                ? value
+                : null;
         }
 
 

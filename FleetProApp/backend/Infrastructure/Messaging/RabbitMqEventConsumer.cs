@@ -67,11 +67,13 @@ namespace VehicleBook.Infrastructure.Messaging
                         _options.NotificationQueueName,
                         [
                             "booking.created",
+                            "booking.updated",
                             "booking.status.changed",
                             "booking.deleted",
                             "vehicle.status.changed",
                             "admin.approval.requested",
-                            "admin.approval.approved"
+                            "admin.approval.approved",
+                            "audit.booking"
                         ]);
 
                     DeclareAndBindQueue(

@@ -78,6 +78,40 @@ namespace VehicleBook.Infrastructure.Notifications
             return notifications.Count;
         }
 
+        private async Task NotifyUsersAboutBookingUpdateAsync(SystemEventMessage message, CancellationToken cancellationToken)
+        {
+            var bookingId = TryGetInt(message.Data, "bookingId");
+            var companyId = TryGetInt(message.Data, "companyId");
+            var vehicleId = TryGetInt(message.Data, "vehicleId");
+
+            var company = companyId == null
+                ? null
+                : await _context.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(item => item.UserId == companyId, cancellationToken);
+
+            var vehicle = vehicleId == null
+                ? null
+                : await _context.Vehicles
+                    .Include(item => item.Owner)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(item => item.VehicleId == vehicleId, cancellationToken);
+
+            var title = "Booking updated";
+            var body = $"Booking {bookingId} has been updated.";
+
+            if (company != null)
+            {
+                await CreateNotificationAsync(company.UserId, title, body, "Booking", "Booking", bookingId, cancellationToken);
+                await _emailSender.SendAsync([company.Email], title, body, cancellationToken);
+            }
+
+            if (vehicle?.Owner != null)
+            {
+                await CreateNotificationAsync(vehicle.OwnerId, title, body, "Booking", "Booking", bookingId, cancellationToken);
+                await _emailSender.SendAsync([vehicle.Owner.Email], title, body, cancellationToken);
+            }
+        }
         public async Task HandleSystemEventAsync(SystemEventMessage message, CancellationToken cancellationToken = default)
         {
             switch (message.EventType)
@@ -85,21 +119,31 @@ namespace VehicleBook.Infrastructure.Notifications
                 case "AdminApprovalRequested":
                     await NotifyAdminsAboutPendingUserAsync(message, cancellationToken);
                     break;
+
                 case "AdminApprovalApproved":
                     await NotifyUserApprovedAsync(message, cancellationToken);
                     break;
+
                 case "BookingCreated":
                     await NotifyOwnerAboutBookingAsync(message, cancellationToken);
                     break;
+
+                case "BookingUpdated":
+                    await NotifyUsersAboutBookingUpdateAsync(message, cancellationToken);
+                    break;
+
                 case "BookingStatusChanged":
                     await NotifyCompanyAboutBookingStatusAsync(message, cancellationToken);
                     break;
+
                 case "BookingDeleted":
                     await NotifyBookingDeletedAsync(message, cancellationToken);
                     break;
+
                 case "VehicleStatusChanged":
                     await NotifyOwnerAboutVehicleStatusAsync(message, cancellationToken);
                     break;
+
                 default:
                     _logger.LogInformation("No notification handler configured for event type {EventType}.", message.EventType);
                     break;
@@ -294,8 +338,33 @@ namespace VehicleBook.Infrastructure.Notifications
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task CreateNotificationAsync(int userId, string title, string body, string type, string? entityType, int? entityId, CancellationToken cancellationToken, bool saveImmediately = true)
+        private async Task CreateNotificationAsync(
+            int userId,
+            string title,
+            string body,
+            string type,
+            string? entityType,
+            int? entityId,
+            CancellationToken cancellationToken,
+            bool saveImmediately = true)
         {
+            var duplicateWindowStart = DateTime.UtcNow.AddMinutes(-5);
+
+            var alreadyExists = await _context.Notifications.AnyAsync(notification =>
+                notification.UserId == userId &&
+                notification.Title == title &&
+                notification.Message == body &&
+                notification.Type == type &&
+                notification.EntityType == entityType &&
+                notification.EntityId == entityId &&
+                notification.CreatedAtUtc >= duplicateWindowStart,
+                cancellationToken);
+
+            if (alreadyExists)
+            {
+                return;
+            }
+
             var notification = new Notification
             {
                 UserId = userId,

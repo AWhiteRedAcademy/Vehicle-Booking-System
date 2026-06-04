@@ -76,7 +76,75 @@ namespace VehicleBook.Infrastructure.Migrations
 
                     b.ToTable("bookings", null, t =>
                         {
-                            t.HasCheckConstraint("bookings_status_check", "status = ANY (ARRAY['Pending', 'Confirmed', 'Cancelled']::text[])");
+                            t.HasCheckConstraint("bookings_status_check", "status = ANY (ARRAY['Pending', 'Confirmed', 'Approved', 'Rejected', 'Cancelled', 'Completed']::text[])");
+                        });
+                });
+
+            modelBuilder.Entity("VehicleBook.Domain.Entities.BookingAudit", b =>
+                {
+                    b.Property<long>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("auditid");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("AuditId"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("bookingid");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("integer")
+                        .HasColumnName("companyid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasColumnName("createdat");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("BookingStatusChanged")
+                        .HasColumnName("eventtype");
+
+                    b.Property<bool>("IsPublished")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("ispublished");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("text")
+                        .HasColumnName("message");
+
+                    b.Property<string>("NewStatus")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("newstatus");
+
+                    b.Property<string>("OldStatus")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("oldstatus");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("publishedat");
+
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("vehicleid");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("bookingaudit", null, t =>
+                        {
+                            t.HasCheckConstraint("bookingaudit_status_check", "(oldstatus IS NULL OR oldstatus = ANY (ARRAY['Pending', 'Confirmed', 'Approved', 'Rejected', 'Cancelled', 'Completed']::text[])) AND newstatus = ANY (ARRAY['Pending', 'Confirmed', 'Approved', 'Rejected', 'Cancelled', 'Completed']::text[])");
                         });
                 });
 
