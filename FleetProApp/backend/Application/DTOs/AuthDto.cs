@@ -40,6 +40,12 @@ namespace VehicleBook.Application.DTOs
         public string Email { get; set; } = string.Empty;
     }
 
+    public class ForgotPasswordResponseDto
+    {
+        public string Message { get; set; } = string.Empty;
+        public string OtpToken { get; set; } = string.Empty;
+    }
+
     public class VerifyResetOtpRequestDto
     {
         [Required]
@@ -49,6 +55,9 @@ namespace VehicleBook.Application.DTOs
         [Required]
         [StringLength(6, MinimumLength = 6)]
         public string Otp { get; set; } = string.Empty;
+
+        [Required]
+        public string OtpToken { get; set; } = string.Empty;
     }
 
     public class VerifyResetOtpResponseDto
@@ -72,4 +81,5 @@ namespace VehicleBook.Application.DTOs
         [Required]
         public string ConfirmPassword { get; set; } = string.Empty;
     }
+
 }

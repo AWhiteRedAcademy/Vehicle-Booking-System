@@ -45,6 +45,8 @@ function ForgotPasswordPage() {
   const [step, setStep] = useState("email");
 
   const [email, setEmail] = useState("");
+
+  const [otpToken, setOtpToken] = useState("");
   const [otp, setOtp] = useState("");
   const [resetToken, setResetToken] = useState("");
 
@@ -90,7 +92,9 @@ function ForgotPasswordPage() {
           return;
         }
 
-        await requestPasswordReset(email.trim());
+        const result = await requestPasswordReset(email.trim());
+
+        setOtpToken(result.otpToken);
 
         setMessage("If this email exists, a verification code has been sent.");
         setStep("otp");
@@ -103,7 +107,7 @@ function ForgotPasswordPage() {
           return;
         }
 
-        const result = await verifyResetOtp(email.trim(), otp.trim());
+        const result = await verifyResetOtp(email.trim(), otp.trim(), otpToken);
 
         setResetToken(result.resetToken);
         setMessage("OTP verified. Please create a new password.");

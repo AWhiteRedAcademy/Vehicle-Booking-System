@@ -26,19 +26,28 @@ export async function requestPasswordReset(email) {
   return handleResponse(response);
 }
 
-export async function verifyResetOtp(email, otp) {
+export async function verifyResetOtp(email, otp, otpToken) {
   const response = await fetch(`${API_URL}/api/Auth/verify-reset-otp`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, otp }),
+    body: JSON.stringify({
+      email,
+      otp,
+      otpToken,
+    }),
   });
 
   return handleResponse(response);
 }
 
-export async function resetPassword(email, resetToken, newPassword, confirmPassword) {
+export async function resetPassword(
+  email,
+  resetToken,
+  newPassword,
+  confirmPassword,
+) {
   const response = await fetch(`${API_URL}/api/Auth/reset-password`, {
     method: "POST",
     headers: {

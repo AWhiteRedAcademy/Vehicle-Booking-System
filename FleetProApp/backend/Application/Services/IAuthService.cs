@@ -7,7 +7,7 @@ namespace VehicleBook.Application.Services
         Task<TokenResponseDto?> LoginAsync(LoginUserDto request);
         Task<TokenResponseDto?> RefreshTokenAsync(RefreshTokenRequestDto request);
 
-        Task ForgotPasswordAsync(ForgotPasswordRequestDto request);
+        Task<ForgotPasswordResponseDto> ForgotPasswordAsync(ForgotPasswordRequestDto request);
         Task<VerifyResetOtpResponseDto?> VerifyResetOtpAsync(VerifyResetOtpRequestDto request);
         Task<bool> ResetPasswordAsync(ResetPasswordRequestDto request);
     }

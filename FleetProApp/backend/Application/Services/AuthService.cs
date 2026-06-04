@@ -86,79 +86,62 @@ namespace VehicleBook.Application.Services
             };
         }
 
-        public async Task ForgotPasswordAsync(ForgotPasswordRequestDto request)
+        public async Task<ForgotPasswordResponseDto> ForgotPasswordAsync(ForgotPasswordRequestDto request)
         {
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
-
-            var user = await _userRepository.GetByEmailAsync(normalizedEmail);
-
-            // Do not reveal whether the email exists.
-            if (user == null)
-            {
-                return;
-            }
 
             var otp = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
 
-            var hasher = new PasswordHasher<User>();
-
-            user.PasswordResetOtpHash = hasher.HashPassword(user, otp);
-            user.PasswordResetOtpExpiryUtc = DateTime.UtcNow.AddMinutes(10);
-            user.PasswordResetTokenHash = null;
-            user.PasswordResetTokenExpiryUtc = null;
-
-            _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
-
-            var body =
-                $"Hi {user.Name},\n\n" +
-                $"Your FleetPro password reset OTP is: {otp}\n\n" +
-                $"This OTP will expire in 10 minutes.\n\n" +
-                $"If you did not request this, you can ignore this email.";
-
-            await _emailSender.SendAsync(
-                new[] { user.Email },
-                "FleetPro Password Reset OTP",
-                body);
-        }
-
-        public async Task<VerifyResetOtpResponseDto?> VerifyResetOtpAsync(VerifyResetOtpRequestDto request)
-        {
-            var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+            var otpToken = _jwtTokenService.CreatePasswordResetOtpToken(
+                normalizedEmail,
+                otp);
 
             var user = await _userRepository.GetByEmailAsync(normalizedEmail);
 
-            if (user == null ||
-                string.IsNullOrWhiteSpace(user.PasswordResetOtpHash) ||
-                user.PasswordResetOtpExpiryUtc == null ||
-                user.PasswordResetOtpExpiryUtc < DateTime.UtcNow)
+            if (user != null)
+            {
+                var body =
+                    $"Hi {user.Name},\n\n" +
+                    $"Your CarGo password reset OTP is: {otp}\n\n" +
+                    $"This OTP will expire in 10 minutes.\n\n" +
+                    $"If you did not request this, you can ignore this email.";
+
+                await _emailSender.SendAsync(
+                    new[] { user.Email },
+                    "CarGo Password Reset OTP",
+                    body);
+            }
+
+            return new ForgotPasswordResponseDto
+            {
+                Message = "If this email exists, a password reset OTP has been sent.",
+                OtpToken = otpToken
+            };
+        }
+
+        public async Task<VerifyResetOtpResponseDto?> VerifyResetOtpAsync(
+            VerifyResetOtpRequestDto request)
+        {
+            var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+
+            var isOtpValid = _jwtTokenService.ValidatePasswordResetOtpToken(
+                request.OtpToken,
+                normalizedEmail,
+                request.Otp);
+
+            if (!isOtpValid)
             {
                 return null;
             }
 
-            var hasher = new PasswordHasher<User>();
+            var user = await _userRepository.GetByEmailAsync(normalizedEmail);
 
-            var result = hasher.VerifyHashedPassword(
-                user,
-                user.PasswordResetOtpHash,
-                request.Otp.Trim());
-
-            if (result == PasswordVerificationResult.Failed)
+            if (user == null)
             {
                 return null;
             }
 
-            var resetToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
-
-            user.PasswordResetTokenHash = hasher.HashPassword(user, resetToken);
-            user.PasswordResetTokenExpiryUtc = DateTime.UtcNow.AddMinutes(15);
-
-            // OTP can no longer be reused after verification.
-            user.PasswordResetOtpHash = null;
-            user.PasswordResetOtpExpiryUtc = null;
-
-            _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
+            var resetToken = _jwtTokenService.CreatePasswordResetToken(normalizedEmail);
 
             return new VerifyResetOtpResponseDto
             {
@@ -175,34 +158,34 @@ namespace VehicleBook.Application.Services
 
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
+            var emailFromToken = _jwtTokenService.ValidatePasswordResetToken(
+                request.ResetToken);
+
+            if (string.IsNullOrWhiteSpace(emailFromToken))
+            {
+                return false;
+            }
+
+            if (!string.Equals(
+                    normalizedEmail,
+                    emailFromToken,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
             var user = await _userRepository.GetByEmailAsync(normalizedEmail);
 
-            if (user == null ||
-                string.IsNullOrWhiteSpace(user.PasswordResetTokenHash) ||
-                user.PasswordResetTokenExpiryUtc == null ||
-                user.PasswordResetTokenExpiryUtc < DateTime.UtcNow)
+            if (user == null)
             {
                 return false;
             }
 
             var hasher = new PasswordHasher<User>();
 
-            var tokenResult = hasher.VerifyHashedPassword(
-                user,
-                user.PasswordResetTokenHash,
-                request.ResetToken);
-
-            if (tokenResult == PasswordVerificationResult.Failed)
-            {
-                return false;
-            }
-
             user.PasswordHash = hasher.HashPassword(user, request.NewPassword);
 
-            user.PasswordResetTokenHash = null;
-            user.PasswordResetTokenExpiryUtc = null;
-            user.PasswordResetOtpHash = null;
-            user.PasswordResetOtpExpiryUtc = null;
+            // Force old sessions to become invalid.
             user.RefreshToken = null;
             user.RefreshTokenExpiryTime = null;
 

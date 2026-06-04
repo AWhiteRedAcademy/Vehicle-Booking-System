@@ -45,14 +45,12 @@ namespace Vehicle_Booking_System.Controllers
 
         [AllowAnonymous]
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
+        public async Task<ActionResult<ForgotPasswordResponseDto>> ForgotPassword(
+         [FromBody] ForgotPasswordRequestDto request)
         {
-            await _authService.ForgotPasswordAsync(request);
+            var result = await _authService.ForgotPasswordAsync(request);
 
-            return Ok(new
-            {
-                message = "If this email exists, a password reset OTP has been sent."
-            });
+            return Ok(result);
         }
 
         [AllowAnonymous]
@@ -92,7 +90,6 @@ namespace Vehicle_Booking_System.Controllers
                 message = "Password reset successful."
             });
         }
-
         [Authorize]
         [HttpGet("authenticated-only")]
         public IActionResult AuthenticatedOnlyEndpoint()
