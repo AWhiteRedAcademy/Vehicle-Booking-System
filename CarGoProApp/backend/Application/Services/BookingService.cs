@@ -333,20 +333,16 @@ namespace VehicleBook.Application.Services
 
         private static string GetCurrentBookingStatus(Booking booking, DateOnly today)
         {
-            if (booking.Status == "Cancelled")
-            {
-                return "Cancelled";
-            }
+            if (booking.Status == "Cancelled") return "Cancelled";
+            if (booking.Status == "Completed") return "Completed"; 
 
             if (booking.EndDate < today)
             {
-                return "Completed";
+                // If it's past due but database is still Pending, reflect the real DB State!
+                return booking.Status == "Pending" ? "Pending" : "Completed";
             }
 
-            if (booking.Status == "Pending")
-            {
-                return "Pending";
-            }
+            if (booking.Status == "Pending") return "Pending";
 
             if (booking.StartDate <= today && booking.EndDate >= today)
             {
@@ -355,6 +351,7 @@ namespace VehicleBook.Application.Services
 
             return "Upcoming";
         }
+
 
         private static BookingDto MapToDto(Booking booking)
         {

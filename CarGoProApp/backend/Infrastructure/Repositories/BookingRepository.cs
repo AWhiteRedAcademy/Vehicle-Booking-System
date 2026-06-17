@@ -85,9 +85,16 @@ namespace VehicleBook.Infrastructure.Repositories
 
         public async Task<IEnumerable<Booking>> GetActiveAndPendingBookingsAsync(DateOnly date, CancellationToken cancellationToken)
         {
+            var targetDate = date;
+
             return await _context.Bookings
-                .Where(b => (b.StartDate == date && b.Status != "Cancelled")
-                         || (b.EndDate < date && (b.Status == "Active" || b.Status == "Confirmed")))
+                .Where(b =>
+                    // Condition A: Starts today and isn't cancelled
+                    (b.StartDate == targetDate && b.Status != "Cancelled" && b.Status != "Completed")
+                    ||
+                    // Condition B: Ended in the past but never got updated
+                    (b.EndDate < targetDate && (b.Status == "Confirmed" || b.Status == "In Use" || b.Status == "Pending"))
+                )
                 .ToListAsync(cancellationToken);
         }
 
