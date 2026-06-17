@@ -120,13 +120,13 @@ export default function CompanyBookingListDetails({
             </td>
 
             <td data-label="Status">
-              <StatusText $available={booking.status === "Confirmed"}>
-                {booking.status || "Pending"}
+              <StatusText $available={booking.status === "Confirmed" || booking.status === "Completed"}>
+                {booking.status || "Unknown"}
               </StatusText>
             </td>
 
             <td data-label="Current Booking">
-              {booking.currentBooking || booking.status || "Pending"}
+              {booking.currentBooking || booking.status || "Unknown"}
             </td>
 
             <td data-label="Total">

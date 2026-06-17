@@ -36,52 +36,56 @@ public class VehicleStatusService : IVehicleStatusService
 
         foreach (var booking in relevantBookings)
         {
-            var vehicle = await _vehicleRepository.GetByIdAsync(booking.VehicleId);
-            if (vehicle == null)
-            {
-                continue;
-            }
-
-            var oldVehicleStatus = vehicle.IsAvailable;
             var oldBookingStatus = booking.Status;
 
-            if (booking.StartDate == today && booking.Status == "Pending")
+            // 1. Process Finished Bookings
+            if (booking.EndDate < today && booking.Status != "Completed")
             {
-                vehicle.IsAvailable = "In Use";
-                booking.Status = "Confirmed";
-
-                _vehicleRepository.Update(vehicle);
+                booking.Status = "Completed";
                 _bookingRepository.Update(booking);
 
-                messages.Add(CreateVehicleStatusChangedMessage(vehicle.VehicleId, vehicle.OwnerId, oldVehicleStatus, vehicle.IsAvailable, booking.BookingId));
-                messages.Add(CreateBookingStatusChangedMessage(booking.BookingId, booking.CompanyId, booking.VehicleId, oldBookingStatus, booking.Status));
+                var vehicle = await _vehicleRepository.GetByIdAsync(booking.VehicleId);
+                if (vehicle != null)
+                {
+                    var oldVehicleStatus = vehicle.IsAvailable;
+                    vehicle.IsAvailable = "Available";
+                    _vehicleRepository.Update(vehicle);
+                    messages.Add(CreateVehicleStatusChangedMessage(vehicle.VehicleId, vehicle.OwnerId, oldVehicleStatus, vehicle.IsAvailable, booking.BookingId));
+                }
 
+                messages.Add(CreateBookingStatusChangedMessage(booking.BookingId, booking.CompanyId, booking.VehicleId, oldBookingStatus, booking.Status));
                 await AddBookingAuditAsync(booking, oldBookingStatus, booking.Status, cancellationToken);
             }
-            else if (booking.EndDate < today && booking.Status == "Confirmed")
+            // 2. Process Bookings Starting Today
+            else if (booking.StartDate == today && booking.Status == "Pending")
             {
-                vehicle.IsAvailable = "Available";
-                booking.Status = "Completed";
-
-                _vehicleRepository.Update(vehicle);
+                booking.Status = "Confirmed";
                 _bookingRepository.Update(booking);
 
-                messages.Add(CreateVehicleStatusChangedMessage(vehicle.VehicleId, vehicle.OwnerId, oldVehicleStatus, vehicle.IsAvailable, booking.BookingId));
-                messages.Add(CreateBookingStatusChangedMessage(booking.BookingId, booking.CompanyId, booking.VehicleId, oldBookingStatus, booking.Status));
+                var vehicle = await _vehicleRepository.GetByIdAsync(booking.VehicleId);
+                if (vehicle != null)
+                {
+                    var oldVehicleStatus = vehicle.IsAvailable;
+                    vehicle.IsAvailable = "In Use";
+                    _vehicleRepository.Update(vehicle);
+                    messages.Add(CreateVehicleStatusChangedMessage(vehicle.VehicleId, vehicle.OwnerId, oldVehicleStatus, vehicle.IsAvailable, booking.BookingId));
+                }
 
+                messages.Add(CreateBookingStatusChangedMessage(booking.BookingId, booking.CompanyId, booking.VehicleId, oldBookingStatus, booking.Status));
                 await AddBookingAuditAsync(booking, oldBookingStatus, booking.Status, cancellationToken);
             }
         }
 
         await _vehicleRepository.SaveChangesAsync();
         await _bookingRepository.SaveChangesAsync();
-        await _bookingAuditRepository.SaveChangesAsync(cancellationToken);
+        await _bookingAuditRepository.SaveChangesAsync();
 
         foreach (var message in messages)
         {
             await _messagePublisher.PublishAsync(message, cancellationToken);
         }
     }
+
 
     private static SystemEventMessage CreateVehicleStatusChangedMessage(int vehicleId, int ownerId, string oldStatus, string newStatus, int bookingId)
     {
