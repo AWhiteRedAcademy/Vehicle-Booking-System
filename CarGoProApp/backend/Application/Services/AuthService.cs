@@ -102,7 +102,7 @@ namespace VehicleBook.Application.Services
             var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
             _cache.Set($"RESET_OTP_{normalizedEmail}", otpCode, cacheOptions);
 
-            string subject = "FleetPro - Reset Password OTP";
+            string subject = "CarGo Pro - Reset Password OTP";
             string body = $"Your one-time security password verification code is: {otpCode}\nThis code expires in 10 minutes.";
             
             await _emailSender.SendAsync(new[] { user.Email }, subject, body);
