@@ -37,7 +37,7 @@ export const authFetch = async (endpoint, options = {}) => {
 
     // 1. ANONYMOUS BYPASS LIST: Check if the endpoint allows unauthenticated requests
     const anonymousEndpoints = [
-        'api/user/register',
+        'api/User/register',
         'api/auth/forgot-password',
         'api/auth/verify-reset-otp',
         'api/auth/reset-password'
